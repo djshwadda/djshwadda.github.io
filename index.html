@@ -35,73 +35,163 @@
       padding: 28px 14px;
     }
 
-    .wrap{ width:min(980px,100%); display:grid; gap:16px; }
+    .wrap{
+      width: min(980px, 100%);
+      display:grid;
+      gap: 16px;
+    }
 
     .card{
       background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.03));
-      border:1px solid var(--border);
-      border-radius:18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
 
-    .header{ padding:18px; }
-    .title{ margin:0; font-size:clamp(28px,4vw,44px); }
-    .subtitle{ margin:0; color:var(--muted); font-size:15px; }
+    .header{
+      padding: 18px 18px 6px 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .title{
+      font-size: clamp(28px, 4vw, 44px);
+      margin:0;
+    }
+
+    .subtitle{
+      margin:0;
+      color: var(--muted);
+      font-size: 15px;
+    }
 
     .controls{
-      padding:14px 16px;
+      padding: 14px 16px;
       display:flex;
-      justify-content:space-between;
+      justify-content: space-between;
       align-items:center;
-      border-top:1px solid var(--border);
-      background:rgba(255,255,255,0.03);
+      gap: 12px;
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .lane-label{
+      display:flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .lane-name{ font-weight:700; }
     .lane-hint{ font-size:12px; color:var(--muted); }
 
-    .toggle{ display:flex; gap:10px; align-items:center; }
-    .switch{
-      width:66px; height:36px; border-radius:999px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,0.1);
-      position:relative; cursor:pointer;
+    .toggle{
+      display:flex;
+      align-items:center;
+      gap:10px;
     }
-    .knob{
-      width:26px; height:26px; border-radius:50%;
-      background:#fff; position:absolute; top:50%; left:6px;
-      transform:translateY(-50%);
-      transition:left .2s;
-    }
-    .switch[data-mode="songs"] .knob{ left:34px; }
 
-    .content{ padding:16px; display:grid; gap:12px; }
+    .toggle span{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .switch{
+      width:66px;
+      height:36px;
+      background:rgba(255,255,255,0.10);
+      border:1px solid var(--border);
+      border-radius:999px;
+      position:relative;
+      cursor:pointer;
+    }
+
+    .knob{
+      width:26px;
+      height:26px;
+      background:#fff;
+      border-radius:999px;
+      position:absolute;
+      top:50%;
+      left:6px;
+      transform:translateY(-50%);
+      transition:left 220ms ease;
+    }
+
+    .switch[data-mode="songs"] .knob{
+      left:34px;
+    }
+
+    .content{
+      padding:16px;
+      display:grid;
+      gap:12px;
+    }
+
     .pane{ display:none; gap:12px; }
     .pane.active{ display:grid; }
+
+    .pane-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+    }
+
+    .badge{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.05);
+      color:var(--muted);
+    }
 
     .grid{
       display:grid;
       grid-template-columns:repeat(2,1fr);
       gap:10px;
     }
-    @media(min-width:760px){
+
+    @media (min-width:760px){
       .grid{ grid-template-columns:repeat(4,1fr); }
     }
 
     .btn{
-      display:flex; align-items:center; justify-content:center;
-      gap:10px; padding:12px;
-      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:12px;
+      border-radius:var(--btnRadius);
       border:1px solid var(--border);
-      background:linear-gradient(180deg,var(--card2),rgba(255,255,255,.04));
-      color:var(--text); text-decoration:none;
+      background:linear-gradient(180deg,var(--card2),rgba(255,255,255,0.04));
+      color:var(--text);
+      text-decoration:none;
       font-weight:650;
     }
 
-    .icon{ width:20px; height:20px; }
+    .btn.secondary{ color:var(--muted); }
 
-    .footer{ text-align:center; font-size:12px; color:rgba(255,255,255,.45); padding:12px; }
+    .icon{
+      width:20px;
+      height:20px;
+    }
+
+    .note{
+      font-size:13px;
+      color:var(--muted);
+      border:1px dashed rgba(255,255,255,0.16);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .footer{
+      text-align:center;
+      font-size:12px;
+      color:rgba(255,255,255,0.45);
+      padding:8px;
+    }
   </style>
 </head>
 
@@ -111,11 +201,11 @@
 
   <div class="header">
     <h1 class="title">Pick your lane 🎧</h1>
-    <p class="subtitle">Instrumentals for motion 🏃‍♂️ — Songs for emotion 🎤</p>
+    <p class="subtitle">Two vibes. One universe.</p>
   </div>
 
   <div class="controls">
-    <div>
+    <div class="lane-label">
       <div class="lane-name" id="laneName">DJ Shwadda — Instrumentals</div>
       <div class="lane-hint" id="laneHint">Beats, loops, fuel.</div>
     </div>
@@ -131,31 +221,42 @@
 
   <div class="content">
 
-    <!-- INSTRUMENTALS -->
+    <!-- INSTRUMENTALS (COMING SOON) -->
     <section class="pane active" id="paneBeats">
-      <h2>DJ Shwadda — Instrumentals 🎚️</h2>
-      <div class="grid">
-        <a class="btn" href="#" target="_blank">
-          <img src="assets/icons/spotifyicon.png" class="icon"> Spotify (coming soon)
-        </a>
+      <div class="pane-title">
+        <h2>DJ Shwadda — Instrumentals 🎚️</h2>
+        <span class="badge">Loading ⏳</span>
       </div>
+
+      <div class="grid">
+        <div class="btn secondary"><img class="icon" src="assets/icons/spotifyicon.png"> Spotify</div>
+        <div class="btn secondary"><img class="icon" src="assets/icons/applemusicicon.png"> Apple Music</div>
+        <div class="btn secondary"><img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music</div>
+        <div class="btn secondary"><img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</div>
+      </div>
+
+      <div class="note">Instrumentals unlock soon.</div>
     </section>
 
-    <!-- SONGS -->
+    <!-- SONGS (LIVE) -->
     <section class="pane" id="paneSongs">
-      <h2>Shwadda — Songs 🎤</h2>
+      <div class="pane-title">
+        <h2>Shwadda — Songs 🎤</h2>
+        <span class="badge">Live now ✅</span>
+      </div>
+
       <div class="grid">
         <a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank">
-          <img src="assets/icons/spotifyicon.png" class="icon"> Spotify
+          <img class="icon" src="assets/icons/spotifyicon.png"> Spotify
         </a>
         <a class="btn" href="https://music.apple.com/us/artist/shwadda/1615926938" target="_blank">
-          <img src="assets/icons/applemusicicon.png" class="icon"> Apple Music
+          <img class="icon" src="assets/icons/applemusicicon.png"> Apple Music
         </a>
         <a class="btn" href="https://www.youtube.com/channel/UCEuwn9HJAmdVn5137ehJx4g" target="_blank">
-          <img src="assets/icons/youtubemusicicon.png" class="icon"> YouTube Music
+          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
         </a>
         <a class="btn" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank">
-          <img src="assets/icons/amazonmusicicon.png" class="icon"> Amazon Music
+          <img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music
         </a>
       </div>
     </section>
@@ -168,21 +269,25 @@
 </main>
 
 <script>
-const s=document.getElementById("switch"),
-b=document.getElementById("paneBeats"),
-g=document.getElementById("paneSongs"),
-n=document.getElementById("laneName"),
-h=document.getElementById("laneHint");
+const switchBtn = document.getElementById("switch");
+const paneBeats = document.getElementById("paneBeats");
+const paneSongs = document.getElementById("paneSongs");
+const laneName = document.getElementById("laneName");
+const laneHint = document.getElementById("laneHint");
 
-function set(m){
-  s.dataset.mode=m;
-  b.classList.toggle("active",m==="beats");
-  g.classList.toggle("active",m==="songs");
-  n.textContent=m==="songs"?"Shwadda — Songs":"DJ Shwadda — Instrumentals";
-  h.textContent=m==="songs"?"Vocals + story + feeling":"Beats, loops, fuel.";
+function setMode(mode){
+  const isSongs = mode === "songs";
+  switchBtn.dataset.mode = isSongs ? "songs" : "beats";
+  paneBeats.classList.toggle("active", !isSongs);
+  paneSongs.classList.toggle("active", isSongs);
+  laneName.textContent = isSongs ? "Shwadda — Songs" : "DJ Shwadda — Instrumentals";
+  laneHint.textContent = isSongs ? "Vocals + story." : "Beats, loops, fuel.";
 }
 
-s.onclick=()=>set(s.dataset.mode==="beats"?"songs":"beats");
+switchBtn.addEventListener("click", () => {
+  setMode(switchBtn.dataset.mode === "beats" ? "songs" : "beats");
+});
 </script>
+
 </body>
 </html>
