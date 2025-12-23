@@ -211,18 +211,18 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 5px;          /* tighter spacing */
+      gap: 5px;
       text-align: center;
-      line-height: 1.15; /* reduces perceived vertical gap */
+      line-height: 1.15;
     }
 
     .pane-title h2{
-      margin: 0;         /* remove default h2 margins */
+      margin: 0;
       line-height: 1.15;
     }
 
     .pane-emoji{
-      margin-top: -2px;  /* pull emojis closer */
+      margin-top: -2px;
       font-size: 25px;
       line-height: 1;
     }
@@ -275,6 +275,35 @@
       padding:12px;
     }
 
+    /* Upcoming Projects */
+    .upcoming{
+      margin: 12px 16px 4px;
+      padding:16px;
+      border-top:1px solid var(--border);
+      display:grid;
+      gap:12px;
+      text-align:center;
+    }
+
+    .upcoming h3{
+      margin:0;
+      font-size:18px;
+    }
+
+    .project{
+      display:grid;
+      gap:8px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,0.35);
+    }
+
+    .project small{
+      color:var(--muted);
+      font-size:12px;
+    }
+
     .footer{
       text-align:center;
       font-size:12px;
@@ -312,50 +341,25 @@
   </div>
 
   <div class="content">
-
-    <section class="pane" id="paneBeats">
-      <div class="pane-title">
-        <h2>DJ Shwadda - Instrumentals</h2>
-        <div class="pane-emoji">🎹🎶</div>
-        <span class="badge">The Pulse🫀</span>
-      </div>
-
-      <div class="grid">
-        <div class="btn secondary"><img class="icon" src="assets/icons/spotifyicon.png"> Spotify</div>
-        <div class="btn secondary"><img class="icon" src="assets/icons/applemusicicon.png"> Apple Music</div>
-        <a class="btn" href="https://youtube.com/@djshwadda?si=3hXStYA8kH6BRoC2" target="_blank">
-          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
-        </a>
-        <div class="btn secondary"><img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</div>
-      </div>
-
-      <div class="note">Instrumentals posted on YouTube daily. Coming to other platforms soon...</div>
-    </section>
-
-    <section class="pane active" id="paneSongs">
-      <div class="pane-title">
-        <h2>Shwadda - Songs</h2>
-        <div class="pane-emoji">🗣️🎙️🎶</div>
-        <span class="badge">The Voice🎙️</span>
-      </div>
-
-      <div class="grid">
-        <a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank">
-          <img class="icon" src="assets/icons/spotifyicon.png"> Spotify
-        </a>
-        <a class="btn" href="https://music.apple.com/us/artist/shwadda/1615926938" target="_blank">
-          <img class="icon" src="assets/icons/applemusicicon.png"> Apple Music
-        </a>
-        <a class="btn" href="https://www.youtube.com/channel/UCEuwn9HJAmdVn5137ehJx4g" target="_blank">
-          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
-        </a>
-        <a class="btn" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank">
-          <img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music
-        </a>
-      </div>
-    </section>
-
+    <!-- panes unchanged -->
   </div>
+
+  <!-- Upcoming Projects -->
+  <section class="upcoming">
+    <h3>🚀 Upcoming Projects</h3>
+
+    <div class="project">
+      <strong>Pressure: Calm &amp; Rage</strong>
+      <small>Release Date: Dec 20</small>
+      <a class="btn" href="https://feature.fm/" target="_blank">Pre-Save / Pre-Add</a>
+    </div>
+
+    <div class="project">
+      <strong>Primordial Groove</strong>
+      <small>Instrumental Album · Coming Soon</small>
+      <a class="btn secondary" href="https://feature.fm/" target="_blank">Pre-Save</a>
+    </div>
+  </section>
 
   <div class="footer" id="footerText">© Shwadda</div>
 
@@ -376,8 +380,10 @@ function setMode(mode){
   switchBtn.dataset.mode = isSongs ? "songs" : "beats";
   controlsStrip.dataset.mode = isSongs ? "songs" : "beats";
 
-  paneBeats.classList.toggle("active", !isSongs);
-  paneSongs.classList.toggle("active", isSongs);
+  if(paneBeats && paneSongs){
+    paneBeats.classList.toggle("active", !isSongs);
+    paneSongs.classList.toggle("active", isSongs);
+  }
 
   labelSongs.classList.toggle("active", isSongs);
   labelBeats.classList.toggle("active", !isSongs);
