@@ -8,131 +8,279 @@
 
   <style>
     :root{
-      --bg:#0b0c10;
-      --card:rgba(255,255,255,0.50);
-      --card2:rgba(255,255,255,0.09);
-      --text:rgba(255,255,255,0.92);
-      --muted:rgba(255,255,255,0.62);
-      --border:rgba(255,255,255,0.12);
-      --shadow:0 18px 40px rgba(0,0,0,0.45);
-      --radius:18px;
-      --btnRadius:14px;
+      --bg: #0b0c10;
+      --card: rgba(255,255,255,0.50);
+      --card2: rgba(255,255,255,0.09);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.62);
+      --border: rgba(255,255,255,0.12);
+      --shadow: 0 18px 40px rgba(0,0,0,0.45);
+      --radius: 18px;
+      --btnRadius: 14px;
+      --focus: rgba(255,255,255,0.25);
 
-      --activeGreen:#1DB954;
-      --activeBlue:#2D7DFF;
+      --activeGreen: #1DB954;
+      --activeBlue:  #2D7DFF;
     }
 
-    *{box-sizing:border-box;}
+    *{ box-sizing:border-box; }
     body{
       margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background:
-        linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),
-        url("assets/images/background1.jpg") center/cover no-repeat fixed;
-      color:var(--text);
-      min-height:100vh;
+        linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url("assets/images/background1.jpg") center / cover no-repeat fixed;
+      color: var(--text);
+      min-height: 100vh;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:28px 14px;
+      padding: 28px 14px;
     }
 
-    .wrap{width:min(980px,100%);display:grid;gap:16px;}
+    .wrap{
+      width: min(980px, 100%);
+      display:grid;
+      gap: 16px;
+    }
+
     .card{
-      background:linear-gradient(180deg,var(--card),rgba(255,255,255,.08));
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.08));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
       overflow:hidden;
-      backdrop-filter:blur(20px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
-    .header{text-align:center;padding:18px 18px 6px;}
-    .title{margin:0;font-size:clamp(28px,4vw,44px);}
-    .subtitle{margin:0;color:var(--muted);font-size:15px;}
+    .header{
+      padding: 18px 18px 6px 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .title{
+      font-size: clamp(28px, 4vw, 44px);
+      margin:0;
+    }
+
+    .subtitle{
+      margin:0;
+      color: var(--muted);
+      font-size: 15px;
+    }
 
     .controls{
-      padding:18px 16px;
+      padding: 18px 16px;
       display:flex;
-      justify-content:center;
-      border-top:1px solid var(--border);
-      background:rgba(0,0,0,.45);
-    }
-    .controls[data-mode="songs"]{
-      background:linear-gradient(to right,rgba(29,185,84,.24),rgba(0,0,0,.55));
-    }
-    .controls[data-mode="beats"]{
-      background:linear-gradient(to right,rgba(0,0,0,.55),rgba(45,125,255,.24));
+      justify-content: center;
+      align-items:center;
+      gap: 14px;
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: background 220ms ease;
     }
 
-    .toggle{display:flex;align-items:center;gap:14px;}
-    .toggle-group{text-align:center;}
+    .controls[data-mode="songs"]{
+      background:
+        linear-gradient(to right,
+          rgba(29,185,84,0.24) 0%,
+          rgba(0,0,0,0.55) 55%,
+          rgba(0,0,0,0.45) 100%);
+    }
+
+    .controls[data-mode="beats"]{
+      background:
+        linear-gradient(to right,
+          rgba(0,0,0,0.45) 0%,
+          rgba(0,0,0,0.55) 45%,
+          rgba(45,125,255,0.24) 100%);
+    }
+
+    .lane-label{ display:none; }
+
+    .toggle{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .toggle-group{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+    }
+
     .toggle span{
-      display:inline-block;
       font-size:18px;
       font-weight:700;
-      padding:6px 12px;
-      border-radius:999px;
-      background:rgba(0,0,0,.55);
+      color:var(--muted);
+      white-space: nowrap;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+      transition:
+        color 160ms ease,
+        font-weight 160ms ease,
+        background 160ms ease,
+        opacity 160ms ease;
+    }
+
+    .toggle span.active{
+      font-weight: 800;
+      background: rgba(0,0,0,0.75);
+    }
+
+    .toggle-sub{
+      font-size:12px;
       color:var(--muted);
     }
-    .toggle span.active{background:rgba(0,0,0,.75);}
-    #labelSongs.active{color:var(--activeGreen);}
-    #labelBeats.active{color:var(--activeBlue);}
-    .toggle-sub{font-size:12px;color:var(--muted);}
+
+    #labelSongs.active{ color: var(--activeGreen); }
+    #labelBeats.active{ color: var(--activeBlue); }
 
     .switch{
-      width:72px;height:38px;border-radius:999px;
-      position:relative;border:1px solid var(--border);cursor:pointer;
+      width:72px;
+      height:38px;
+      border-radius:999px;
+      position:relative;
+      cursor:pointer;
+      border:1px solid var(--border);
+      transition: background 220ms ease;
     }
-    .switch[data-mode="songs"]{background:linear-gradient(to right,rgba(29,185,84,.8),rgba(255,255,255,.1));}
-    .switch[data-mode="beats"]{background:linear-gradient(to right,rgba(255,255,255,.1),rgba(45,125,255,.85));}
+
+    .switch[data-mode="songs"]{
+      background:
+        linear-gradient(
+          to right,
+          rgba(29,185,84,0.80) 0%,
+          rgba(255,255,255,0.10) 100%
+        );
+    }
+
+    .switch[data-mode="beats"]{
+      background:
+        linear-gradient(
+          to right,
+          rgba(255,255,255,0.10) 0%,
+          rgba(45,125,255,0.85) 100%
+        );
+    }
 
     .knob{
-      width:28px;height:28px;border-radius:999px;
-      background:#fff;position:absolute;top:50%;left:6px;
-      transform:translateY(-50%);transition:left .2s;
-    }
-    .switch[data-mode="beats"] .knob{left:38px;}
-
-    .content{padding:16px;}
-    .pane{display:none;}
-    .pane.active{display:block;}
-
-    .pane-title{text-align:center;line-height:1.15;}
-    .pane-title h2{margin:0;}
-    .pane-emoji{font-size:22px;margin-top:2px;}
-    .badge{font-size:12px;color:var(--muted);}
-
-    /* UPCOMING */
-    .upcoming{
-      border-top:1px solid var(--border);
-      padding:14px 16px 6px;
-      background:rgba(0,0,0,.35);
-    }
-    .project{
-      margin-top:8px;
-      padding:12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.12);
-      text-align:center;
-    }
-    .project h4{margin:0 0 6px;}
-    .project-date{font-size:12px;color:var(--muted);margin-bottom:10px;}
-
-    .pill{
-      display:inline-block;
-      padding:10px 14px;
+      width:28px;
+      height:28px;
+      background:#fff;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.45);
-      color:#fff;
-      text-decoration:none;
-      font-weight:700;
-      font-size:13px;
+      position:absolute;
+      top:50%;
+      left:6px;
+      transform:translateY(-50%);
+      transition:left 220ms ease, box-shadow 220ms ease;
     }
 
-    .footer{text-align:center;font-size:12px;color:rgba(255,255,255,.45);padding:8px;}
+    .switch[data-mode="beats"] .knob{ left:38px; }
+
+    .switch[data-mode="songs"] .knob{
+      box-shadow: 0 0 12px rgba(29,185,84,0.55);
+    }
+    .switch[data-mode="beats"] .knob{
+      box-shadow: 0 0 12px rgba(45,125,255,0.55);
+    }
+
+    .content{
+      padding:16px;
+      display:grid;
+      gap:12px;
+    }
+
+    .pane{ display:none; gap:12px; }
+    .pane.active{ display:grid; }
+
+    .pane-title{
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;          /* tighter spacing */
+      text-align: center;
+      line-height: 1.15; /* reduces perceived vertical gap */
+    }
+
+    .pane-title h2{
+      margin: 0;         /* remove default h2 margins */
+      line-height: 1.15;
+    }
+
+    .pane-emoji{
+      margin-top: -2px;  /* pull emojis closer */
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    .badge{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.05);
+      color:var(--muted);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+    }
+
+    @media (min-width:760px){
+      .grid{ grid-template-columns:repeat(4,1fr); }
+    }
+
+    .btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:12px;
+      border-radius:var(--btnRadius);
+      border:1px solid var(--border);
+      background:linear-gradient(180deg,var(--card2),rgba(255,255,255,0.04));
+      color:var(--text);
+      text-decoration:none;
+      font-weight:650;
+    }
+
+    .btn.secondary{ color:var(--muted); }
+
+    .icon{
+      width:50px;
+      height:50px;
+    }
+
+    .note{
+      font-size:13px;
+      color:var(--muted);
+      border:1px dashed rgba(255,255,255,0.16);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .footer{
+      text-align:center;
+      font-size:12px;
+      color:rgba(255,255,255,0.45);
+      padding:8px;
+    }
   </style>
 </head>
 
@@ -151,7 +299,11 @@
         <span id="labelSongs">Songs</span>
         <div class="toggle-sub">Vocals + Story</div>
       </div>
-      <button class="switch" id="switch" data-mode="songs"><span class="knob"></span></button>
+
+      <button class="switch" id="switch" data-mode="songs">
+        <span class="knob"></span>
+      </button>
+
       <div class="toggle-group">
         <span id="labelBeats">Instrumentals</span>
         <div class="toggle-sub">Beats, Loops, Fuel.</div>
@@ -160,31 +312,52 @@
   </div>
 
   <div class="content">
-    <section class="pane active" id="paneSongs">
-      <div class="pane-title">
-        <h2>Shwadda – Songs</h2>
-        <div class="pane-emoji">🗣️🎙️🎶</div>
-        <div class="badge">The Voice</div>
-      </div>
-    </section>
 
     <section class="pane" id="paneBeats">
       <div class="pane-title">
-        <h2>DJ Shwadda – Instrumentals</h2>
+        <h2>DJ Shwadda - Instrumentals</h2>
         <div class="pane-emoji">🎹🎶</div>
-        <div class="badge">The Pulse</div>
+        <span class="badge">The Pulse🫀</span>
+      </div>
+
+      <div class="grid">
+        <div class="btn secondary"><img class="icon" src="assets/icons/spotifyicon.png"> Spotify</div>
+        <div class="btn secondary"><img class="icon" src="assets/icons/applemusicicon.png"> Apple Music</div>
+        <a class="btn" href="https://youtube.com/@djshwadda?si=3hXStYA8kH6BRoC2" target="_blank">
+          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
+        </a>
+        <div class="btn secondary"><img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</div>
+      </div>
+
+      <div class="note">Instrumentals posted on YouTube daily. Coming to other platforms soon...</div>
+    </section>
+
+    <section class="pane active" id="paneSongs">
+      <div class="pane-title">
+        <h2>Shwadda - Songs</h2>
+        <div class="pane-emoji">🗣️🎙️🎶</div>
+        <span class="badge">The Voice🎙️</span>
+      </div>
+
+      <div class="grid">
+        <a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank">
+          <img class="icon" src="assets/icons/spotifyicon.png"> Spotify
+        </a>
+        <a class="btn" href="https://music.apple.com/us/artist/shwadda/1615926938" target="_blank">
+          <img class="icon" src="assets/icons/applemusicicon.png"> Apple Music
+        </a>
+        <a class="btn" href="https://www.youtube.com/channel/UCEuwn9HJAmdVn5137ehJx4g" target="_blank">
+          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
+        </a>
+        <a class="btn" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank">
+          <img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music
+        </a>
       </div>
     </section>
+
   </div>
 
-  <!-- UPCOMING PROJECT (ONE PER MODE) -->
-  <section class="upcoming" id="upcoming">
-    <div class="project">
-      <h4 id="projectTitle"></h4>
-      <div class="project-date" id="projectDate"></div>
-      <a class="pill" id="projectLink" href="#" target="_blank">Pre-Save / Pre-Add</a>
-    </div>
-  </section>
+  <div class="note" id="upcomingProject">Upcoming project: —</div>
 
   <div class="footer" id="footerText">© Shwadda</div>
 
@@ -193,51 +366,36 @@
 
 <script>
 const switchBtn = document.getElementById("switch");
-const paneSongs = document.getElementById("paneSongs");
 const paneBeats = document.getElementById("paneBeats");
-const labelSongs = document.getElementById("labelSongs");
+const paneSongs = document.getElementById("paneSongs");
 const labelBeats = document.getElementById("labelBeats");
+const labelSongs = document.getElementById("labelSongs");
 const footerText = document.getElementById("footerText");
 const controlsStrip = document.getElementById("controlsStrip");
-
-const projectTitle = document.getElementById("projectTitle");
-const projectDate = document.getElementById("projectDate");
-const projectLink = document.getElementById("projectLink");
-
-const projects = {
-  songs:{
-    title:"Pressure: Calm & Rage (EP)",
-    date:"Coming Soon",
-    link:"https://www.feature.fm/"
-  },
-  beats:{
-    title:"Primordial Groove",
-    date:"Coming Soon",
-    link:"https://www.feature.fm/"
-  }
-};
+const upcomingProject = document.getElementById("upcomingProject");
 
 function setMode(mode){
   const isSongs = mode === "songs";
-  switchBtn.dataset.mode = mode;
-  controlsStrip.dataset.mode = mode;
+  switchBtn.dataset.mode = isSongs ? "songs" : "beats";
+  controlsStrip.dataset.mode = isSongs ? "songs" : "beats";
 
-  paneSongs.classList.toggle("active", isSongs);
   paneBeats.classList.toggle("active", !isSongs);
+  paneSongs.classList.toggle("active", isSongs);
 
   labelSongs.classList.toggle("active", isSongs);
   labelBeats.classList.toggle("active", !isSongs);
 
   footerText.textContent = isSongs ? "© Shwadda" : "© DJ Shwadda";
 
-  projectTitle.textContent = projects[mode].title;
-  projectDate.textContent = projects[mode].date;
-  projectLink.href = projects[mode].link;
+  upcomingProject.textContent = isSongs
+    ? "Upcoming project: Soul Spectrum: Golden"
+    : "Upcoming project: Primordial Groove";
 }
 
 setMode("songs");
-switchBtn.addEventListener("click",()=>{
-  setMode(switchBtn.dataset.mode==="songs"?"beats":"songs");
+
+switchBtn.addEventListener("click", () => {
+  setMode(switchBtn.dataset.mode === "songs" ? "beats" : "songs");
 });
 </script>
 
