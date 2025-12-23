@@ -208,10 +208,16 @@
 
     .pane-title{
       display:flex;
+      flex-direction: column;      /* stack title + emoji line */
       justify-content: center;
       align-items: center;
-      gap: 10px;
+      gap: 6px;                    /* spacing between title and emoji */
       text-align: center;
+    }
+
+    .pane-emoji{
+      font-size: 20px;
+      line-height: 1;
     }
 
     .badge{
@@ -302,7 +308,8 @@
 
     <section class="pane" id="paneBeats">
       <div class="pane-title">
-        <h2>DJ Shwadda - Instrumentals 🎹🎶</h2>
+        <h2>DJ Shwadda - Instrumentals</h2>
+        <div class="pane-emoji">🎹🎶</div>
         <span class="badge">The Pulse🫀</span>
       </div>
 
@@ -320,7 +327,8 @@
 
     <section class="pane active" id="paneSongs">
       <div class="pane-title">
-        <h2>Shwadda - Songs 🗣️🎙️🎶</h2>
+        <h2>Shwadda - Songs</h2>
+        <div class="pane-emoji">🗣️🎙️🎶</div>
         <span class="badge">The Voice🎙️</span>
       </div>
 
