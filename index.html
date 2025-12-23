@@ -19,8 +19,8 @@
       --btnRadius: 14px;
       --focus: rgba(255,255,255,0.25);
 
-      --activeGreen: #1DB954; /* songs */
-      --activeBlue:  #2D7DFF; /* instrumentals */
+      --activeGreen: #1DB954;
+      --activeBlue:  #2D7DFF;
     }
 
     *{ box-sizing:border-box; }
@@ -73,7 +73,6 @@
       font-size: 15px;
     }
 
-    /* Strip behind the toggle */
     .controls{
       padding: 14px 16px;
       display:flex;
@@ -81,13 +80,12 @@
       align-items:center;
       gap: 12px;
       border-top: 1px solid var(--border);
-      background: rgba(0,0,0,0.45); /* darker base for readability */
+      background: rgba(0,0,0,0.45);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       transition: background 220ms ease;
     }
 
-    /* Strip tint shifts with mode */
     .controls[data-mode="songs"]{
       background:
         linear-gradient(to right,
@@ -119,18 +117,29 @@
       gap:10px;
     }
 
+    /* OPTION 1: pill badges behind toggle text */
     .toggle span{
       font-size:12px;
       color:var(--muted);
-      transition: color 160ms ease, font-weight 160ms ease;
       white-space: nowrap;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+      transition:
+        color 160ms ease,
+        font-weight 160ms ease,
+        background 160ms ease,
+        opacity 160ms ease;
     }
 
     .toggle span.active{
       font-weight: 750;
+      background: rgba(0,0,0,0.75);
     }
 
-    /* per-mode label colors */
     #labelSongs.active{ color: var(--activeGreen); }
     #labelBeats.active{ color: var(--activeBlue); }
 
@@ -144,7 +153,6 @@
       transition: background 220ms ease;
     }
 
-    /* Songs active → green on LEFT */
     .switch[data-mode="songs"]{
       background:
         linear-gradient(
@@ -154,7 +162,6 @@
         );
     }
 
-    /* Instrumentals active → blue on RIGHT */
     .switch[data-mode="beats"]{
       background:
         linear-gradient(
@@ -176,12 +183,10 @@
       transition:left 220ms ease, box-shadow 220ms ease;
     }
 
-    /* Songs = LEFT (default), Beats = RIGHT */
     .switch[data-mode="beats"] .knob{
       left:34px;
     }
 
-    /* optional subtle glow to match mode */
     .switch[data-mode="songs"] .knob{
       box-shadow: 0 0 12px rgba(29,185,84,0.55);
     }
@@ -364,7 +369,6 @@ function setMode(mode){
   footerText.textContent = isSongs ? "© Shwadda" : "© DJ Shwadda";
 }
 
-// default = Songs
 setMode("songs");
 
 switchBtn.addEventListener("click", () => {
