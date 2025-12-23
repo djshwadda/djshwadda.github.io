@@ -303,7 +303,7 @@
 
   </div>
 
-  <div class="footer">Built on GitHub Pages ⚡</div>
+<div class="footer" id="footerText">© DJ Shwadda</div>
 
 </section>
 </main>
@@ -329,6 +329,8 @@ function setMode(mode){
 
   labelBeats.classList.toggle("active", !isSongs);
   labelSongs.classList.toggle("active", isSongs);
+
+  footerText.textContent = isSongs ? "© Shwadda" : "© DJ Shwadda";
 }
 
 // initial state based on current data-mode
