@@ -211,18 +211,18 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 5px;
+      gap: 5px;          /* tighter spacing */
       text-align: center;
-      line-height: 1.15;
+      line-height: 1.15; /* reduces perceived vertical gap */
     }
 
     .pane-title h2{
-      margin: 0;
+      margin: 0;         /* remove default h2 margins */
       line-height: 1.15;
     }
 
     .pane-emoji{
-      margin-top: -2px;
+      margin-top: -2px;  /* pull emojis closer */
       font-size: 25px;
       line-height: 1;
     }
@@ -273,19 +273,72 @@
       border:1px dashed rgba(255,255,255,0.16);
       border-radius:14px;
       padding:12px;
+    }
+
+    /* Upcoming Project block */
+    .upcoming{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px;
+      border-radius:14px;
+      border:1px dashed rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.25);
+    }
+    .upcoming-left{
       display:flex;
       align-items:center;
       gap:12px;
-      justify-content:center;
-      flex-wrap:wrap;
+      min-width:0;
     }
-
-    .upcoming-cover{
-      width:56px;
-      height:56px;
-      border-radius:10px;
+    .cover{
+      width:54px;
+      height:54px;
+      border-radius:12px;
       object-fit:cover;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+      border:1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+      flex: 0 0 auto;
+    }
+    .upcoming-meta{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width:0;
+    }
+    .upcoming-title{
+      font-weight:750;
+      font-size:14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .upcoming-sub{
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .feature-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+      color:var(--text);
+      text-decoration:none;
+      font-weight:700;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .feature-link:focus-visible,
+    .feature-link:hover{
+      outline:none;
+      box-shadow: 0 0 0 3px var(--focus);
     }
 
     .footer{
@@ -343,6 +396,17 @@
       </div>
 
       <div class="note">Instrumentals posted on YouTube daily. Coming to other platforms soon...</div>
+
+      <div class="upcoming">
+        <div class="upcoming-left">
+          <img class="cover" src="assets/images/your-cover-art.jpg" alt="Upcoming project cover art">
+          <div class="upcoming-meta">
+            <div class="upcoming-title">Upcoming Project: Title Here</div>
+            <div class="upcoming-sub">Drop date: TBD • Short teaser line here</div>
+          </div>
+        </div>
+        <a class="feature-link" href="https://feature.fm/your-link" target="_blank" rel="noopener">Feature.fm ↗</a>
+      </div>
     </section>
 
     <section class="pane active" id="paneSongs">
@@ -366,11 +430,20 @@
           <img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music
         </a>
       </div>
+
+      <div class="upcoming">
+        <div class="upcoming-left">
+          <img class="cover" src="assets/images/your-cover-art.jpg" alt="Upcoming project cover art">
+          <div class="upcoming-meta">
+            <div class="upcoming-title">Upcoming Project: Title Here</div>
+            <div class="upcoming-sub">Drop date: TBD • Short teaser line here</div>
+          </div>
+        </div>
+        <a class="feature-link" href="https://feature.fm/your-link" target="_blank" rel="noopener">Feature.fm ↗</a>
+      </div>
     </section>
 
   </div>
-
-  <div class="note" id="upcomingProject"></div>
 
   <div class="footer" id="footerText">© Shwadda</div>
 
@@ -385,7 +458,6 @@ const labelBeats = document.getElementById("labelBeats");
 const labelSongs = document.getElementById("labelSongs");
 const footerText = document.getElementById("footerText");
 const controlsStrip = document.getElementById("controlsStrip");
-const upcomingProject = document.getElementById("upcomingProject");
 
 function setMode(mode){
   const isSongs = mode === "songs";
@@ -399,18 +471,6 @@ function setMode(mode){
   labelBeats.classList.toggle("active", !isSongs);
 
   footerText.textContent = isSongs ? "© Shwadda" : "© DJ Shwadda";
-
-  upcomingProject.innerHTML = isSongs
-    ? `Upcoming project:
-       <a href="https://feature.fm/YOUR_SONG_LINK" target="_blank">
-         <img class="upcoming-cover" src="assets/images/soul-spectrum-golden.jpg" alt="Soul Spectrum: Golden cover">
-       </a>
-       Soul Spectrum: Golden`
-    : `Upcoming project:
-       <a href="https://feature.fm/YOUR_BEAT_LINK" target="_blank">
-         <img class="upcoming-cover" src="assets/images/primordial-groove.jpg" alt="Primordial Groove cover">
-       </a>
-       Primordial Groove`;
 }
 
 setMode("songs");
