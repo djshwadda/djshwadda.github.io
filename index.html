@@ -24,12 +24,14 @@ assets/icons/spotifyicon.png
     }
 
     *{ box-sizing:border-box; }
+
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 900px at 20% 0%, rgba(255,255,255,0.08), transparent 60%),
-                  radial-gradient(1000px 700px at 90% 20%, rgba(255,255,255,0.06), transparent 55%),
-                  var(--bg);
+      background:
+        radial-gradient(1200px 900px at 20% 0%, rgba(255,255,255,0.08), transparent 60%),
+        radial-gradient(1000px 700px at 90% 20%, rgba(255,255,255,0.06), transparent 55%),
+        var(--bg);
       color: var(--text);
       min-height: 100vh;
       display:flex;
@@ -45,7 +47,7 @@ assets/icons/spotifyicon.png
     }
 
     .header{
-      padding: 18px 18px 6px 18px;
+      padding: 18px 18px 6px;
       display:flex;
       flex-direction: column;
       gap: 10px;
@@ -105,11 +107,13 @@ assets/icons/spotifyicon.png
       gap: 10px;
       user-select:none;
     }
+
     .toggle span{
       font-size: 12px;
       color: var(--muted);
       white-space: nowrap;
     }
+
     .switch{
       position: relative;
       width: 66px;
@@ -120,9 +124,11 @@ assets/icons/spotifyicon.png
       cursor: pointer;
       outline:none;
     }
+
     .switch:focus-visible{
       box-shadow: 0 0 0 4px var(--focus);
     }
+
     .knob{
       position:absolute;
       top: 50%;
@@ -134,6 +140,7 @@ assets/icons/spotifyicon.png
       background: rgba(255,255,255,0.9);
       transition: left 220ms ease;
     }
+
     .switch[data-mode="songs"] .knob{
       left: 34px;
     }
@@ -148,6 +155,7 @@ assets/icons/spotifyicon.png
       display:none;
       gap: 12px;
     }
+
     .pane.active{
       display:grid;
     }
@@ -179,23 +187,19 @@ assets/icons/spotifyicon.png
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
     }
+
     @media (min-width: 760px){
       .grid{
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
     }
-.icon {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-}
 
     .btn{
       display:flex;
       align-items:center;
       justify-content:center;
       gap: 8px;
-      padding: 12px 12px;
+      padding: 12px;
       text-decoration:none;
       color: var(--text);
       border-radius: var(--btnRadius);
@@ -204,9 +208,9 @@ assets/icons/spotifyicon.png
       transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
       font-weight: 650;
       letter-spacing: 0.01em;
-      text-align:center;
       min-height: 46px;
     }
+
     .btn:hover{
       transform: translateY(-1px);
       border-color: rgba(255,255,255,0.22);
@@ -218,13 +222,20 @@ assets/icons/spotifyicon.png
       font-weight: 600;
     }
 
+    /* ICONS */
+    .icon{
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
     .note{
       color: var(--muted);
       font-size: 13px;
       line-height: 1.35;
       border: 1px dashed rgba(255,255,255,0.16);
       border-radius: 14px;
-      padding: 12px 12px;
+      padding: 12px;
       background: rgba(255,255,255,0.03);
     }
 
@@ -246,21 +257,22 @@ assets/icons/spotifyicon.png
       </div>
 
       <div class="controls">
-        <div class="lane-label" aria-live="polite">
+        <div class="lane-label">
           <div class="lane-name" id="laneName">DJ Shwadda — Instrumentals</div>
           <div class="lane-hint" id="laneHint">Beats, loops, fuel. Tap a DSP and go.</div>
         </div>
 
         <div class="toggle">
           <span>Instrumentals</span>
-          <button class="switch" id="switch" data-mode="beats" aria-label="Toggle between instrumentals and songs" aria-pressed="false">
-            <span class="knob" aria-hidden="true"></span>
+          <button class="switch" id="switch" data-mode="beats" aria-pressed="false">
+            <span class="knob"></span>
           </button>
           <span>Songs</span>
         </div>
       </div>
 
       <div class="content">
+
         <!-- INSTRUMENTALS -->
         <section class="pane active" id="paneBeats">
           <div class="pane-title">
@@ -269,14 +281,14 @@ assets/icons/spotifyicon.png
           </div>
 
           <div class="grid">
-            <!-- Replace href values with your real links -->
-<a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank" rel="noopener">
-  <img src="assets/icons/spotifyicon.png" class="icon" alt="" />
-  Spotify
-</a>
-            <a class="btn secondary" href="https://music.apple.com/us/artist/shwadda/1615926938" target="_blank" rel="noopener" aria-disabled="true">Apple Music</a>
-            <a class="btn secondary" href="https://www.youtube.com/channel/UCEuwn9HJAmdVn5137ehJx4g" target="_blank" rel="noopener" aria-disabled="true">YouTube Music</a>
-            <a class="btn secondary" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank" rel="noopener" aria-disabled="true">Amazon Music</a>
+            <a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank" rel="noopener">
+              <img src="assets/icons/spotifyicon.png" class="icon" alt="" />
+              Spotify
+            </a>
+
+            <a class="btn secondary" href="https://music.apple.com/us/artist/shwadda/1615926938" target="_blank">Apple Music</a>
+            <a class="btn secondary" href="https://www.youtube.com/channel/UCEuwn9HJAmdVn5137ehJx4g" target="_blank">YouTube Music</a>
+            <a class="btn secondary" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank">Amazon Music</a>
           </div>
 
           <div class="note">
@@ -298,13 +310,17 @@ assets/icons/spotifyicon.png
           </div>
 
           <div class="grid">
-            <!-- Temporary: point to your current Spotify, or leave as # -->
-            <a class="btn" href="PASTE_YOUR_SPOTIFY_LINK_HERE" target="_blank" rel="noopener">Follow on Spotify</a>
-            <a class="btn secondary" href="#" target="_blank" rel="noopener" aria-disabled="true">Apple Music</a>
-            <a class="btn secondary" href="#" target="_blank" rel="noopener" aria-disabled="true">YouTube Music</a>
-            <a class="btn secondary" href="#" target="_blank" rel="noopener" aria-disabled="true">Amazon Music</a>
+            <a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank">
+              <img src="assets/icons/spotifyicon.png" class="icon" alt="" />
+              Follow on Spotify
+            </a>
+
+            <a class="btn secondary" href="#">Apple Music</a>
+            <a class="btn secondary" href="#">YouTube Music</a>
+            <a class="btn secondary" href="#">Amazon Music</a>
           </div>
         </section>
+
       </div>
 
       <div class="footer">
@@ -322,33 +338,25 @@ assets/icons/spotifyicon.png
 
     function setMode(mode){
       const isSongs = mode === "songs";
-
       switchBtn.dataset.mode = isSongs ? "songs" : "beats";
-      switchBtn.setAttribute("aria-pressed", String(isSongs));
-
       paneBeats.classList.toggle("active", !isSongs);
       paneSongs.classList.toggle("active", isSongs);
-
       laneName.textContent = isSongs ? "Shwadda — Songs" : "DJ Shwadda — Instrumentals";
       laneHint.textContent = isSongs
         ? "Vocals + story + feelings with sharp teeth."
         : "Beats, loops, fuel. Tap a DSP and go.";
-
-      // save preference
-      try { localStorage.setItem("laneMode", mode); } catch(e) {}
+      try { localStorage.setItem("laneMode", mode); } catch(e){}
     }
 
-    // click toggle
     switchBtn.addEventListener("click", () => {
       const current = switchBtn.dataset.mode === "songs" ? "songs" : "beats";
       setMode(current === "beats" ? "songs" : "beats");
     });
 
-    // restore preference
     try {
       const saved = localStorage.getItem("laneMode");
-      if(saved === "songs" || saved === "beats") setMode(saved);
-    } catch(e) {}
+      if(saved) setMode(saved);
+    } catch(e){}
   </script>
 </body>
 </html>
