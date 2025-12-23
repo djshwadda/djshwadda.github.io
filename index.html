@@ -22,24 +22,18 @@
 
     *{ box-sizing:border-box; }
     body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-
-  background:
-    linear-gradient(
-      rgba(0,0,0,0.5),
-      rgba(0,0,0,0.5)
-    ),
-    url("assets/images/background1.jpg") center / cover no-repeat fixed;
-
-  color: var(--text);
-  min-height: 100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding: 28px 14px;
-}
-
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url("assets/images/background1.jpg") center / cover no-repeat fixed;
+      color: var(--text);
+      min-height: 100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 28px 14px;
+    }
 
     .wrap{
       width: min(980px, 100%);
@@ -57,11 +51,13 @@
       -webkit-backdrop-filter: blur(20px);
     }
 
+    /* ✅ CENTER HEADER */
     .header{
       padding: 18px 18px 6px 18px;
       display:flex;
       flex-direction: column;
       gap: 10px;
+      text-align: center;
     }
 
     .title{
@@ -140,10 +136,13 @@
     .pane{ display:none; gap:12px; }
     .pane.active{ display:grid; }
 
+    /* ✅ CENTER SECTION TITLES */
     .pane-title{
       display:flex;
-      justify-content:space-between;
-      align-items:flex-end;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
     }
 
     .badge{
@@ -199,15 +198,6 @@
       font-size:12px;
       color:rgba(255,255,255,0.45);
       padding:8px;
-
-      .header,
-.pane-title {
-  text-align: center;
-}
-
-.pane-title {
-  justify-content: center;
-  gap: 12px;
     }
   </style>
 </head>
@@ -238,7 +228,6 @@
 
   <div class="content">
 
-    <!-- INSTRUMENTALS (COMING SOON) -->
     <section class="pane active" id="paneBeats">
       <div class="pane-title">
         <h2>DJ Shwadda — Instrumentals 🎚️</h2>
@@ -255,7 +244,6 @@
       <div class="note">Instrumentals unlock soon.</div>
     </section>
 
-    <!-- SONGS (LIVE) -->
     <section class="pane" id="paneSongs">
       <div class="pane-title">
         <h2>Shwadda — Songs 🎤</h2>
