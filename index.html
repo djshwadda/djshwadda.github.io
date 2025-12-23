@@ -126,6 +126,25 @@
   transition: background 220ms ease;
 }
 
+/* Songs active → green on the RIGHT */
+.switch[data-mode="songs"]{
+  background:
+    linear-gradient(
+      to right,
+      rgba(255,255,255,0.10) 0%,
+      rgba(29,185,84,0.35) 100%
+    );
+}
+
+/* Instrumentals active → neutral emphasis on the LEFT */
+.switch[data-mode="beats"]{
+  background:
+    linear-gradient(
+      to right,
+      rgba(29,185,84,0.15) 0%,
+      rgba(255,255,255,0.10) 100%
+    );
+}
 
     .knob{
       width:26px;
