@@ -208,14 +208,21 @@
 
     .pane-title{
       display:flex;
-      flex-direction: column;      /* stack title + emoji line */
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 6px;                    /* spacing between title and emoji */
+      gap: 2px;          /* tighter spacing */
       text-align: center;
+      line-height: 1.15; /* reduces perceived vertical gap */
+    }
+
+    .pane-title h2{
+      margin: 0;         /* remove default h2 margins */
+      line-height: 1.15;
     }
 
     .pane-emoji{
+      margin-top: -2px;  /* pull emojis closer */
       font-size: 20px;
       line-height: 1;
     }
