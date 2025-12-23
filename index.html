@@ -211,18 +211,18 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 5px;          /* tighter spacing */
+      gap: 5px;
       text-align: center;
-      line-height: 1.15; /* reduces perceived vertical gap */
+      line-height: 1.15;
     }
 
     .pane-title h2{
-      margin: 0;         /* remove default h2 margins */
+      margin: 0;
       line-height: 1.15;
     }
 
     .pane-emoji{
-      margin-top: -2px;  /* pull emojis closer */
+      margin-top: -2px;
       font-size: 25px;
       line-height: 1;
     }
@@ -273,6 +273,19 @@
       border:1px dashed rgba(255,255,255,0.16);
       border-radius:14px;
       padding:12px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    .upcoming-cover{
+      width:56px;
+      height:56px;
+      border-radius:10px;
+      object-fit:cover;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.35);
     }
 
     .footer{
@@ -357,7 +370,7 @@
 
   </div>
 
-  <div class="note" id="upcomingProject">Upcoming project: —</div>
+  <div class="note" id="upcomingProject"></div>
 
   <div class="footer" id="footerText">© Shwadda</div>
 
@@ -387,9 +400,17 @@ function setMode(mode){
 
   footerText.textContent = isSongs ? "© Shwadda" : "© DJ Shwadda";
 
-  upcomingProject.textContent = isSongs
-    ? "Upcoming project: Soul Spectrum: Golden"
-    : "Upcoming project: Primordial Groove";
+  upcomingProject.innerHTML = isSongs
+    ? `Upcoming project:
+       <a href="https://feature.fm/YOUR_SONG_LINK" target="_blank">
+         <img class="upcoming-cover" src="assets/images/soul-spectrum-golden.jpg" alt="Soul Spectrum: Golden cover">
+       </a>
+       Soul Spectrum: Golden`
+    : `Upcoming project:
+       <a href="https://feature.fm/YOUR_BEAT_LINK" target="_blank">
+         <img class="upcoming-cover" src="assets/images/primordial-groove.jpg" alt="Primordial Groove cover">
+       </a>
+       Primordial Groove`;
 }
 
 setMode("songs");
