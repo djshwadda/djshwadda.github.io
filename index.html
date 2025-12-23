@@ -109,42 +109,34 @@
     }
 
     .switch{
-  width:66px;
-  height:36px;
-  border-radius:999px;
-  position:relative;
-  cursor:pointer;
-  border:1px solid var(--border);
+      width:66px;
+      height:36px;
+      border-radius:999px;
+      position:relative;
+      cursor:pointer;
+      border:1px solid var(--border);
+      transition: background 220ms ease;
+    }
 
-  background:
-    linear-gradient(
-      to right,
-      rgba(255,255,255,0.10) 0%,
-      rgba(255,255,255,0.10) 100%
-    );
+    /* Songs active → green on LEFT */
+    .switch[data-mode="songs"]{
+      background:
+        linear-gradient(
+          to right,
+          rgba(29,185,84,0.75) 0%,
+          rgba(255,255,255,0.10) 100%
+        );
+    }
 
-  transition: background 220ms ease;
-}
-
-/* Songs active → green on the RIGHT */
-.switch[data-mode="songs"]{
-  background:
-    linear-gradient(
-      to right,
-      rgba(255,255,255,0.10) 0%,
-      rgba(29,185,84,0.75) 100%
-    );
-}
-
-/* Instrumentals active → neutral emphasis on the LEFT */
-.switch[data-mode="beats"]{
-  background:
-    linear-gradient(
-      to right,
-      rgba(29,185,84,0.15) 0%,
-      rgba(255,255,255,0.10) 100%
-    );
-}
+    /* Instrumentals active → green on RIGHT */
+    .switch[data-mode="beats"]{
+      background:
+        linear-gradient(
+          to right,
+          rgba(255,255,255,0.10) 0%,
+          rgba(29,185,84,0.75) 100%
+        );
+    }
 
     .knob{
       width:26px;
@@ -158,7 +150,8 @@
       transition:left 220ms ease;
     }
 
-    .switch[data-mode="songs"] .knob{
+    /* Songs = LEFT (default) */
+    .switch[data-mode="beats"] .knob{
       left:34px;
     }
 
@@ -247,22 +240,22 @@
 
   <div class="controls">
     <div class="lane-label">
-      <div class="lane-name" id="laneName">DJ Shwadda — Instrumentals</div>
-      <div class="lane-hint" id="laneHint">Beats, loops, fuel.</div>
+      <div class="lane-name" id="laneName">Shwadda — Songs</div>
+      <div class="lane-hint" id="laneHint">Vocals + story.</div>
     </div>
 
     <div class="toggle">
-      <span id="labelBeats">Instrumentals</span>
-      <button class="switch" id="switch" data-mode="beats">
+      <span id="labelSongs">Songs</span>
+      <button class="switch" id="switch" data-mode="songs">
         <span class="knob"></span>
       </button>
-      <span id="labelSongs">Songs</span>
+      <span id="labelBeats">Instrumentals</span>
     </div>
   </div>
 
   <div class="content">
 
-    <section class="pane active" id="paneBeats">
+    <section class="pane" id="paneBeats">
       <div class="pane-title">
         <h2>DJ Shwadda — Instrumentals 🎚️</h2>
         <span class="badge">Loading ⏳</span>
@@ -271,15 +264,16 @@
       <div class="grid">
         <div class="btn secondary"><img class="icon" src="assets/icons/spotifyicon.png"> Spotify</div>
         <div class="btn secondary"><img class="icon" src="assets/icons/applemusicicon.png"> Apple Music</div>
-<a class="btn" href="https://youtube.com/@djshwadda?si=3hXStYA8kH6BRoC2" target="_blank">
+        <a class="btn" href="https://youtube.com/@djshwadda?si=3hXStYA8kH6BRoC2" target="_blank">
           <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
-        </a>        <div class="btn secondary"><img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</div>
+        </a>
+        <div class="btn secondary"><img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</div>
       </div>
 
       <div class="note">Instrumentals posted on YouTube daily. Coming to other platforms soon...</div>
     </section>
 
-    <section class="pane" id="paneSongs">
+    <section class="pane active" id="paneSongs">
       <div class="pane-title">
         <h2>Shwadda — Songs 🎤</h2>
         <span class="badge">Live now ✅</span>
@@ -303,7 +297,7 @@
 
   </div>
 
-<div class="footer" id="footerText">© DJ Shwadda</div>
+  <div class="footer" id="footerText">© Shwadda</div>
 
 </section>
 </main>
@@ -317,7 +311,6 @@ const laneHint = document.getElementById("laneHint");
 const labelBeats = document.getElementById("labelBeats");
 const labelSongs = document.getElementById("labelSongs");
 const footerText = document.getElementById("footerText");
-  
 
 function setMode(mode){
   const isSongs = mode === "songs";
@@ -329,17 +322,17 @@ function setMode(mode){
   laneName.textContent = isSongs ? "Shwadda — Songs" : "DJ Shwadda — Instrumentals";
   laneHint.textContent = isSongs ? "Vocals + story." : "Beats, loops, fuel.";
 
-  labelBeats.classList.toggle("active", !isSongs);
   labelSongs.classList.toggle("active", isSongs);
+  labelBeats.classList.toggle("active", !isSongs);
 
   footerText.textContent = isSongs ? "© Shwadda" : "© DJ Shwadda";
 }
 
-// initial state based on current data-mode
-setMode(switchBtn.dataset.mode === "songs" ? "songs" : "beats");
+// default = Songs
+setMode("songs");
 
 switchBtn.addEventListener("click", () => {
-  setMode(switchBtn.dataset.mode === "beats" ? "songs" : "beats");
+  setMode(switchBtn.dataset.mode === "songs" ? "beats" : "songs");
 });
 </script>
 
