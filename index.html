@@ -18,6 +18,7 @@
       --radius: 18px;
       --btnRadius: 14px;
       --focus: rgba(255,255,255,0.25);
+      --activeGreen: #1DB954;
     }
 
     *{ box-sizing:border-box; }
@@ -51,7 +52,6 @@
       -webkit-backdrop-filter: blur(20px);
     }
 
-    /* ✅ CENTER HEADER */
     .header{
       padding: 18px 18px 6px 18px;
       display:flex;
@@ -99,6 +99,13 @@
     .toggle span{
       font-size:12px;
       color:var(--muted);
+      transition: color 160ms ease, font-weight 160ms ease;
+      white-space: nowrap;
+    }
+
+    .toggle span.active{
+      color: var(--activeGreen);
+      font-weight: 750;
     }
 
     .switch{
@@ -136,7 +143,6 @@
     .pane{ display:none; gap:12px; }
     .pane.active{ display:grid; }
 
-    /* ✅ CENTER SECTION TITLES */
     .pane-title{
       display:flex;
       justify-content: center;
@@ -218,11 +224,11 @@
     </div>
 
     <div class="toggle">
-      <span>Instrumentals</span>
+      <span id="labelBeats">Instrumentals</span>
       <button class="switch" id="switch" data-mode="beats">
         <span class="knob"></span>
       </button>
-      <span>Songs</span>
+      <span id="labelSongs">Songs</span>
     </div>
   </div>
 
@@ -279,15 +285,25 @@ const paneBeats = document.getElementById("paneBeats");
 const paneSongs = document.getElementById("paneSongs");
 const laneName = document.getElementById("laneName");
 const laneHint = document.getElementById("laneHint");
+const labelBeats = document.getElementById("labelBeats");
+const labelSongs = document.getElementById("labelSongs");
 
 function setMode(mode){
   const isSongs = mode === "songs";
   switchBtn.dataset.mode = isSongs ? "songs" : "beats";
+
   paneBeats.classList.toggle("active", !isSongs);
   paneSongs.classList.toggle("active", isSongs);
+
   laneName.textContent = isSongs ? "Shwadda — Songs" : "DJ Shwadda — Instrumentals";
   laneHint.textContent = isSongs ? "Vocals + story." : "Beats, loops, fuel.";
+
+  labelBeats.classList.toggle("active", !isSongs);
+  labelSongs.classList.toggle("active", isSongs);
 }
+
+// initial state based on current data-mode
+setMode(switchBtn.dataset.mode === "songs" ? "songs" : "beats");
 
 switchBtn.addEventListener("click", () => {
   setMode(switchBtn.dataset.mode === "beats" ? "songs" : "beats");
