@@ -341,6 +341,18 @@
       box-shadow: 0 0 0 3px var(--focus);
     }
 
+    /* FIX: stack presave link under on mobile, keep side-by-side on larger screens */
+    @media (max-width:520px){
+      .upcoming{
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .feature-link{
+        width:100%;
+        justify-content:center;
+      }
+    }
+
     .footer{
       text-align:center;
       font-size:12px;
