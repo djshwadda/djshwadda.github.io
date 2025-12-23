@@ -8,385 +8,130 @@
 
   <style>
     :root{
-      --bg: #0b0c10;
-      --card: rgba(255,255,255,0.50);
-      --card2: rgba(255,255,255,0.09);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.62);
-      --border: rgba(255,255,255,0.12);
-      --shadow: 0 18px 40px rgba(0,0,0,0.45);
-      --radius: 18px;
-      --btnRadius: 14px;
-      --focus: rgba(255,255,255,0.25);
+      --bg:#0b0c10;
+      --card:rgba(255,255,255,0.50);
+      --card2:rgba(255,255,255,0.09);
+      --text:rgba(255,255,255,0.92);
+      --muted:rgba(255,255,255,0.62);
+      --border:rgba(255,255,255,0.12);
+      --shadow:0 18px 40px rgba(0,0,0,0.45);
+      --radius:18px;
+      --btnRadius:14px;
 
-      --activeGreen: #1DB954;
-      --activeBlue:  #2D7DFF;
+      --activeGreen:#1DB954;
+      --activeBlue:#2D7DFF;
     }
 
-    *{ box-sizing:border-box; }
+    *{box-sizing:border-box;}
     body{
       margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       background:
-        linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-        url("assets/images/background1.jpg") center / cover no-repeat fixed;
-      color: var(--text);
-      min-height: 100vh;
+        linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),
+        url("assets/images/background1.jpg") center/cover no-repeat fixed;
+      color:var(--text);
+      min-height:100vh;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding: 28px 14px;
+      padding:28px 14px;
     }
 
-    .wrap{
-      width: min(980px, 100%);
-      display:grid;
-      gap: 16px;
-    }
-
+    .wrap{width:min(980px,100%);display:grid;gap:16px;}
     .card{
-      background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.08));
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      background:linear-gradient(180deg,var(--card),rgba(255,255,255,.08));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
       overflow:hidden;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter:blur(20px);
     }
 
-    .header{
-      padding: 18px 18px 6px 18px;
-      display:flex;
-      flex-direction: column;
-      gap: 10px;
-      text-align: center;
-    }
-
-    .title{
-      font-size: clamp(28px, 4vw, 44px);
-      margin:0;
-    }
-
-    .subtitle{
-      margin:0;
-      color: var(--muted);
-      font-size: 15px;
-    }
+    .header{text-align:center;padding:18px 18px 6px;}
+    .title{margin:0;font-size:clamp(28px,4vw,44px);}
+    .subtitle{margin:0;color:var(--muted);font-size:15px;}
 
     .controls{
-      padding: 18px 16px;
+      padding:18px 16px;
       display:flex;
-      justify-content: center;
-      align-items:center;
-      gap: 14px;
-      border-top: 1px solid var(--border);
-      background: rgba(0,0,0,0.45);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      transition: background 220ms ease;
+      justify-content:center;
+      border-top:1px solid var(--border);
+      background:rgba(0,0,0,.45);
     }
-
     .controls[data-mode="songs"]{
-      background:
-        linear-gradient(to right,
-          rgba(29,185,84,0.24) 0%,
-          rgba(0,0,0,0.55) 55%,
-          rgba(0,0,0,0.45) 100%);
+      background:linear-gradient(to right,rgba(29,185,84,.24),rgba(0,0,0,.55));
     }
-
     .controls[data-mode="beats"]{
-      background:
-        linear-gradient(to right,
-          rgba(0,0,0,0.45) 0%,
-          rgba(0,0,0,0.55) 45%,
-          rgba(45,125,255,0.24) 100%);
+      background:linear-gradient(to right,rgba(0,0,0,.55),rgba(45,125,255,.24));
     }
 
-    .lane-label{ display:none; }
-
-    .toggle{
-      display:flex;
-      align-items:center;
-      gap:14px;
-    }
-
-    .toggle-group{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:4px;
-    }
-
+    .toggle{display:flex;align-items:center;gap:14px;}
+    .toggle-group{text-align:center;}
     .toggle span{
+      display:inline-block;
       font-size:18px;
       font-weight:700;
-      color:var(--muted);
-      white-space: nowrap;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
-      transition:
-        color 160ms ease,
-        font-weight 160ms ease,
-        background 160ms ease,
-        opacity 160ms ease;
-    }
-
-    .toggle span.active{
-      font-weight: 800;
-      background: rgba(0,0,0,0.75);
-    }
-
-    .toggle-sub{
-      font-size:12px;
+      padding:6px 12px;
+      border-radius:999px;
+      background:rgba(0,0,0,.55);
       color:var(--muted);
     }
-
-    #labelSongs.active{ color: var(--activeGreen); }
-    #labelBeats.active{ color: var(--activeBlue); }
+    .toggle span.active{background:rgba(0,0,0,.75);}
+    #labelSongs.active{color:var(--activeGreen);}
+    #labelBeats.active{color:var(--activeBlue);}
+    .toggle-sub{font-size:12px;color:var(--muted);}
 
     .switch{
-      width:72px;
-      height:38px;
-      border-radius:999px;
-      position:relative;
-      cursor:pointer;
-      border:1px solid var(--border);
-      transition: background 220ms ease;
+      width:72px;height:38px;border-radius:999px;
+      position:relative;border:1px solid var(--border);cursor:pointer;
     }
-
-    .switch[data-mode="songs"]{
-      background:
-        linear-gradient(
-          to right,
-          rgba(29,185,84,0.80) 0%,
-          rgba(255,255,255,0.10) 100%
-        );
-    }
-
-    .switch[data-mode="beats"]{
-      background:
-        linear-gradient(
-          to right,
-          rgba(255,255,255,0.10) 0%,
-          rgba(45,125,255,0.85) 100%
-        );
-    }
+    .switch[data-mode="songs"]{background:linear-gradient(to right,rgba(29,185,84,.8),rgba(255,255,255,.1));}
+    .switch[data-mode="beats"]{background:linear-gradient(to right,rgba(255,255,255,.1),rgba(45,125,255,.85));}
 
     .knob{
-      width:28px;
-      height:28px;
-      background:#fff;
-      border-radius:999px;
-      position:absolute;
-      top:50%;
-      left:6px;
-      transform:translateY(-50%);
-      transition:left 220ms ease, box-shadow 220ms ease;
+      width:28px;height:28px;border-radius:999px;
+      background:#fff;position:absolute;top:50%;left:6px;
+      transform:translateY(-50%);transition:left .2s;
     }
+    .switch[data-mode="beats"] .knob{left:38px;}
 
-    .switch[data-mode="beats"] .knob{ left:38px; }
+    .content{padding:16px;}
+    .pane{display:none;}
+    .pane.active{display:block;}
 
-    .switch[data-mode="songs"] .knob{
-      box-shadow: 0 0 12px rgba(29,185,84,0.55);
-    }
-    .switch[data-mode="beats"] .knob{
-      box-shadow: 0 0 12px rgba(45,125,255,0.55);
-    }
+    .pane-title{text-align:center;line-height:1.15;}
+    .pane-title h2{margin:0;}
+    .pane-emoji{font-size:22px;margin-top:2px;}
+    .badge{font-size:12px;color:var(--muted);}
 
-    .content{
-      padding:16px;
-      display:grid;
-      gap:12px;
-    }
-
-    .pane{ display:none; gap:12px; }
-    .pane.active{ display:grid; }
-
-    .pane-title{
-      display:flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 4px;
-      text-align: center;
-      line-height: 1.15;
-    }
-
-    .pane-title h2{
-      margin: 0;
-      line-height: 1.15;
-    }
-
-    .pane-emoji{
-      margin-top: -1px;
-      font-size: 22px;
-      line-height: 1;
-    }
-
-    .badge{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,0.05);
-      color:var(--muted);
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:10px;
-    }
-
-    @media (min-width:760px){
-      .grid{ grid-template-columns:repeat(4,1fr); }
-    }
-
-    .btn{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding:12px;
-      border-radius:var(--btnRadius);
-      border:1px solid var(--border);
-      background:linear-gradient(180deg,var(--card2),rgba(255,255,255,0.04));
-      color:var(--text);
-      text-decoration:none;
-      font-weight:650;
-    }
-
-    .btn.secondary{ color:var(--muted); }
-
-    .icon{
-      width:50px;
-      height:50px;
-    }
-
-    .note{
-      font-size:13px;
-      color:var(--muted);
-      border:1px dashed rgba(255,255,255,0.16);
-      border-radius:14px;
-      padding:12px;
-    }
-
-    /* Upcoming Projects */
     .upcoming{
-      margin-top: 6px;
-      border-top: 1px solid var(--border);
-      padding: 14px 16px 6px 16px;
-      display: grid;
-      gap: 10px;
-      background: rgba(0,0,0,0.35);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      border-top:1px solid var(--border);
+      padding:14px 16px 6px;
+      background:rgba(0,0,0,.35);
     }
-
-    .upcoming-head{
-      display:flex;
-      flex-direction: column;
-      align-items:center;
-      text-align:center;
-      gap:6px;
-    }
-
-    .upcoming-title{
-      margin:0;
-      font-size: 14px;
-      letter-spacing: 0.5px;
-      color: rgba(255,255,255,0.82);
-      text-transform: uppercase;
-    }
-
-    .upcoming-sub{
-      margin:0;
-      font-size:12px;
-      color: var(--muted);
-    }
-
-    .upcoming-list{
-      display:grid;
-      gap:10px;
-    }
-
     .project{
-      display:flex;
-      flex-direction: column;
-      gap:10px;
-      padding: 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.10));
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.18);
+      margin-top:8px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      text-align:center;
     }
-
-    .project-top{
-      display:flex;
-      align-items:flex-start;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .project-name{
-      margin:0;
-      font-size: 16px;
-      font-weight: 750;
-      letter-spacing: 0.2px;
-    }
-
-    .project-date{
-      font-size: 12px;
-      color: var(--muted);
-      white-space: nowrap;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.40);
-    }
-
-    .project-actions{
-      display:flex;
-      gap:10px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+    .project h4{margin:0 0 6px;}
+    .project-date{font-size:12px;color:var(--muted);margin-bottom:10px;}
 
     .pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.45);
-      color: rgba(255,255,255,0.92);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 13px;
-      transition: transform 140ms ease, background 140ms ease;
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(0,0,0,.45);
+      color:#fff;
+      text-decoration:none;
+      font-weight:700;
+      font-size:13px;
     }
 
-    .pill:hover{ transform: translateY(-1px); background: rgba(0,0,0,0.60); }
-
-    .pill.primary[data-mode="songs"]{ box-shadow: 0 0 0 2px rgba(29,185,84,0.18) inset; }
-    .pill.primary[data-mode="beats"]{ box-shadow: 0 0 0 2px rgba(45,125,255,0.18) inset; }
-
-    .pill.secondary{
-      color: var(--muted);
-      font-weight: 650;
-    }
-
-    .footer{
-      text-align:center;
-      font-size:12px;
-      color:rgba(255,255,255,0.45);
-      padding:8px;
-    }
+    .footer{text-align:center;font-size:12px;color:rgba(255,255,255,.45);padding:8px;}
   </style>
 </head>
 
@@ -405,11 +150,7 @@
         <span id="labelSongs">Songs</span>
         <div class="toggle-sub">Vocals + Story</div>
       </div>
-
-      <button class="switch" id="switch" data-mode="songs">
-        <span class="knob"></span>
-      </button>
-
+      <button class="switch" id="switch" data-mode="songs"><span class="knob"></span></button>
       <div class="toggle-group">
         <span id="labelBeats">Instrumentals</span>
         <div class="toggle-sub">Beats, Loops, Fuel.</div>
@@ -418,60 +159,28 @@
   </div>
 
   <div class="content">
+    <section class="pane active" id="paneSongs">
+      <div class="pane-title">
+        <h2>Shwadda – Songs</h2>
+        <div class="pane-emoji">🗣️🎙️🎶</div>
+        <div class="badge">The Voice</div>
+      </div>
+    </section>
 
     <section class="pane" id="paneBeats">
       <div class="pane-title">
-        <h2>DJ Shwadda - Instrumentals</h2>
+        <h2>DJ Shwadda – Instrumentals</h2>
         <div class="pane-emoji">🎹🎶</div>
-        <span class="badge">The Pulse🫀</span>
-      </div>
-
-      <div class="grid">
-        <div class="btn secondary"><img class="icon" src="assets/icons/spotifyicon.png"> Spotify</div>
-        <div class="btn secondary"><img class="icon" src="assets/icons/applemusicicon.png"> Apple Music</div>
-        <a class="btn" href="https://youtube.com/@djshwadda?si=3hXStYA8kH6BRoC2" target="_blank">
-          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
-        </a>
-        <div class="btn secondary"><img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</div>
-      </div>
-
-      <div class="note">Instrumentals posted on YouTube daily. Coming to other platforms soon...</div>
-    </section>
-
-    <section class="pane active" id="paneSongs">
-      <div class="pane-title">
-        <h2>Shwadda - Songs</h2>
-        <div class="pane-emoji">🗣️🎙️🎶</div>
-        <span class="badge">The Voice🎙️</span>
-      </div>
-
-      <div class="grid">
-        <a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank">
-          <img class="icon" src="assets/icons/spotifyicon.png"> Spotify
-        </a>
-        <a class="btn" href="https://music.apple.com/us/artist/shwadda/1615926938" target="_blank">
-          <img class="icon" src="assets/icons/applemusicicon.png"> Apple Music
-        </a>
-        <a class="btn" href="https://www.youtube.com/channel/UCEuwn9HJAmdVn5137ehJx4g" target="_blank">
-          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
-        </a>
-        <a class="btn" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank">
-          <img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music
-        </a>
+        <div class="badge">The Pulse</div>
       </div>
     </section>
-
   </div>
 
-  <!-- Upcoming Projects (changes with toggle) -->
-  <section class="upcoming" id="upcomingWrap">
-    <div class="upcoming-head">
-      <h3 class="upcoming-title" id="upcomingTitle">Upcoming Projects</h3>
-      <p class="upcoming-sub" id="upcomingSub">Pre-save / pre-add links coming in hot.</p>
-    </div>
-
-    <div class="upcoming-list" id="upcomingList">
-      <!-- injected by JS -->
+  <section class="upcoming" id="upcoming">
+    <div class="project">
+      <h4 id="projectTitle"></h4>
+      <div class="project-date" id="projectDate"></div>
+      <a class="pill" id="projectLink" href="#" target="_blank">Pre-Save / Pre-Add</a>
     </div>
   </section>
 
@@ -482,136 +191,51 @@
 
 <script>
 const switchBtn = document.getElementById("switch");
-const paneBeats = document.getElementById("paneBeats");
 const paneSongs = document.getElementById("paneSongs");
-const labelBeats = document.getElementById("labelBeats");
+const paneBeats = document.getElementById("paneBeats");
 const labelSongs = document.getElementById("labelSongs");
+const labelBeats = document.getElementById("labelBeats");
 const footerText = document.getElementById("footerText");
 const controlsStrip = document.getElementById("controlsStrip");
 
-const upcomingList = document.getElementById("upcomingList");
-const upcomingSub = document.getElementById("upcomingSub");
+const projectTitle = document.getElementById("projectTitle");
+const projectDate = document.getElementById("projectDate");
+const projectLink = document.getElementById("projectLink");
 
-const upcomingData = {
-  songs: [
-    {
-      title: "Sweet Love",
-      date: "TBD",
-      presave: "https://www.feature.fm/",
-      extras: [
-        { label: "Apple Pre-Add", url: "https://www.feature.fm/" },
-        { label: "YouTube Reminder", url: "https://www.feature.fm/" }
-      ]
-    },
-    {
-      title: "Pressure: Calm & Rage (EP)",
-      date: "TBD",
-      presave: "https://www.feature.fm/",
-      extras: [
-        { label: "Apple Pre-Add", url: "https://www.feature.fm/" }
-      ]
-    }
-  ],
-  beats: [
-    {
-      title: "Primordial Groove (Instrumental)",
-      date: "TBD",
-      presave: "https://www.feature.fm/",
-      extras: [
-        { label: "YouTube Premiere", url: "https://www.youtube.com/" }
-      ]
-    },
-    {
-      title: "Roulette (Single)",
-      date: "TBD",
-      presave: "https://www.feature.fm/",
-      extras: [
-        { label: "Apple Pre-Add", url: "https://www.feature.fm/" }
-      ]
-    }
-  ]
+const projects = {
+  songs:{
+    title:"Pressure: Calm & Rage (EP)",
+    date:"Coming Soon",
+    link:"https://www.feature.fm/"
+  },
+  beats:{
+    title:"Primordial Groove",
+    date:"Coming Soon",
+    link:"https://www.feature.fm/"
+  }
 };
-
-function renderUpcoming(mode){
-  const items = upcomingData[mode] || [];
-  upcomingList.innerHTML = "";
-
-  upcomingSub.textContent = mode === "songs"
-    ? "Upcoming Shwadda releases — lock them in early."
-    : "Upcoming DJ Shwadda drops — save the fuel before it ignites.";
-
-  items.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "project";
-
-    const top = document.createElement("div");
-    top.className = "project-top";
-
-    const name = document.createElement("h4");
-    name.className = "project-name";
-    name.textContent = item.title;
-
-    const date = document.createElement("div");
-    date.className = "project-date";
-    date.textContent = item.date || "TBD";
-
-    top.appendChild(name);
-    top.appendChild(date);
-
-    const actions = document.createElement("div");
-    actions.className = "project-actions";
-
-    const primary = document.createElement("a");
-    primary.className = "pill primary";
-    primary.dataset.mode = mode;
-    primary.href = item.presave;
-    primary.target = "_blank";
-    primary.rel = "noopener";
-    primary.textContent = "Pre-Save / Pre-Add";
-
-    actions.appendChild(primary);
-
-    if (Array.isArray(item.extras)) {
-      item.extras.forEach(x => {
-        const a = document.createElement("a");
-        a.className = "pill secondary";
-        a.href = x.url;
-        a.target = "_blank";
-        a.rel = "noopener";
-        a.textContent = x.label;
-        actions.appendChild(a);
-      });
-    }
-
-    card.appendChild(top);
-    card.appendChild(actions);
-
-    upcomingList.appendChild(card);
-  });
-}
 
 function setMode(mode){
   const isSongs = mode === "songs";
-  const modeKey = isSongs ? "songs" : "beats";
+  switchBtn.dataset.mode = mode;
+  controlsStrip.dataset.mode = mode;
 
-  switchBtn.dataset.mode = modeKey;
-  controlsStrip.dataset.mode = modeKey;
-
-  paneBeats.classList.toggle("active", !isSongs);
   paneSongs.classList.toggle("active", isSongs);
+  paneBeats.classList.toggle("active", !isSongs);
 
   labelSongs.classList.toggle("active", isSongs);
   labelBeats.classList.toggle("active", !isSongs);
 
   footerText.textContent = isSongs ? "© Shwadda" : "© DJ Shwadda";
 
-  renderUpcoming(modeKey);
+  projectTitle.textContent = projects[mode].title;
+  projectDate.textContent = projects[mode].date;
+  projectLink.href = projects[mode].link;
 }
 
 setMode("songs");
-
-switchBtn.addEventListener("click", () => {
-  setMode(switchBtn.dataset.mode === "songs" ? "beats" : "songs");
+switchBtn.addEventListener("click",()=>{
+  setMode(switchBtn.dataset.mode==="songs"?"beats":"songs");
 });
 </script>
 
