@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -74,11 +74,11 @@
     }
 
     .controls{
-      padding: 14px 16px;
+      padding: 18px 16px;
       display:flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items:center;
-      gap: 12px;
+      gap: 14px;
       border-top: 1px solid var(--border);
       background: rgba(0,0,0,0.45);
       backdrop-filter: blur(10px);
@@ -102,27 +102,27 @@
           rgba(45,125,255,0.24) 100%);
     }
 
-    .lane-label{
-      display:flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .lane-name{ font-weight:700; }
-    .lane-hint{ font-size:12px; color:var(--muted); }
+    .lane-label{ display:none; }
 
     .toggle{
       display:flex;
       align-items:center;
-      gap:10px;
+      gap:14px;
     }
 
-    /* OPTION 1: pill badges behind toggle text */
+    .toggle-group{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+    }
+
     .toggle span{
-      font-size:12px;
+      font-size:18px;
+      font-weight:700;
       color:var(--muted);
       white-space: nowrap;
-      padding: 4px 8px;
+      padding: 6px 12px;
       border-radius: 999px;
       background: rgba(0,0,0,0.55);
       backdrop-filter: blur(6px);
@@ -136,16 +136,21 @@
     }
 
     .toggle span.active{
-      font-weight: 750;
+      font-weight: 800;
       background: rgba(0,0,0,0.75);
+    }
+
+    .toggle-sub{
+      font-size:12px;
+      color:var(--muted);
     }
 
     #labelSongs.active{ color: var(--activeGreen); }
     #labelBeats.active{ color: var(--activeBlue); }
 
     .switch{
-      width:66px;
-      height:36px;
+      width:72px;
+      height:38px;
       border-radius:999px;
       position:relative;
       cursor:pointer;
@@ -172,8 +177,8 @@
     }
 
     .knob{
-      width:26px;
-      height:26px;
+      width:28px;
+      height:28px;
       background:#fff;
       border-radius:999px;
       position:absolute;
@@ -183,9 +188,7 @@
       transition:left 220ms ease, box-shadow 220ms ease;
     }
 
-    .switch[data-mode="beats"] .knob{
-      left:34px;
-    }
+    .switch[data-mode="beats"] .knob{ left:38px; }
 
     .switch[data-mode="songs"] .knob{
       box-shadow: 0 0 12px rgba(29,185,84,0.55);
@@ -278,17 +281,20 @@
   </div>
 
   <div class="controls" id="controlsStrip" data-mode="songs">
-    <div class="lane-label">
-      <div class="lane-name" id="laneName">Shwadda — Songs</div>
-      <div class="lane-hint" id="laneHint">Vocals + Story.</div>
-    </div>
-
     <div class="toggle">
-      <span id="labelSongs">Songs</span>
+      <div class="toggle-group">
+        <span id="labelSongs">Songs</span>
+        <div class="toggle-sub">Vocals + Story</div>
+      </div>
+
       <button class="switch" id="switch" data-mode="songs">
         <span class="knob"></span>
       </button>
-      <span id="labelBeats">Instrumentals</span>
+
+      <div class="toggle-group">
+        <span id="labelBeats">Instrumentals</span>
+        <div class="toggle-sub">Beats, Loops, Fuel.</div>
+      </div>
     </div>
   </div>
 
@@ -345,8 +351,6 @@
 const switchBtn = document.getElementById("switch");
 const paneBeats = document.getElementById("paneBeats");
 const paneSongs = document.getElementById("paneSongs");
-const laneName = document.getElementById("laneName");
-const laneHint = document.getElementById("laneHint");
 const labelBeats = document.getElementById("labelBeats");
 const labelSongs = document.getElementById("labelSongs");
 const footerText = document.getElementById("footerText");
@@ -359,9 +363,6 @@ function setMode(mode){
 
   paneBeats.classList.toggle("active", !isSongs);
   paneSongs.classList.toggle("active", isSongs);
-
-  laneName.textContent = isSongs ? "Shwadda — Songs" : "DJ Shwadda — Instrumentals";
-  laneHint.textContent = isSongs ? "Vocals + story." : "Beats, Loops, Fuel.";
 
   labelSongs.classList.toggle("active", isSongs);
   labelBeats.classList.toggle("active", !isSongs);
