@@ -211,19 +211,19 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 5px;          /* tighter spacing */
+      gap: 4px;
       text-align: center;
-      line-height: 1.15; /* reduces perceived vertical gap */
+      line-height: 1.15;
     }
 
     .pane-title h2{
-      margin: 0;         /* remove default h2 margins */
+      margin: 0;
       line-height: 1.15;
     }
 
     .pane-emoji{
-      margin-top: -2px;  /* pull emojis closer */
-      font-size: 25px;
+      margin-top: -1px;
+      font-size: 22px;
       line-height: 1;
     }
 
@@ -273,6 +273,112 @@
       border:1px dashed rgba(255,255,255,0.16);
       border-radius:14px;
       padding:12px;
+    }
+
+    /* Upcoming Projects */
+    .upcoming{
+      margin-top: 6px;
+      border-top: 1px solid var(--border);
+      padding: 14px 16px 6px 16px;
+      display: grid;
+      gap: 10px;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .upcoming-head{
+      display:flex;
+      flex-direction: column;
+      align-items:center;
+      text-align:center;
+      gap:6px;
+    }
+
+    .upcoming-title{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      color: rgba(255,255,255,0.82);
+      text-transform: uppercase;
+    }
+
+    .upcoming-sub{
+      margin:0;
+      font-size:12px;
+      color: var(--muted);
+    }
+
+    .upcoming-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .project{
+      display:flex;
+      flex-direction: column;
+      gap:10px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.10));
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.18);
+    }
+
+    .project-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .project-name{
+      margin:0;
+      font-size: 16px;
+      font-weight: 750;
+      letter-spacing: 0.2px;
+    }
+
+    .project-date{
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.40);
+    }
+
+    .project-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.45);
+      color: rgba(255,255,255,0.92);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      transition: transform 140ms ease, background 140ms ease;
+    }
+
+    .pill:hover{ transform: translateY(-1px); background: rgba(0,0,0,0.60); }
+
+    .pill.primary[data-mode="songs"]{ box-shadow: 0 0 0 2px rgba(29,185,84,0.18) inset; }
+    .pill.primary[data-mode="beats"]{ box-shadow: 0 0 0 2px rgba(45,125,255,0.18) inset; }
+
+    .pill.secondary{
+      color: var(--muted);
+      font-weight: 650;
     }
 
     .footer{
@@ -357,6 +463,18 @@
 
   </div>
 
+  <!-- Upcoming Projects (changes with toggle) -->
+  <section class="upcoming" id="upcomingWrap">
+    <div class="upcoming-head">
+      <h3 class="upcoming-title" id="upcomingTitle">Upcoming Projects</h3>
+      <p class="upcoming-sub" id="upcomingSub">Pre-save / pre-add links coming in hot.</p>
+    </div>
+
+    <div class="upcoming-list" id="upcomingList">
+      <!-- injected by JS -->
+    </div>
+  </section>
+
   <div class="footer" id="footerText">© Shwadda</div>
 
 </section>
@@ -371,10 +489,113 @@ const labelSongs = document.getElementById("labelSongs");
 const footerText = document.getElementById("footerText");
 const controlsStrip = document.getElementById("controlsStrip");
 
+const upcomingList = document.getElementById("upcomingList");
+const upcomingSub = document.getElementById("upcomingSub");
+
+const upcomingData = {
+  songs: [
+    {
+      title: "Sweet Love",
+      date: "TBD",
+      presave: "https://www.feature.fm/",
+      extras: [
+        { label: "Apple Pre-Add", url: "https://www.feature.fm/" },
+        { label: "YouTube Reminder", url: "https://www.feature.fm/" }
+      ]
+    },
+    {
+      title: "Pressure: Calm & Rage (EP)",
+      date: "TBD",
+      presave: "https://www.feature.fm/",
+      extras: [
+        { label: "Apple Pre-Add", url: "https://www.feature.fm/" }
+      ]
+    }
+  ],
+  beats: [
+    {
+      title: "Primordial Groove (Instrumental)",
+      date: "TBD",
+      presave: "https://www.feature.fm/",
+      extras: [
+        { label: "YouTube Premiere", url: "https://www.youtube.com/" }
+      ]
+    },
+    {
+      title: "Roulette (Single)",
+      date: "TBD",
+      presave: "https://www.feature.fm/",
+      extras: [
+        { label: "Apple Pre-Add", url: "https://www.feature.fm/" }
+      ]
+    }
+  ]
+};
+
+function renderUpcoming(mode){
+  const items = upcomingData[mode] || [];
+  upcomingList.innerHTML = "";
+
+  upcomingSub.textContent = mode === "songs"
+    ? "Upcoming Shwadda releases — lock them in early."
+    : "Upcoming DJ Shwadda drops — save the fuel before it ignites.";
+
+  items.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "project";
+
+    const top = document.createElement("div");
+    top.className = "project-top";
+
+    const name = document.createElement("h4");
+    name.className = "project-name";
+    name.textContent = item.title;
+
+    const date = document.createElement("div");
+    date.className = "project-date";
+    date.textContent = item.date || "TBD";
+
+    top.appendChild(name);
+    top.appendChild(date);
+
+    const actions = document.createElement("div");
+    actions.className = "project-actions";
+
+    const primary = document.createElement("a");
+    primary.className = "pill primary";
+    primary.dataset.mode = mode;
+    primary.href = item.presave;
+    primary.target = "_blank";
+    primary.rel = "noopener";
+    primary.textContent = "Pre-Save / Pre-Add";
+
+    actions.appendChild(primary);
+
+    if (Array.isArray(item.extras)) {
+      item.extras.forEach(x => {
+        const a = document.createElement("a");
+        a.className = "pill secondary";
+        a.href = x.url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = x.label;
+        actions.appendChild(a);
+      });
+    }
+
+    card.appendChild(top);
+    card.appendChild(actions);
+
+    upcomingList.appendChild(card);
+  });
+}
+
 function setMode(mode){
   const isSongs = mode === "songs";
-  switchBtn.dataset.mode = isSongs ? "songs" : "beats";
-  controlsStrip.dataset.mode = isSongs ? "songs" : "beats";
+  const modeKey = isSongs ? "songs" : "beats";
+
+  switchBtn.dataset.mode = modeKey;
+  controlsStrip.dataset.mode = modeKey;
 
   paneBeats.classList.toggle("active", !isSongs);
   paneSongs.classList.toggle("active", isSongs);
@@ -383,6 +604,8 @@ function setMode(mode){
   labelBeats.classList.toggle("active", !isSongs);
 
   footerText.textContent = isSongs ? "© Shwadda" : "© DJ Shwadda";
+
+  renderUpcoming(modeKey);
 }
 
 setMode("songs");
