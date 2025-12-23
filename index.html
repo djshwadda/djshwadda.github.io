@@ -109,14 +109,23 @@
     }
 
     .switch{
-      width:66px;
-      height:36px;
-      background:rgba(255,255,255,0.10);
-      border:1px solid var(--border);
-      border-radius:999px;
-      position:relative;
-      cursor:pointer;
-    }
+  width:66px;
+  height:36px;
+  border-radius:999px;
+  position:relative;
+  cursor:pointer;
+  border:1px solid var(--border);
+
+  background:
+    linear-gradient(
+      to right,
+      rgba(255,255,255,0.10) 0%,
+      rgba(255,255,255,0.10) 100%
+    );
+
+  transition: background 220ms ease;
+}
+
 
     .knob{
       width:26px;
