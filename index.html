@@ -51,12 +51,13 @@
       -webkit-backdrop-filter: blur(20px);
     }
 
+    /* ✅ CENTER HEADER */
     .header{
       padding: 18px 18px 6px 18px;
       display:flex;
       flex-direction: column;
       gap: 10px;
-      text-align:center;
+      text-align: center;
     }
 
     .title{
@@ -135,12 +136,13 @@
     .pane{ display:none; gap:12px; }
     .pane.active{ display:grid; }
 
+    /* ✅ CENTER SECTION TITLES */
     .pane-title{
       display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:10px;
-      text-align:center;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
     }
 
     .badge{
@@ -179,8 +181,8 @@
     .btn.secondary{ color:var(--muted); }
 
     .icon{
-      width:30px;
-      height:30px;
+      width:50px;
+      height:50px;
     }
 
     .note{
@@ -211,13 +213,13 @@
 
   <div class="controls">
     <div class="lane-label">
-      <div class="lane-name" id="laneName">Shwadda — Songs</div>
-      <div class="lane-hint" id="laneHint">Vocals + story.</div>
+      <div class="lane-name" id="laneName">DJ Shwadda — Instrumentals</div>
+      <div class="lane-hint" id="laneHint">Beats, loops, fuel.</div>
     </div>
 
     <div class="toggle">
       <span>Instrumentals</span>
-      <button class="switch" id="switch" data-mode="songs">
+      <button class="switch" id="switch" data-mode="beats">
         <span class="knob"></span>
       </button>
       <span>Songs</span>
@@ -226,8 +228,7 @@
 
   <div class="content">
 
-    <!-- INSTRUMENTALS -->
-    <section class="pane" id="paneBeats">
+    <section class="pane active" id="paneBeats">
       <div class="pane-title">
         <h2>DJ Shwadda — Instrumentals 🎚️</h2>
         <span class="badge">Loading ⏳</span>
@@ -243,8 +244,7 @@
       <div class="note">Instrumentals unlock soon.</div>
     </section>
 
-    <!-- SONGS -->
-    <section class="pane active" id="paneSongs">
+    <section class="pane" id="paneSongs">
       <div class="pane-title">
         <h2>Shwadda — Songs 🎤</h2>
         <span class="badge">Live now ✅</span>
@@ -288,9 +288,6 @@ function setMode(mode){
   laneName.textContent = isSongs ? "Shwadda — Songs" : "DJ Shwadda — Instrumentals";
   laneHint.textContent = isSongs ? "Vocals + story." : "Beats, loops, fuel.";
 }
-
-// ✅ DEFAULT TO SONGS
-setMode("songs");
 
 switchBtn.addEventListener("click", () => {
   setMode(switchBtn.dataset.mode === "beats" ? "songs" : "beats");
