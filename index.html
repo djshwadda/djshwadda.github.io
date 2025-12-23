@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shwadda — Choose Your Lane</title>
+  <meta name="description" content="Choose your lane: DJ Shwadda instrumentals or Shwadda songs." />
+
+  <style>
+    :root{
+      --bg: #0b0c10;
+      --card: rgba(255,255,255,0.06);
+      --card2: rgba(255,255,255,0.09);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.62);
+      --border: rgba(255,255,255,0.12);
+      --shadow: 0 18px 40px rgba(0,0,0,0.45);
+      --radius: 18px;
+      --btnRadius: 14px;
+      --focus: rgba(255,255,255,0.25);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 900px at 20% 0%, rgba(255,255,255,0.08), transparent 60%),
+                  radial-gradient(1000px 700px at 90% 20%, rgba(255,255,255,0.06), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 28px 14px;
+    }
+
+    .wrap{
+      width: min(980px, 100%);
+      display:grid;
+      gap: 16px;
+    }
+
+    .header{
+      padding: 18px 18px 6px 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .title{
+      font-size: clamp(28px, 4vw, 44px);
+      line-height:1.05;
+      letter-spacing: -0.02em;
+      margin:0;
+    }
+
+    .subtitle{
+      margin:0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .controls{
+      padding: 14px 16px;
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      gap: 12px;
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .lane-label{
+      display:flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .lane-name{
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .lane-hint{
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Toggle */
+    .toggle{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      user-select:none;
+    }
+    .toggle span{
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .switch{
+      position: relative;
+      width: 66px;
+      height: 36px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+      outline:none;
+    }
+    .switch:focus-visible{
+      box-shadow: 0 0 0 4px var(--focus);
+    }
+    .knob{
+      position:absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 6px;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.9);
+      transition: left 220ms ease;
+    }
+    .switch[data-mode="songs"] .knob{
+      left: 34px;
+    }
+
+    .content{
+      padding: 16px;
+      display:grid;
+      gap: 12px;
+    }
+
+    .pane{
+      display:none;
+      gap: 12px;
+    }
+    .pane.active{
+      display:grid;
+    }
+
+    .pane-title{
+      display:flex;
+      justify-content: space-between;
+      align-items:flex-end;
+      gap: 10px;
+    }
+
+    .pane-title h2{
+      margin:0;
+      font-size: 18px;
+    }
+
+    .badge{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    @media (min-width: 760px){
+      .grid{
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 12px 12px;
+      text-decoration:none;
+      color: var(--text);
+      border-radius: var(--btnRadius);
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--card2), rgba(255,255,255,0.04));
+      transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+      font-weight: 650;
+      letter-spacing: 0.01em;
+      text-align:center;
+      min-height: 46px;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,0.22);
+      background: linear-gradient(180deg, rgba(255,255,255,0.13), rgba(255,255,255,0.05));
+    }
+
+    .btn.secondary{
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .note{
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      border: 1px dashed rgba(255,255,255,0.16);
+      border-radius: 14px;
+      padding: 12px 12px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .footer{
+      text-align:center;
+      color: rgba(255,255,255,0.45);
+      font-size: 12px;
+      padding: 4px 8px 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <section class="card">
+      <div class="header">
+        <h1 class="title">Pick your lane 🎧</h1>
+        <p class="subtitle">Two vibes. One universe. Instrumentals for motion 🏃‍♂️💨 — songs for emotion 🎤🫀.</p>
+      </div>
+
+      <div class="controls">
+        <div class="lane-label" aria-live="polite">
+          <div class="lane-name" id="laneName">DJ Shwadda — Instrumentals</div>
+          <div class="lane-hint" id="laneHint">Beats, loops, fuel. Tap a DSP and go.</div>
+        </div>
+
+        <div class="toggle">
+          <span>Instrumentals</span>
+          <button class="switch" id="switch" data-mode="beats" aria-label="Toggle between instrumentals and songs" aria-pressed="false">
+            <span class="knob" aria-hidden="true"></span>
+          </button>
+          <span>Songs</span>
+        </div>
+      </div>
+
+      <div class="content">
+        <!-- INSTRUMENTALS -->
+        <section class="pane active" id="paneBeats">
+          <div class="pane-title">
+            <h2>DJ Shwadda — Instrumentals 🎚️</h2>
+            <span class="badge">Live now ✅</span>
+          </div>
+
+          <div class="grid">
+            <!-- Replace href values with your real links -->
+            <a class="btn" href="PASTE_YOUR_SPOTIFY_LINK_HERE" target="_blank" rel="noopener">Spotify</a>
+            <a class="btn secondary" href="#" target="_blank" rel="noopener" aria-disabled="true">Apple Music</a>
+            <a class="btn secondary" href="#" target="_blank" rel="noopener" aria-disabled="true">YouTube Music</a>
+            <a class="btn secondary" href="#" target="_blank" rel="noopener" aria-disabled="true">Amazon Music</a>
+          </div>
+
+          <div class="note">
+            💡 Tip: Keep the same DSP order on both lanes. People don’t like thinking before listening.
+          </div>
+        </section>
+
+        <!-- SONGS -->
+        <section class="pane" id="paneSongs">
+          <div class="pane-title">
+            <h2>Shwadda — Songs 🎤</h2>
+            <span class="badge">Unlocking soon ⏳</span>
+          </div>
+
+          <div class="note">
+            🚧 Songs are loading into the world right now. Until the songs profile link is live, this lane stays “coming soon.”
+            <br><br>
+            Meanwhile: follow the current Spotify page so you catch the moment it drops.
+          </div>
+
+          <div class="grid">
+            <!-- Temporary: point to your current Spotify, or leave as # -->
+            <a class="btn" href="PASTE_YOUR_SPOTIFY_LINK_HERE" target="_blank" rel="noopener">Follow on Spotify</a>
+            <a class="btn secondary" href="#" target="_blank" rel="noopener" aria-disabled="true">Apple Music</a>
+            <a class="btn secondary" href="#" target="_blank" rel="noopener" aria-disabled="true">YouTube Music</a>
+            <a class="btn secondary" href="#" target="_blank" rel="noopener" aria-disabled="true">Amazon Music</a>
+          </div>
+        </section>
+      </div>
+
+      <div class="footer">
+        Built on GitHub Pages 🧱⚡ | No ads. No rent. Just links.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const switchBtn = document.getElementById("switch");
+    const paneBeats = document.getElementById("paneBeats");
+    const paneSongs = document.getElementById("paneSongs");
+    const laneName = document.getElementById("laneName");
+    const laneHint = document.getElementById("laneHint");
+
+    function setMode(mode){
+      const isSongs = mode === "songs";
+
+      switchBtn.dataset.mode = isSongs ? "songs" : "beats";
+      switchBtn.setAttribute("aria-pressed", String(isSongs));
+
+      paneBeats.classList.toggle("active", !isSongs);
+      paneSongs.classList.toggle("active", isSongs);
+
+      laneName.textContent = isSongs ? "Shwadda — Songs" : "DJ Shwadda — Instrumentals";
+      laneHint.textContent = isSongs
+        ? "Vocals + story + feelings with sharp teeth."
+        : "Beats, loops, fuel. Tap a DSP and go.";
+
+      // save preference
+      try { localStorage.setItem("laneMode", mode); } catch(e) {}
+    }
+
+    // click toggle
+    switchBtn.addEventListener("click", () => {
+      const current = switchBtn.dataset.mode === "songs" ? "songs" : "beats";
+      setMode(current === "beats" ? "songs" : "beats");
+    });
+
+    // restore preference
+    try {
+      const saved = localStorage.getItem("laneMode");
+      if(saved === "songs" || saved === "beats") setMode(saved);
+    } catch(e) {}
+  </script>
+</body>
+</html>
