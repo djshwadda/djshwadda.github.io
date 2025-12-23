@@ -321,6 +321,11 @@
       overflow:hidden;
       text-overflow:ellipsis;
     }
+
+    /* ADDED: only affects the drop-date/teaser formatting */
+    .drop-date{ font-weight:600; }
+    .teaser{ display:inline; }
+
     .feature-link{
       display:inline-flex;
       align-items:center;
@@ -350,6 +355,17 @@
       .feature-link{
         width:100%;
         justify-content:center;
+      }
+
+      /* ADDED: make teaser go UNDER drop date on mobile */
+      .upcoming-sub{
+        white-space:normal;
+        overflow:visible;
+        text-overflow:unset;
+        line-height:1.3;
+      }
+      .teaser{
+        display:block;
       }
     }
 
@@ -414,7 +430,10 @@
           <img class="cover" src="assets/images/PrimordialGrooveCoverArt.jpg" alt="Upcoming project cover art">
           <div class="upcoming-meta">
             <div class="upcoming-title">Upcoming Project: Primordial Groove</div>
-            <div class="upcoming-sub">Drop date: Jan 4th • Rap/Trap Instrumental Album</div>
+            <div class="upcoming-sub">
+              <span class="drop-date">Drop date: Jan 4th</span>
+              <span class="teaser">• Rap/Trap Instrumental Album</span>
+            </div>
           </div>
         </div>
         <a class="feature-link" href="https://ffm.to/shwadda-golden" rel="noopener">Spotify Pre-Save ↗</a>
@@ -448,7 +467,10 @@
           <img class="cover" src="assets/images/GoldenCoverArt.png" alt="Upcoming project cover art">
           <div class="upcoming-meta">
             <div class="upcoming-title">Upcoming Project: Golden</div>
-            <div class="upcoming-sub">Drop date: Jan 3rd • RnB & Soul Album</div>
+            <div class="upcoming-sub">
+              <span class="drop-date">Drop date: Jan 3rd</span>
+              <span class="teaser">• RnB & Soul Album</span>
+            </div>
           </div>
         </div>
         <a class="feature-link" href="https://ffm.to/shwadda-golden" target="_blank" rel="noopener">Spotify Pre-Save ↗</a>
