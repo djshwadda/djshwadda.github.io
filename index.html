@@ -18,7 +18,9 @@
       --radius: 18px;
       --btnRadius: 14px;
       --focus: rgba(255,255,255,0.25);
-      --activeGreen: #1DB954;
+
+      --activeGreen: #1DB954; /* songs */
+      --activeBlue:  #2D7DFF; /* instrumentals */
     }
 
     *{ box-sizing:border-box; }
@@ -71,6 +73,7 @@
       font-size: 15px;
     }
 
+    /* Strip behind the toggle */
     .controls{
       padding: 14px 16px;
       display:flex;
@@ -78,7 +81,27 @@
       align-items:center;
       gap: 12px;
       border-top: 1px solid var(--border);
-      background: rgba(255,255,255,0.03);
+      background: rgba(0,0,0,0.45); /* darker base for readability */
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: background 220ms ease;
+    }
+
+    /* Strip tint shifts with mode */
+    .controls[data-mode="songs"]{
+      background:
+        linear-gradient(to right,
+          rgba(29,185,84,0.24) 0%,
+          rgba(0,0,0,0.55) 55%,
+          rgba(0,0,0,0.45) 100%);
+    }
+
+    .controls[data-mode="beats"]{
+      background:
+        linear-gradient(to right,
+          rgba(0,0,0,0.45) 0%,
+          rgba(0,0,0,0.55) 45%,
+          rgba(45,125,255,0.24) 100%);
     }
 
     .lane-label{
@@ -104,9 +127,12 @@
     }
 
     .toggle span.active{
-      color: var(--activeGreen);
       font-weight: 750;
     }
+
+    /* per-mode label colors */
+    #labelSongs.active{ color: var(--activeGreen); }
+    #labelBeats.active{ color: var(--activeBlue); }
 
     .switch{
       width:66px;
@@ -123,18 +149,18 @@
       background:
         linear-gradient(
           to right,
-          rgba(29,185,84,0.75) 0%,
+          rgba(29,185,84,0.80) 0%,
           rgba(255,255,255,0.10) 100%
         );
     }
 
-    /* Instrumentals active → green on RIGHT */
+    /* Instrumentals active → blue on RIGHT */
     .switch[data-mode="beats"]{
       background:
         linear-gradient(
           to right,
           rgba(255,255,255,0.10) 0%,
-          rgba(29,185,84,0.75) 100%
+          rgba(45,125,255,0.85) 100%
         );
     }
 
@@ -147,12 +173,20 @@
       top:50%;
       left:6px;
       transform:translateY(-50%);
-      transition:left 220ms ease;
+      transition:left 220ms ease, box-shadow 220ms ease;
     }
 
-    /* Songs = LEFT (default) */
+    /* Songs = LEFT (default), Beats = RIGHT */
     .switch[data-mode="beats"] .knob{
       left:34px;
+    }
+
+    /* optional subtle glow to match mode */
+    .switch[data-mode="songs"] .knob{
+      box-shadow: 0 0 12px rgba(29,185,84,0.55);
+    }
+    .switch[data-mode="beats"] .knob{
+      box-shadow: 0 0 12px rgba(45,125,255,0.55);
     }
 
     .content{
@@ -238,7 +272,7 @@
     <p class="subtitle">💫 Two vibes. One universe 💫.</p>
   </div>
 
-  <div class="controls">
+  <div class="controls" id="controlsStrip" data-mode="songs">
     <div class="lane-label">
       <div class="lane-name" id="laneName">Shwadda — Songs</div>
       <div class="lane-hint" id="laneHint">Vocals + Story.</div>
@@ -311,10 +345,12 @@ const laneHint = document.getElementById("laneHint");
 const labelBeats = document.getElementById("labelBeats");
 const labelSongs = document.getElementById("labelSongs");
 const footerText = document.getElementById("footerText");
+const controlsStrip = document.getElementById("controlsStrip");
 
 function setMode(mode){
   const isSongs = mode === "songs";
   switchBtn.dataset.mode = isSongs ? "songs" : "beats";
+  controlsStrip.dataset.mode = isSongs ? "songs" : "beats";
 
   paneBeats.classList.toggle("active", !isSongs);
   paneSongs.classList.toggle("active", isSongs);
