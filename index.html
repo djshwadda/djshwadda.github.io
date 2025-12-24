@@ -26,11 +26,12 @@
       --edgeA: rgba(29,185,84,0.95);
       --edgeGlow: rgba(29,185,84,0.40);
 
-      /* tracer tuning */
-      --sparkSpeed: 2.85s;      /* tracer speed */
-      --sparkSize: 7px;         /* size of the dot */
-      --sparkBlur: 16px;        /* glow bloom */
-      --edgeStroke: 1.35px;     /* outline thickness */
+      /* ===== Twin beam tuning ===== */
+      --beamSpeed: 5.4s;          /* slower */
+      --beamSize: 12px;           /* bigger */
+      --beamGlow: 26px;           /* more bloom */
+      --beamTail: 20px;           /* how "comet" it feels */
+      --edgeStroke: 1.35px;
     }
 
     *{ box-sizing:border-box; }
@@ -49,16 +50,16 @@
       padding: 28px 14px;
     }
 
-    /* Theme sync: edge glow + tracer follow toggle mode */
+    /* Theme sync: edge glow + beams follow toggle mode */
     body[data-mode="songs"]{
       --edgeA: rgba(29,185,84,0.95);
-      --edgeGlow: rgba(29,185,84,0.42);
-      --sparkSpeed: 2.85s;
+      --edgeGlow: rgba(29,185,84,0.44);
+      --beamSpeed: 5.6s;
     }
     body[data-mode="beats"]{
       --edgeA: rgba(45,125,255,0.98);
-      --edgeGlow: rgba(45,125,255,0.44);
-      --sparkSpeed: 2.25s;
+      --edgeGlow: rgba(45,125,255,0.46);
+      --beamSpeed: 5.0s;
     }
 
     .wrap{
@@ -80,7 +81,7 @@
       isolation: isolate;
     }
 
-    /* ===== TRUE EDGE OUTLINE GLOW (matches the card exactly) ===== */
+    /* ===== Exact edge outline glow (matches the card) ===== */
     .card::before{
       content:"";
       position:absolute;
@@ -89,15 +90,14 @@
       pointer-events:none;
       z-index: 0;
 
-      /* crisp outline + neon bloom */
       box-shadow:
         inset 0 0 0 var(--edgeStroke) rgba(255,255,255,0.10),
         inset 0 0 0 calc(var(--edgeStroke) + 0.65px) rgba(0,0,0,0.06),
         0 0 10px var(--edgeGlow),
         0 0 22px var(--edgeGlow),
-        0 0 40px rgba(0,0,0,0.25);
+        0 0 42px rgba(0,0,0,0.22);
 
-      opacity: 0.85;
+      opacity: 0.82;
       animation: edgeBreathe 3.6s ease-in-out infinite;
     }
 
@@ -106,58 +106,77 @@
       50%{ opacity: 0.95; }
     }
 
-    /* ===== THE TRACING “SPECK” (runs the exact rounded rectangle) ===== */
-    .edge-dot{
+    /* ===== Twin beams: start top-center, meet bottom-center ===== */
+    .beam{
       position:absolute;
       inset: 0;
       pointer-events:none;
-      z-index: 0; /* stays under content */
+      z-index: 0;
 
-      /* Motion path: exact card outline with matching radius */
+      /* Path = exact rounded rectangle border */
       offset-path: inset(1px round var(--radius));
-      offset-distance: 0%;
-      animation: trace var(--sparkSpeed) linear infinite;
+      animation-duration: var(--beamSpeed);
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
     }
 
-    .edge-dot::after{
+    /* Beam visuals (comet) */
+    .beam::after{
       content:"";
       position:absolute;
-      width: var(--sparkSize);
-      height: var(--sparkSize);
+      width: var(--beamSize);
+      height: var(--beamSize);
       border-radius: 999px;
-      background: var(--edgeA);
 
-      /* place the dot on the path (its own local position is irrelevant; offset-path moves it) */
-      left: 0;
-      top: 0;
+      /* “comet core” */
+      background: radial-gradient(circle, rgba(255,255,255,0.95), var(--edgeA) 55%, rgba(0,0,0,0) 72%);
 
-      /* neon bloom */
+      /* Tail glow */
       box-shadow:
-        0 0 10px var(--edgeA),
-        0 0 var(--sparkBlur) var(--edgeGlow),
-        0 0 calc(var(--sparkBlur) * 1.8) var(--edgeGlow);
+        0 0 12px var(--edgeA),
+        0 0 var(--beamGlow) var(--edgeGlow),
+        0 0 calc(var(--beamGlow) * 1.7) var(--edgeGlow);
 
       transform: translate(-50%, -50%);
+      left: 0;
+      top: 0;
     }
 
-    @keyframes trace{
-      to { offset-distance: 100%; }
+    /* Start at TOP center and go to BOTTOM center:
+       top-center is 12.5% around the rounded-rect perimeter (approx).
+       We'll treat 12.5% as our "start", and run half a lap (50%) to meet bottom.
+       One beam goes forward, the other goes backward. */
+    .beam.beamA{
+      offset-distance: 12.5%;
+      animation-name: beamForwardHalf;
     }
 
-    /* Keep content above glow + dot */
+    .beam.beamB{
+      offset-distance: 12.5%;
+      animation-name: beamBackwardHalf;
+    }
+
+    @keyframes beamForwardHalf{
+      to { offset-distance: 62.5%; } /* +50% */
+    }
+
+    @keyframes beamBackwardHalf{
+      to { offset-distance: -37.5%; } /* -50% */
+    }
+
+    /* Keep content above glow + beams */
     .card > *{
       position: relative;
       z-index: 1;
     }
 
     @media (prefers-reduced-motion: reduce){
-      .edge-dot{ animation: none; }
+      .beam{ animation: none; }
       .card::before{ animation: none; }
     }
 
-    /* If a browser doesn’t support motion path, the dot hides automatically */
     @supports not (offset-path: inset(1px round 10px)){
-      .edge-dot{ display:none; }
+      .beam{ display:none; }
     }
 
     .header{
@@ -207,8 +226,6 @@
           rgba(0,0,0,0.55) 45%,
           rgba(45,125,255,0.24) 100%);
     }
-
-    .lane-label{ display:none; }
 
     .toggle{
       display:flex;
@@ -313,7 +330,6 @@
     .pane{ display:none; gap:12px; }
     .pane.active{ display:grid; }
 
-    /* Fix: stop Instagram WebView from clipping title text */
     .pane-title{
       display:flex;
       flex-direction: column;
@@ -511,8 +527,9 @@
 <main class="wrap">
 <section class="card">
 
-  <!-- The tracer (dot) that follows the card’s exact perimeter -->
-  <div class="edge-dot" aria-hidden="true"></div>
+  <!-- Two beams: split at top center, meet at bottom center -->
+  <div class="beam beamA" aria-hidden="true"></div>
+  <div class="beam beamB" aria-hidden="true"></div>
 
   <div class="header">
     <h1 class="title">🎧 Pick your lane 🎧</h1>
@@ -629,8 +646,6 @@ function setMode(mode){
 
   switchBtn.dataset.mode = isSongs ? "songs" : "beats";
   controlsStrip.dataset.mode = isSongs ? "songs" : "beats";
-
-  // Drives the edge glow + tracer theme
   document.body.dataset.mode = isSongs ? "songs" : "beats";
 
   paneBeats.classList.toggle("active", !isSongs);
