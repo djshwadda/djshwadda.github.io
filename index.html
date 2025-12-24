@@ -21,6 +21,9 @@
 
       --activeGreen: #1DB954;
       --activeBlue:  #2D7DFF;
+
+      /* IG/WebView helper: fallback vh that we can update via JS */
+      --appvh: 1vh;
     }
 
     *{ box-sizing:border-box; }
@@ -31,11 +34,25 @@
         linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
         url("assets/images/background1.jpg") center / cover no-repeat fixed;
       color: var(--text);
-      min-height: 100vh;
+
+      /* ✅ FIX 1: stop using plain 100vh (Instagram WebView lies about it) */
+      min-height: 100vh;     /* fallback */
+      min-height: 100svh;    /* small viewport height (safe) */
+      min-height: 100dvh;    /* dynamic viewport height (best when supported) */
+
+      /* ✅ FIX 1b (extra safe): JS-updated vh for nasty WebViews */
+      min-height: calc(var(--appvh) * 100);
+
       display:flex;
       align-items:center;
       justify-content:center;
-      padding: 28px 14px;
+
+      /* ✅ FIX 2: protect top from in-app browser UI/safe-area */
+      padding: calc(28px + env(safe-area-inset-top)) 14px calc(28px + env(safe-area-inset-bottom));
+
+      /* ✅ FIX 3: avoid accidental clipping */
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     .wrap{
@@ -211,18 +228,18 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 5px;          /* tighter spacing */
+      gap: 5px;
       text-align: center;
-      line-height: 1.15; /* reduces perceived vertical gap */
+      line-height: 1.15;
     }
 
     .pane-title h2{
-      margin: 0;         /* remove default h2 margins */
+      margin: 0;
       line-height: 1.15;
     }
 
     .pane-emoji{
-      margin-top: -2px;  /* pull emojis closer */
+      margin-top: -2px;
       font-size: 25px;
       line-height: 1;
     }
@@ -275,7 +292,6 @@
       padding:12px;
     }
 
-    /* Upcoming Project block */
     .upcoming{
       display:flex;
       align-items:center;
@@ -322,7 +338,6 @@
       text-overflow:ellipsis;
     }
 
-    /* ADDED: only affects the drop-date/teaser formatting */
     .drop-date{ font-weight:600; }
     .teaser{ display:inline; }
 
@@ -346,7 +361,6 @@
       box-shadow: 0 0 0 3px var(--focus);
     }
 
-    /* FIX: stack presave link under on mobile, keep side-by-side on larger screens */
     @media (max-width:520px){
       .upcoming{
         flex-direction:column;
@@ -357,7 +371,6 @@
         justify-content:center;
       }
 
-      /* ADDED: make teaser go UNDER drop date on mobile */
       .upcoming-sub{
         white-space:normal;
         overflow:visible;
@@ -485,6 +498,14 @@
 </main>
 
 <script>
+/* ✅ IG/WebView vh fix: update --appvh to actual innerHeight */
+function setAppVh(){
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--appvh', `${vh}px`);
+}
+setAppVh();
+window.addEventListener('resize', setAppVh);
+
 const switchBtn = document.getElementById("switch");
 const paneBeats = document.getElementById("paneBeats");
 const paneSongs = document.getElementById("paneSongs");
