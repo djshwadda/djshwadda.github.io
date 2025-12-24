@@ -215,8 +215,6 @@
       gap: 5px;
       text-align: center;
       line-height: 1.15;
-
-      /* buffer so text never kisses the rounded edge */
       padding-inline: 10px;
       max-width: 100%;
     }
@@ -224,15 +222,11 @@
     .pane-title h2{
       margin: 0;
       line-height: 1.15;
-
-      /* critical: force wrapping instead of overflow */
       max-width: 100%;
       padding-inline: 6px;
       white-space: normal;
       overflow-wrap: anywhere;
       word-break: break-word;
-
-      /* scale down on narrow WebViews (Instagram) */
       font-size: clamp(22px, 6vw, 34px);
     }
 
@@ -290,28 +284,33 @@
       padding:12px;
     }
 
+    /* ✅ TIGHTENED Upcoming spacing (no more huge dead-air) */
     .upcoming{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding:12px;
+
+      /* was 12px; this reduces vertical "pillow" */
+      padding:10px 12px;
+
       border-radius:14px;
       border:1px dashed rgba(255,255,255,0.16);
       background: rgba(0,0,0,0.25);
 
-      /* ✅ FIX: allow the row to breathe on narrow WebViews */
       flex-wrap: wrap;
     }
+
     .upcoming-left{
       display:flex;
       align-items:center;
       gap:12px;
       min-width:0;
 
-      /* ✅ FIX: let text area claim width so it doesn't get squeezed to death */
-      flex: 1 1 260px;
+      /* was flex: 1 1 260px; which can exaggerate spacing in IG */
+      flex: 1 1 auto;
     }
+
     .cover{
       width:60px;
       height:60px;
@@ -321,6 +320,7 @@
       box-shadow: 0 10px 22px rgba(0,0,0,0.35);
       flex: 0 0 auto;
     }
+
     .upcoming-meta{
       display:flex;
       flex-direction:column;
@@ -329,27 +329,23 @@
       max-width: 100%;
     }
 
-    /* ✅ FIX: stop "Upcoming Project..." from being chopped/ellipsized */
     .upcoming-title{
       font-weight:750;
       font-size:14px;
-
       white-space: normal;
       overflow: visible;
       text-overflow: unset;
-
       overflow-wrap: anywhere;
       word-break: break-word;
       line-height: 1.25;
     }
+
     .upcoming-sub{
       font-size:12px;
       color:var(--muted);
-
       white-space: normal;
       overflow: visible;
       text-overflow: unset;
-
       overflow-wrap: anywhere;
       word-break: break-word;
       line-height:1.3;
@@ -371,10 +367,9 @@
       font-weight:700;
       font-size:12px;
       white-space:nowrap;
-
-      /* ✅ FIX: don't let the button steal all the row width */
       flex: 0 0 auto;
     }
+
     .feature-link:focus-visible,
     .feature-link:hover{
       outline:none;
@@ -389,6 +384,9 @@
       .feature-link{
         width:100%;
         justify-content:center;
+
+        /* pulls it closer to content */
+        margin-top: 8px;
       }
 
       .upcoming-sub{
@@ -491,8 +489,7 @@
           <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
         </a>
         <a class="btn" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank">
-          <img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music
-        </a>
+          <img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</a>
       </div>
 
       <div class="upcoming">
