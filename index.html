@@ -21,17 +21,6 @@
 
       --activeGreen: #1DB954;
       --activeBlue:  #2D7DFF;
-
-      /* Theme-driven edge glow + tracer (defaults = songs) */
-      --flowA: rgba(29,185,84,0.92);
-      --flowGlow: rgba(29,185,84,0.38);
-
-      /* tracer tuning */
-      --sparkSpeed: 2.8s;      /* how fast the speck runs */
-      --sparkLen: 14;          /* speck length (px-ish, stroke-space) */
-      --sparkGap: 999;         /* big gap so it's just one speck */
-      --edgeStroke: 1.6;       /* outline stroke width */
-      --sparkStroke: 2.6;      /* speck stroke width */
     }
 
     *{ box-sizing:border-box; }
@@ -49,18 +38,6 @@
       padding: 28px 14px;
     }
 
-    /* Theme sync: edge glow + tracer follow toggle mode */
-    body[data-mode="songs"]{
-      --flowA: rgba(29,185,84,0.92);
-      --flowGlow: rgba(29,185,84,0.40);
-      --sparkSpeed: 2.85s;
-    }
-    body[data-mode="beats"]{
-      --flowA: rgba(45,125,255,0.95);
-      --flowGlow: rgba(45,125,255,0.42);
-      --sparkSpeed: 2.25s;
-    }
-
     .wrap{
       width: min(980px, 100%);
       display:grid;
@@ -75,88 +52,7 @@
       overflow:hidden;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-
-      position: relative;
-      isolation: isolate;
     }
-
-    /* ===========================
-       TRUE EDGE GLOW + TRACING SPECK
-       (SVG outline that hugs the card)
-       =========================== */
-
-    /* SVG layer sits under content */
-    .edge-trace{
-      position:absolute;
-      inset: 0;
-      width:100%;
-      height:100%;
-      z-index: 0;
-      pointer-events:none;
-      overflow: visible;
-    }
-
-    /* Keep actual content above SVG */
-    .card > *{ position: relative; z-index: 1; }
-
-    /* The glowing outline tube */
-    .edge-glow{
-      fill: none;
-      stroke: var(--flowA);
-      stroke-width: var(--edgeStroke);
-      opacity: 0.55;
-      vector-effect: non-scaling-stroke;
-
-      /* neon bloom */
-      filter:
-        drop-shadow(0 0 8px var(--flowGlow))
-        drop-shadow(0 0 18px var(--flowGlow))
-        drop-shadow(0 0 30px var(--flowGlow));
-      animation: edgeBreathe 3.6s ease-in-out infinite;
-    }
-
-    /* The traveling “speck” that traces the outline */
-    .edge-spark{
-      fill:none;
-      stroke: var(--flowA);
-      stroke-width: var(--sparkStroke);
-      vector-effect: non-scaling-stroke;
-      stroke-linecap: round;
-
-      stroke-dasharray: var(--sparkLen) var(--sparkGap);
-
-      filter:
-        drop-shadow(0 0 10px var(--flowA))
-        drop-shadow(0 0 22px var(--flowGlow))
-        drop-shadow(0 0 40px var(--flowGlow));
-
-      animation: sparkRun var(--sparkSpeed) linear infinite;
-    }
-
-    /* Make glow feel alive (subtle) */
-    @keyframes edgeBreathe{
-      0%,100%{ opacity: 0.45; }
-      50%{ opacity: 0.72; }
-    }
-
-    /* Move the dash around the perimeter */
-    @keyframes sparkRun{
-      to { stroke-dashoffset: -1000; }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .edge-glow, .edge-spark{ animation: none; }
-    }
-
-    /* Fallback: if SVG filters are limited, still show clean outline */
-    @supports not (filter: drop-shadow(0 0 10px #000)){
-      .edge-glow{ opacity: 0.65; }
-      .edge-spark{ opacity: 0.95; }
-    }
-
-    /* ===========================
-       UI CONTENT
-       =========================== */
 
     .header{
       padding: 18px 18px 6px 18px;
@@ -260,7 +156,6 @@
       cursor:pointer;
       border:1px solid var(--border);
       transition: background 220ms ease;
-      background: transparent;
     }
 
     .switch[data-mode="songs"]{
@@ -395,10 +290,14 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
+
+      /* was 12px; this reduces vertical "pillow" */
       padding:10px 12px;
+
       border-radius:14px;
       border:1px dashed rgba(255,255,255,0.16);
       background: rgba(0,0,0,0.25);
+
       flex-wrap: wrap;
     }
 
@@ -407,6 +306,8 @@
       align-items:center;
       gap:12px;
       min-width:0;
+
+      /* was flex: 1 1 260px; which can exaggerate spacing in IG */
       flex: 1 1 auto;
     }
 
@@ -483,6 +384,8 @@
       .feature-link{
         width:100%;
         justify-content:center;
+
+        /* pulls it closer to content */
         margin-top: 8px;
       }
 
@@ -506,16 +409,9 @@
   </style>
 </head>
 
-<body data-mode="songs">
+<body>
 <main class="wrap">
 <section class="card">
-
-  <!-- Neon outline + traveling speck tracing the card edges -->
-  <svg class="edge-trace" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-    <!-- rounded rect: rx/ry should match your card radius vibe (18) -->
-    <rect class="edge-glow"  x="1.5" y="1.5" width="97" height="97" rx="18" ry="18"></rect>
-    <rect class="edge-spark" x="1.5" y="1.5" width="97" height="97" rx="18" ry="18"></rect>
-  </svg>
 
   <div class="header">
     <h1 class="title">🎧 Pick your lane 🎧</h1>
@@ -529,7 +425,7 @@
         <div class="toggle-sub">Vocals + Story</div>
       </div>
 
-      <button class="switch" id="switch" data-mode="songs" aria-label="Toggle songs or instrumentals" type="button">
+      <button class="switch" id="switch" data-mode="songs">
         <span class="knob"></span>
       </button>
 
@@ -550,12 +446,12 @@
       </div>
 
       <div class="grid">
-        <div class="btn secondary"><img class="icon" src="assets/icons/spotifyicon.png" alt=""> Spotify</div>
-        <div class="btn secondary"><img class="icon" src="assets/icons/applemusicicon.png" alt=""> Apple Music</div>
-        <a class="btn" href="https://youtube.com/@djshwadda?si=3hXStYA8kH6BRoC2" target="_blank" rel="noopener">
-          <img class="icon" src="assets/icons/youtubemusicicon.png" alt=""> YouTube Music
+        <div class="btn secondary"><img class="icon" src="assets/icons/spotifyicon.png"> Spotify</div>
+        <div class="btn secondary"><img class="icon" src="assets/icons/applemusicicon.png"> Apple Music</div>
+        <a class="btn" href="https://youtube.com/@djshwadda?si=3hXStYA8kH6BRoC2" target="_blank">
+          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
         </a>
-        <div class="btn secondary"><img class="icon" src="assets/icons/amazonmusicicon.png" alt=""> Amazon Music</div>
+        <div class="btn secondary"><img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</div>
       </div>
 
       <div class="note">Instrumentals posted on YouTube daily. Coming to other platforms soon...</div>
@@ -571,7 +467,7 @@
             </div>
           </div>
         </div>
-        <a class="feature-link" href="https://ffm.to/shwadda-primordial-groove" rel="noopener" target="_blank">Spotify Pre-Save ↗</a>
+        <a class="feature-link" href="https://ffm.to/shwadda-primordial-groove" rel="noopener">Spotify Pre-Save ↗</a>
       </div>
     </section>
 
@@ -583,17 +479,17 @@
       </div>
 
       <div class="grid">
-        <a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank" rel="noopener">
-          <img class="icon" src="assets/icons/spotifyicon.png" alt=""> Spotify
+        <a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank">
+          <img class="icon" src="assets/icons/spotifyicon.png"> Spotify
         </a>
-        <a class="btn" href="https://music.apple.com/us/artist/shwadda/1615926938" target="_blank" rel="noopener">
-          <img class="icon" src="assets/icons/applemusicicon.png" alt=""> Apple Music
+        <a class="btn" href="https://music.apple.com/us/artist/shwadda/1615926938" target="_blank">
+          <img class="icon" src="assets/icons/applemusicicon.png"> Apple Music
         </a>
-        <a class="btn" href="https://www.youtube.com/channel/UCEuwn9HJAmdVn5137ehJx4g" target="_blank" rel="noopener">
-          <img class="icon" src="assets/icons/youtubemusicicon.png" alt=""> YouTube Music
+        <a class="btn" href="https://www.youtube.com/channel/UCEuwn9HJAmdVn5137ehJx4g" target="_blank">
+          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
         </a>
-        <a class="btn" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank" rel="noopener">
-          <img class="icon" src="assets/icons/amazonmusicicon.png" alt=""> Amazon Music</a>
+        <a class="btn" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank">
+          <img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</a>
       </div>
 
       <div class="upcoming">
@@ -629,12 +525,8 @@ const controlsStrip = document.getElementById("controlsStrip");
 
 function setMode(mode){
   const isSongs = mode === "songs";
-
   switchBtn.dataset.mode = isSongs ? "songs" : "beats";
   controlsStrip.dataset.mode = isSongs ? "songs" : "beats";
-
-  // this makes the edge glow + tracer match the toggle
-  document.body.dataset.mode = isSongs ? "songs" : "beats";
 
   paneBeats.classList.toggle("active", !isSongs);
   paneSongs.classList.toggle("active", isSongs);
