@@ -22,16 +22,15 @@
       --activeGreen: #1DB954;
       --activeBlue:  #2D7DFF;
 
-      /* ===== Neon edge + tracer defaults (Songs) ===== */
+      /* ===== Edge glow + tracer defaults (Songs) ===== */
       --edgeA: rgba(29,185,84,0.95);
       --edgeGlow: rgba(29,185,84,0.40);
 
-      --edgeStroke: 1.6;        /* outline thickness */
-      --sparkStroke: 2.8;       /* tracer thickness */
-      --sparkLen: 12;           /* tracer dash length */
-      --sparkGap: 999;          /* huge gap so only one dash exists */
+      /* tracer tuning */
       --sparkSpeed: 2.85s;      /* tracer speed */
-      --breatheSpeed: 3.6s;     /* outline “breathing” speed */
+      --sparkSize: 7px;         /* size of the dot */
+      --sparkBlur: 16px;        /* glow bloom */
+      --edgeStroke: 1.35px;     /* outline thickness */
     }
 
     *{ box-sizing:border-box; }
@@ -81,74 +80,84 @@
       isolation: isolate;
     }
 
-    /* Kill any old pseudo-border layers (prevents “fog overlay” disasters) */
-    .card::before,
-    .card::after{
-      content: none !important;
-    }
-
-    /* ===== TRUE EDGE OUTLINE + TRACING SPECK (SVG) ===== */
-    .edge-trace{
+    /* ===== TRUE EDGE OUTLINE GLOW (matches the card exactly) ===== */
+    .card::before{
+      content:"";
       position:absolute;
       inset: 0;
-      width:100%;
-      height:100%;
-      z-index: 0;          /* stays UNDER content */
+      border-radius: inherit;
       pointer-events:none;
+      z-index: 0;
+
+      /* crisp outline + neon bloom */
+      box-shadow:
+        inset 0 0 0 var(--edgeStroke) rgba(255,255,255,0.10),
+        inset 0 0 0 calc(var(--edgeStroke) + 0.65px) rgba(0,0,0,0.06),
+        0 0 10px var(--edgeGlow),
+        0 0 22px var(--edgeGlow),
+        0 0 40px rgba(0,0,0,0.25);
+
+      opacity: 0.85;
+      animation: edgeBreathe 3.6s ease-in-out infinite;
     }
 
-    /* Only lift non-SVG children above the tracer */
-    .card > :not(.edge-trace){
+    @keyframes edgeBreathe{
+      0%,100%{ opacity: 0.55; }
+      50%{ opacity: 0.95; }
+    }
+
+    /* ===== THE TRACING “SPECK” (runs the exact rounded rectangle) ===== */
+    .edge-dot{
+      position:absolute;
+      inset: 0;
+      pointer-events:none;
+      z-index: 0; /* stays under content */
+
+      /* Motion path: exact card outline with matching radius */
+      offset-path: inset(1px round var(--radius));
+      offset-distance: 0%;
+      animation: trace var(--sparkSpeed) linear infinite;
+    }
+
+    .edge-dot::after{
+      content:"";
+      position:absolute;
+      width: var(--sparkSize);
+      height: var(--sparkSize);
+      border-radius: 999px;
+      background: var(--edgeA);
+
+      /* place the dot on the path (its own local position is irrelevant; offset-path moves it) */
+      left: 0;
+      top: 0;
+
+      /* neon bloom */
+      box-shadow:
+        0 0 10px var(--edgeA),
+        0 0 var(--sparkBlur) var(--edgeGlow),
+        0 0 calc(var(--sparkBlur) * 1.8) var(--edgeGlow);
+
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes trace{
+      to { offset-distance: 100%; }
+    }
+
+    /* Keep content above glow + dot */
+    .card > *{
       position: relative;
       z-index: 1;
     }
 
-    .edge-glow{
-      fill: none;
-      stroke: var(--edgeA);
-      stroke-width: var(--edgeStroke);
-      opacity: 0.60;
-      vector-effect: non-scaling-stroke;
-
-      /* Neon bloom */
-      filter:
-        drop-shadow(0 0 7px var(--edgeGlow))
-        drop-shadow(0 0 16px var(--edgeGlow))
-        drop-shadow(0 0 28px var(--edgeGlow));
-
-      animation: edgeBreathe var(--breatheSpeed) ease-in-out infinite;
-    }
-
-    .edge-spark{
-      fill: none;
-      stroke: var(--edgeA);
-      stroke-width: var(--sparkStroke);
-      vector-effect: non-scaling-stroke;
-      stroke-linecap: round;
-
-      /* One “speck” (dash) with a huge gap */
-      stroke-dasharray: var(--sparkLen) var(--sparkGap);
-
-      /* Hot pixel bloom */
-      filter:
-        drop-shadow(0 0 10px var(--edgeA))
-        drop-shadow(0 0 20px var(--edgeGlow))
-        drop-shadow(0 0 34px var(--edgeGlow));
-
-      animation: sparkRun var(--sparkSpeed) linear infinite;
-    }
-
-    @keyframes edgeBreathe{
-      0%,100%{ opacity: 0.45; }
-      50%{ opacity: 0.78; }
-    }
-
-    @keyframes sparkRun{
-      to { stroke-dashoffset: -1000; }
-    }
-
     @media (prefers-reduced-motion: reduce){
-      .edge-glow, .edge-spark{ animation: none; }
+      .edge-dot{ animation: none; }
+      .card::before{ animation: none; }
+    }
+
+    /* If a browser doesn’t support motion path, the dot hides automatically */
+    @supports not (offset-path: inset(1px round 10px)){
+      .edge-dot{ display:none; }
     }
 
     .header{
@@ -304,7 +313,7 @@
     .pane{ display:none; gap:12px; }
     .pane.active{ display:grid; }
 
-    /* ✅ Fix: stop Instagram WebView from clipping title text */
+    /* Fix: stop Instagram WebView from clipping title text */
     .pane-title{
       display:flex;
       flex-direction: column;
@@ -502,12 +511,8 @@
 <main class="wrap">
 <section class="card">
 
-  <!-- Neon outline + traveling speck that traces the perimeter -->
-  <svg class="edge-trace" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-    <!-- rx/ry match your card radius vibe (18) -->
-    <rect class="edge-glow"  x="1.5" y="1.5" width="97" height="97" rx="18" ry="18"></rect>
-    <rect class="edge-spark" x="1.5" y="1.5" width="97" height="97" rx="18" ry="18"></rect>
-  </svg>
+  <!-- The tracer (dot) that follows the card’s exact perimeter -->
+  <div class="edge-dot" aria-hidden="true"></div>
 
   <div class="header">
     <h1 class="title">🎧 Pick your lane 🎧</h1>
@@ -625,7 +630,7 @@ function setMode(mode){
   switchBtn.dataset.mode = isSongs ? "songs" : "beats";
   controlsStrip.dataset.mode = isSongs ? "songs" : "beats";
 
-  // This drives the neon outline + tracer theme
+  // Drives the edge glow + tracer theme
   document.body.dataset.mode = isSongs ? "songs" : "beats";
 
   paneBeats.classList.toggle("active", !isSongs);
