@@ -21,6 +21,14 @@
 
       --activeGreen: #1DB954;
       --activeBlue:  #2D7DFF;
+
+      /* flowing border defaults (songs) */
+      --flowA: rgba(29,185,84,0.92);
+      --flowB: rgba(29,185,84,0.18);
+      --flowGlow: rgba(29,185,84,0.35);
+
+      --flowWidth: 2px;
+      --flowSpeed: 3.25s;
     }
 
     *{ box-sizing:border-box; }
@@ -38,6 +46,18 @@
       padding: 28px 14px;
     }
 
+    /* Theme sync: border color follows toggle mode */
+    body[data-mode="songs"]{
+      --flowA: rgba(29,185,84,0.92);
+      --flowB: rgba(29,185,84,0.18);
+      --flowGlow: rgba(29,185,84,0.35);
+    }
+    body[data-mode="beats"]{
+      --flowA: rgba(45,125,255,0.95);
+      --flowB: rgba(45,125,255,0.18);
+      --flowGlow: rgba(45,125,255,0.38);
+    }
+
     .wrap{
       width: min(980px, 100%);
       display:grid;
@@ -52,6 +72,87 @@
       overflow:hidden;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
+
+      position: relative; /* needed for the animated border */
+      isolation: isolate; /* keeps glow layers behaving */
+    }
+
+    /* 🔥 Dynamic flowing border (CSS-only) */
+    .card::before{
+      content:"";
+      position:absolute;
+      inset: 0;
+      padding: var(--flowWidth);
+      border-radius: inherit;
+      z-index: 0;
+      pointer-events:none;
+
+      background:
+        conic-gradient(
+          from 0deg,
+          transparent 0%,
+          var(--flowB) 12%,
+          var(--flowA) 22%,
+          transparent 32%,
+          transparent 55%,
+          var(--flowB) 68%,
+          var(--flowA) 78%,
+          transparent 88%,
+          transparent 100%
+        );
+
+      /* show only the border ring */
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      mask-composite: exclude;
+
+      filter: drop-shadow(0 0 10px var(--flowGlow));
+      animation: flowSpin var(--flowSpeed) linear infinite;
+      opacity: 0.95;
+    }
+
+    /* subtle extra bloom so it feels “lit”, not “painted” */
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:-10px;
+      border-radius: calc(var(--radius) + 10px);
+      z-index: 0;
+      pointer-events:none;
+      background: radial-gradient(circle at 30% 10%, var(--flowGlow), transparent 55%);
+      filter: blur(18px);
+      opacity: 0.35;
+    }
+
+    /* keep actual content above the border layers */
+    .card > *{ position: relative; z-index: 1; }
+
+    @keyframes flowSpin{
+      to { transform: rotate(360deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .card::before{ animation: none; }
+    }
+
+    /* fallback if mask-composite isn't supported (still looks good) */
+    @supports not (mask-composite: exclude){
+      .card::before{
+        -webkit-mask: none;
+        mask: none;
+        opacity: 0.0; /* hide ring if we can't cut it cleanly */
+      }
+      .card{
+        box-shadow:
+          var(--shadow),
+          0 0 0 1px rgba(255,255,255,0.10),
+          0 0 18px var(--flowGlow);
+      }
     }
 
     .header{
@@ -156,6 +257,7 @@
       cursor:pointer;
       border:1px solid var(--border);
       transition: background 220ms ease;
+      background: transparent;
     }
 
     .switch[data-mode="songs"]{
@@ -290,14 +392,10 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-
-      /* was 12px; this reduces vertical "pillow" */
       padding:10px 12px;
-
       border-radius:14px;
       border:1px dashed rgba(255,255,255,0.16);
       background: rgba(0,0,0,0.25);
-
       flex-wrap: wrap;
     }
 
@@ -306,8 +404,6 @@
       align-items:center;
       gap:12px;
       min-width:0;
-
-      /* was flex: 1 1 260px; which can exaggerate spacing in IG */
       flex: 1 1 auto;
     }
 
@@ -384,8 +480,6 @@
       .feature-link{
         width:100%;
         justify-content:center;
-
-        /* pulls it closer to content */
         margin-top: 8px;
       }
 
@@ -409,7 +503,7 @@
   </style>
 </head>
 
-<body>
+<body data-mode="songs">
 <main class="wrap">
 <section class="card">
 
@@ -425,7 +519,7 @@
         <div class="toggle-sub">Vocals + Story</div>
       </div>
 
-      <button class="switch" id="switch" data-mode="songs">
+      <button class="switch" id="switch" data-mode="songs" aria-label="Toggle songs or instrumentals" type="button">
         <span class="knob"></span>
       </button>
 
@@ -446,12 +540,12 @@
       </div>
 
       <div class="grid">
-        <div class="btn secondary"><img class="icon" src="assets/icons/spotifyicon.png"> Spotify</div>
-        <div class="btn secondary"><img class="icon" src="assets/icons/applemusicicon.png"> Apple Music</div>
-        <a class="btn" href="https://youtube.com/@djshwadda?si=3hXStYA8kH6BRoC2" target="_blank">
-          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
+        <div class="btn secondary"><img class="icon" src="assets/icons/spotifyicon.png" alt=""> Spotify</div>
+        <div class="btn secondary"><img class="icon" src="assets/icons/applemusicicon.png" alt=""> Apple Music</div>
+        <a class="btn" href="https://youtube.com/@djshwadda?si=3hXStYA8kH6BRoC2" target="_blank" rel="noopener">
+          <img class="icon" src="assets/icons/youtubemusicicon.png" alt=""> YouTube Music
         </a>
-        <div class="btn secondary"><img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</div>
+        <div class="btn secondary"><img class="icon" src="assets/icons/amazonmusicicon.png" alt=""> Amazon Music</div>
       </div>
 
       <div class="note">Instrumentals posted on YouTube daily. Coming to other platforms soon...</div>
@@ -467,7 +561,7 @@
             </div>
           </div>
         </div>
-        <a class="feature-link" href="https://ffm.to/shwadda-primordial-groove" rel="noopener">Spotify Pre-Save ↗</a>
+        <a class="feature-link" href="https://ffm.to/shwadda-primordial-groove" rel="noopener" target="_blank">Spotify Pre-Save ↗</a>
       </div>
     </section>
 
@@ -479,17 +573,17 @@
       </div>
 
       <div class="grid">
-        <a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank">
-          <img class="icon" src="assets/icons/spotifyicon.png"> Spotify
+        <a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank" rel="noopener">
+          <img class="icon" src="assets/icons/spotifyicon.png" alt=""> Spotify
         </a>
-        <a class="btn" href="https://music.apple.com/us/artist/shwadda/1615926938" target="_blank">
-          <img class="icon" src="assets/icons/applemusicicon.png"> Apple Music
+        <a class="btn" href="https://music.apple.com/us/artist/shwadda/1615926938" target="_blank" rel="noopener">
+          <img class="icon" src="assets/icons/applemusicicon.png" alt=""> Apple Music
         </a>
-        <a class="btn" href="https://www.youtube.com/channel/UCEuwn9HJAmdVn5137ehJx4g" target="_blank">
-          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
+        <a class="btn" href="https://www.youtube.com/channel/UCEuwn9HJAmdVn5137ehJx4g" target="_blank" rel="noopener">
+          <img class="icon" src="assets/icons/youtubemusicicon.png" alt=""> YouTube Music
         </a>
-        <a class="btn" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank">
-          <img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</a>
+        <a class="btn" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank" rel="noopener">
+          <img class="icon" src="assets/icons/amazonmusicicon.png" alt=""> Amazon Music</a>
       </div>
 
       <div class="upcoming">
@@ -525,8 +619,12 @@ const controlsStrip = document.getElementById("controlsStrip");
 
 function setMode(mode){
   const isSongs = mode === "songs";
+
   switchBtn.dataset.mode = isSongs ? "songs" : "beats";
   controlsStrip.dataset.mode = isSongs ? "songs" : "beats";
+
+  // 🔥 this is what makes the flowing border match the toggle
+  document.body.dataset.mode = isSongs ? "songs" : "beats";
 
   paneBeats.classList.toggle("active", !isSongs);
   paneSongs.classList.toggle("active", isSongs);
