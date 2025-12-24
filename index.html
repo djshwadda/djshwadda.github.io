@@ -78,56 +78,72 @@
     }
 
     /* 🔥 Dynamic flowing border (CSS-only) */
-    .card::before{
-      content:"";
-      position:absolute;
-      inset: 0;
-      padding: var(--flowWidth);
-      border-radius: inherit;
-      z-index: 0;
-      pointer-events:none;
+.card::before{
+  content:"";
+  position:absolute;
+  inset: 0;
+  padding: var(--flowWidth);
+  border-radius: inherit;
+  z-index: 0;
+  pointer-events:none;
 
-      background:
-        conic-gradient(
-          from 0deg,
-          transparent 0%,
-          var(--flowB) 12%,
-          var(--flowA) 22%,
-          transparent 32%,
-          transparent 55%,
-          var(--flowB) 68%,
-          var(--flowA) 78%,
-          transparent 88%,
-          transparent 100%
-        );
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0%,
+      var(--flowB) 12%,
+      var(--flowA) 22%,
+      transparent 32%,
+      transparent 55%,
+      var(--flowB) 68%,
+      var(--flowA) 78%,
+      transparent 88%,
+      transparent 100%
+    );
 
-      /* show only the border ring */
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-      mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
 
-      filter: drop-shadow(0 0 10px var(--flowGlow));
-      animation: flowSpin var(--flowSpeed) linear infinite;
-      opacity: 0.95;
-    }
+  animation: flowSpin var(--flowSpeed) linear infinite;
 
-    /* subtle extra bloom so it feels “lit”, not “painted” */
-    .card::after{
-      content:"";
-      position:absolute;
-      inset:-10px;
-      border-radius: calc(var(--radius) + 10px);
-      z-index: 0;
-      pointer-events:none;
-      background: radial-gradient(circle at 30% 10%, var(--flowGlow), transparent 55%);
-      filter: blur(18px);
-      opacity: 0.35;
-    }
+  /* THE GLOW */
+  filter:
+    drop-shadow(0 0 8px var(--flowA))
+    drop-shadow(0 0 18px var(--flowGlow))
+    drop-shadow(0 0 32px var(--flowGlow));
+}
+
+.card::after{
+  content:"";
+  position:absolute;
+  inset:-14px;
+  border-radius: calc(var(--radius) + 14px);
+  z-index: -1;
+  pointer-events:none;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      var(--flowGlow),
+      transparent 65%
+    );
+
+  filter: blur(26px);
+  opacity: 0.65;
+  animation: glowPulse 3.5s ease-in-out infinite;
+}
+
+@keyframes glowPulse{
+  0%,100%{ opacity: 0.55; }
+  50%{ opacity: 0.85; }
+}
+
 
     /* keep actual content above the border layers */
     .card > *{ position: relative; z-index: 1; }
