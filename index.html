@@ -21,24 +21,9 @@
 
       --activeGreen: #1DB954;
       --activeBlue:  #2D7DFF;
-
-      /* ===== Edge glow + tracer defaults (Songs) ===== */
-      --edgeA: rgba(29,185,84,0.95);
-      --edgeGlow: rgba(29,185,84,0.40);
-
-      /* ===== Twin beam tuning ===== */
-      --beamSpeed: 5.4s;          /* slower */
-      --beamGlow: 26px;           /* more bloom */
-      --edgeStroke: 1.35px;
-
-      /* ===== Comet tuning (bigger + brighter) ===== */
-      --dashLen: 22;              /* beam length along perimeter (px-ish on path) */
-      --outlineStroke: 1.4;       /* outline thickness */
-      --cometStroke: 3.2;         /* comet thickness */
     }
 
     *{ box-sizing:border-box; }
-
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -51,18 +36,6 @@
       align-items:center;
       justify-content:center;
       padding: 28px 14px;
-    }
-
-    /* Theme sync: edge glow + beams follow toggle mode */
-    body[data-mode="songs"]{
-      --edgeA: rgba(29,185,84,0.95);
-      --edgeGlow: rgba(29,185,84,0.44);
-      --beamSpeed: 5.8s;
-    }
-    body[data-mode="beats"]{
-      --edgeA: rgba(45,125,255,0.98);
-      --edgeGlow: rgba(45,125,255,0.46);
-      --beamSpeed: 5.2s;
     }
 
     .wrap{
@@ -79,100 +52,6 @@
       overflow:hidden;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-
-      position: relative;
-      isolation: isolate;
-    }
-
-    /* ===== Exact edge outline glow (matches the card) ===== */
-    .card::before{
-      content:"";
-      position:absolute;
-      inset: 0;
-      border-radius: inherit;
-      pointer-events:none;
-      z-index: 0;
-
-      box-shadow:
-        inset 0 0 0 var(--edgeStroke) rgba(255,255,255,0.10),
-        inset 0 0 0 calc(var(--edgeStroke) + 0.65px) rgba(0,0,0,0.06),
-        0 0 10px var(--edgeGlow),
-        0 0 22px var(--edgeGlow),
-        0 0 42px rgba(0,0,0,0.22);
-
-      opacity: 0.82;
-      animation: edgeBreathe 3.6s ease-in-out infinite;
-    }
-
-    @keyframes edgeBreathe{
-      0%,100%{ opacity: 0.55; }
-      50%{ opacity: 0.95; }
-    }
-
-    /* ===========================
-       PIXEL-PERFECT, SYNCHRONIZED
-       TWIN COMETS (TOP-CENTER -> BOTTOM-CENTER)
-       =========================== */
-
-    .edge-trace{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      z-index: 0;
-      pointer-events:none;
-      overflow: visible;
-    }
-
-    .edge-outline{
-      fill:none;
-      stroke: var(--edgeA);
-      stroke-width: var(--outlineStroke);
-      opacity: 0.35;
-      vector-effect: non-scaling-stroke;
-      filter:
-        drop-shadow(0 0 8px var(--edgeGlow))
-        drop-shadow(0 0 18px var(--edgeGlow))
-        drop-shadow(0 0 30px var(--edgeGlow));
-    }
-
-    .edge-comet{
-      fill:none;
-      stroke: var(--edgeA);
-      stroke-width: var(--cometStroke);
-      stroke-linecap: round;
-      vector-effect: non-scaling-stroke;
-
-      /* One dash + one giant gap (gap computed from path length via CSS vars) */
-      stroke-dasharray: var(--dashLen) calc(var(--pathLen) - var(--dashLen));
-      stroke-dashoffset: calc(-1 * var(--startOffset));
-
-      filter:
-        drop-shadow(0 0 10px var(--edgeA))
-        drop-shadow(0 0 22px var(--edgeGlow))
-        drop-shadow(0 0 38px var(--edgeGlow));
-    }
-
-    /* Both start at SAME offset (top center) and travel EXACTLY half perimeter in opposite directions */
-    .edge-cometA{ animation: runCW var(--beamSpeed) linear infinite; }
-    .edge-cometB{ animation: runCCW var(--beamSpeed) linear infinite; }
-
-    @keyframes runCW{
-      to { stroke-dashoffset: calc(-1 * (var(--startOffset) + var(--halfLen))); }
-    }
-    @keyframes runCCW{
-      to { stroke-dashoffset: calc(-1 * (var(--startOffset) - var(--halfLen))); }
-    }
-
-    /* Keep content above glow + tracers */
-    .card > *{
-      position: relative;
-      z-index: 1;
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .edge-cometA, .edge-cometB{ animation: none; }
-      .card::before{ animation: none; }
     }
 
     .header{
@@ -222,6 +101,8 @@
           rgba(0,0,0,0.55) 45%,
           rgba(45,125,255,0.24) 100%);
     }
+
+    .lane-label{ display:none; }
 
     .toggle{
       display:flex;
@@ -275,7 +156,6 @@
       cursor:pointer;
       border:1px solid var(--border);
       transition: background 220ms ease;
-      background: transparent;
     }
 
     .switch[data-mode="songs"]{
@@ -326,6 +206,7 @@
     .pane{ display:none; gap:12px; }
     .pane.active{ display:grid; }
 
+    /* ✅ FIX: stop Instagram WebView from clipping the pane title text */
     .pane-title{
       display:flex;
       flex-direction: column;
@@ -403,15 +284,20 @@
       padding:12px;
     }
 
+    /* ✅ TIGHTENED Upcoming spacing (no more huge dead-air) */
     .upcoming{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
+
+      /* was 12px; this reduces vertical "pillow" */
       padding:10px 12px;
+
       border-radius:14px;
       border:1px dashed rgba(255,255,255,0.16);
       background: rgba(0,0,0,0.25);
+
       flex-wrap: wrap;
     }
 
@@ -420,6 +306,8 @@
       align-items:center;
       gap:12px;
       min-width:0;
+
+      /* was flex: 1 1 260px; which can exaggerate spacing in IG */
       flex: 1 1 auto;
     }
 
@@ -496,6 +384,8 @@
       .feature-link{
         width:100%;
         justify-content:center;
+
+        /* pulls it closer to content */
         margin-top: 8px;
       }
 
@@ -519,16 +409,9 @@
   </style>
 </head>
 
-<body data-mode="songs">
+<body>
 <main class="wrap">
 <section class="card">
-
-  <!-- Edge glow + two synchronized comets (exact card dimensions) -->
-  <svg class="edge-trace" aria-hidden="true">
-    <path class="edge-outline" d=""></path>
-    <path class="edge-comet edge-cometA" d=""></path>
-    <path class="edge-comet edge-cometB" d=""></path>
-  </svg>
 
   <div class="header">
     <h1 class="title">🎧 Pick your lane 🎧</h1>
@@ -542,7 +425,7 @@
         <div class="toggle-sub">Vocals + Story</div>
       </div>
 
-      <button class="switch" id="switch" data-mode="songs" aria-label="Toggle songs or instrumentals" type="button">
+      <button class="switch" id="switch" data-mode="songs">
         <span class="knob"></span>
       </button>
 
@@ -563,12 +446,12 @@
       </div>
 
       <div class="grid">
-        <div class="btn secondary"><img class="icon" src="assets/icons/spotifyicon.png" alt=""> Spotify</div>
-        <div class="btn secondary"><img class="icon" src="assets/icons/applemusicicon.png" alt=""> Apple Music</div>
-        <a class="btn" href="https://youtube.com/@djshwadda?si=3hXStYA8kH6BRoC2" target="_blank" rel="noopener">
-          <img class="icon" src="assets/icons/youtubemusicicon.png" alt=""> YouTube Music
+        <div class="btn secondary"><img class="icon" src="assets/icons/spotifyicon.png"> Spotify</div>
+        <div class="btn secondary"><img class="icon" src="assets/icons/applemusicicon.png"> Apple Music</div>
+        <a class="btn" href="https://youtube.com/@djshwadda?si=3hXStYA8kH6BRoC2" target="_blank">
+          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
         </a>
-        <div class="btn secondary"><img class="icon" src="assets/icons/amazonmusicicon.png" alt=""> Amazon Music</div>
+        <div class="btn secondary"><img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</div>
       </div>
 
       <div class="note">Instrumentals posted on YouTube daily. Coming to other platforms soon...</div>
@@ -584,7 +467,7 @@
             </div>
           </div>
         </div>
-        <a class="feature-link" href="https://ffm.to/shwadda-primordial-groove" rel="noopener" target="_blank">Spotify Pre-Save ↗</a>
+        <a class="feature-link" href="https://ffm.to/shwadda-primordial-groove" rel="noopener">Spotify Pre-Save ↗</a>
       </div>
     </section>
 
@@ -596,17 +479,17 @@
       </div>
 
       <div class="grid">
-        <a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank" rel="noopener">
-          <img class="icon" src="assets/icons/spotifyicon.png" alt=""> Spotify
+        <a class="btn" href="https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA" target="_blank">
+          <img class="icon" src="assets/icons/spotifyicon.png"> Spotify
         </a>
-        <a class="btn" href="https://music.apple.com/us/artist/shwadda/1615926938" target="_blank" rel="noopener">
-          <img class="icon" src="assets/icons/applemusicicon.png" alt=""> Apple Music
+        <a class="btn" href="https://music.apple.com/us/artist/shwadda/1615926938" target="_blank">
+          <img class="icon" src="assets/icons/applemusicicon.png"> Apple Music
         </a>
-        <a class="btn" href="https://www.youtube.com/channel/UCEuwn9HJAmdVn5137ehJx4g" target="_blank" rel="noopener">
-          <img class="icon" src="assets/icons/youtubemusicicon.png" alt=""> YouTube Music
+        <a class="btn" href="https://www.youtube.com/channel/UCEuwn9HJAmdVn5137ehJx4g" target="_blank">
+          <img class="icon" src="assets/icons/youtubemusicicon.png"> YouTube Music
         </a>
-        <a class="btn" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank" rel="noopener">
-          <img class="icon" src="assets/icons/amazonmusicicon.png" alt=""> Amazon Music</a>
+        <a class="btn" href="https://www.amazon.com/music/player/artists/B09FR9WKRP/shwadda" target="_blank">
+          <img class="icon" src="assets/icons/amazonmusicicon.png"> Amazon Music</a>
       </div>
 
       <div class="upcoming">
@@ -642,10 +525,8 @@ const controlsStrip = document.getElementById("controlsStrip");
 
 function setMode(mode){
   const isSongs = mode === "songs";
-
   switchBtn.dataset.mode = isSongs ? "songs" : "beats";
   controlsStrip.dataset.mode = isSongs ? "songs" : "beats";
-  document.body.dataset.mode = isSongs ? "songs" : "beats";
 
   paneBeats.classList.toggle("active", !isSongs);
   paneSongs.classList.toggle("active", isSongs);
@@ -654,9 +535,6 @@ function setMode(mode){
   labelBeats.classList.toggle("active", !isSongs);
 
   footerText.textContent = isSongs ? "© Shwadda" : "© DJ Shwadda";
-
-  // keep tracer aligned if layout changes subtly
-  window.dispatchEvent(new Event("resize"));
 }
 
 setMode("songs");
@@ -664,70 +542,6 @@ setMode("songs");
 switchBtn.addEventListener("click", () => {
   setMode(switchBtn.dataset.mode === "songs" ? "beats" : "songs");
 });
-</script>
-
-<script>
-/* Pixel-perfect rounded-rect path sized to the actual card.
-   Two comets start at TOP CENTER and meet at BOTTOM CENTER every loop (symmetry locked). */
-(function syncEdgeTrace(){
-  const card = document.querySelector(".card");
-  const svg  = document.querySelector(".edge-trace");
-  if(!card || !svg) return;
-
-  const outline = svg.querySelector(".edge-outline");
-  const cometA  = svg.querySelector(".edge-cometA");
-  const cometB  = svg.querySelector(".edge-cometB");
-
-  // Rounded rect path, clockwise, starting at (r, 0)
-  function roundedRectPath(w, h, r){
-    r = Math.max(0, Math.min(r, w/2, h/2));
-    return [
-      `M ${r} 0`,
-      `H ${w - r}`,
-      `A ${r} ${r} 0 0 1 ${w} ${r}`,
-      `V ${h - r}`,
-      `A ${r} ${r} 0 0 1 ${w - r} ${h}`,
-      `H ${r}`,
-      `A ${r} ${r} 0 0 1 0 ${h - r}`,
-      `V ${r}`,
-      `A ${r} ${r} 0 0 1 ${r} 0`,
-      `Z`
-    ].join(" ");
-  }
-
-  function update(){
-    const w = Math.max(1, card.clientWidth);
-    const h = Math.max(1, card.clientHeight);
-    const r = parseFloat(getComputedStyle(card).getPropertyValue("--radius")) || 18;
-
-    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
-
-    const d = roundedRectPath(w, h, r);
-    outline.setAttribute("d", d);
-    cometA.setAttribute("d", d);
-    cometB.setAttribute("d", d);
-
-    const L = cometA.getTotalLength();
-
-    // Path starts at (r,0). Top center is at (w/2, 0).
-    // Distance along top edge from start to top center = (w/2 - r).
-    const startOffset = Math.max(0, (w/2) - r);
-
-    card.style.setProperty("--pathLen", `${L}`);
-    card.style.setProperty("--halfLen", `${L/2}`);
-    card.style.setProperty("--startOffset", `${startOffset}`);
-  }
-
-  update();
-
-  // Resize observer = rock solid on mobile + Instagram webview
-  if("ResizeObserver" in window){
-    const ro = new ResizeObserver(() => update());
-    ro.observe(card);
-  } else {
-    window.addEventListener("resize", update, { passive:true });
-  }
-})();
 </script>
 
 </body>
