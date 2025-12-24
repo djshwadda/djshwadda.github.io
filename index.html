@@ -21,9 +21,6 @@
 
       --activeGreen: #1DB954;
       --activeBlue:  #2D7DFF;
-
-      /* IG/WebView helper: fallback vh that we can update via JS */
-      --appvh: 1vh;
     }
 
     *{ box-sizing:border-box; }
@@ -34,25 +31,11 @@
         linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
         url("assets/images/background1.jpg") center / cover no-repeat fixed;
       color: var(--text);
-
-      /* ✅ FIX 1: stop using plain 100vh (Instagram WebView lies about it) */
-      min-height: 100vh;     /* fallback */
-      min-height: 100svh;    /* small viewport height (safe) */
-      min-height: 100dvh;    /* dynamic viewport height (best when supported) */
-
-      /* ✅ FIX 1b (extra safe): JS-updated vh for nasty WebViews */
-      min-height: calc(var(--appvh) * 100);
-
+      min-height: 100vh;
       display:flex;
       align-items:center;
       justify-content:center;
-
-      /* ✅ FIX 2: protect top from in-app browser UI/safe-area */
-      padding: calc(28px + env(safe-area-inset-top)) 14px calc(28px + env(safe-area-inset-bottom));
-
-      /* ✅ FIX 3: avoid accidental clipping */
-      overflow-x: hidden;
-      overflow-y: auto;
+      padding: 28px 14px;
     }
 
     .wrap{
@@ -223,6 +206,7 @@
     .pane{ display:none; gap:12px; }
     .pane.active{ display:grid; }
 
+    /* ✅ FIX: stop Instagram WebView from clipping the pane title text */
     .pane-title{
       display:flex;
       flex-direction: column;
@@ -231,11 +215,25 @@
       gap: 5px;
       text-align: center;
       line-height: 1.15;
+
+      /* buffer so text never kisses the rounded edge */
+      padding-inline: 10px;
+      max-width: 100%;
     }
 
     .pane-title h2{
       margin: 0;
       line-height: 1.15;
+
+      /* critical: force wrapping instead of overflow */
+      max-width: 100%;
+      padding-inline: 6px;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+
+      /* scale down on narrow WebViews (Instagram) */
+      font-size: clamp(22px, 6vw, 34px);
     }
 
     .pane-emoji{
@@ -498,14 +496,6 @@
 </main>
 
 <script>
-/* ✅ IG/WebView vh fix: update --appvh to actual innerHeight */
-function setAppVh(){
-  const vh = window.innerHeight * 0.01;
-  document.documentElement.style.setProperty('--appvh', `${vh}px`);
-}
-setAppVh();
-window.addEventListener('resize', setAppVh);
-
 const switchBtn = document.getElementById("switch");
 const paneBeats = document.getElementById("paneBeats");
 const paneSongs = document.getElementById("paneSongs");
