@@ -22,13 +22,16 @@
       --activeGreen: #1DB954;
       --activeBlue:  #2D7DFF;
 
-      /* flowing border defaults (songs) */
+      /* Theme-driven edge glow + tracer (defaults = songs) */
       --flowA: rgba(29,185,84,0.92);
-      --flowB: rgba(29,185,84,0.18);
-      --flowGlow: rgba(29,185,84,0.35);
+      --flowGlow: rgba(29,185,84,0.38);
 
-      --flowWidth: 2px;
-      --flowSpeed: 3.25s;
+      /* tracer tuning */
+      --sparkSpeed: 2.8s;      /* how fast the speck runs */
+      --sparkLen: 14;          /* speck length (px-ish, stroke-space) */
+      --sparkGap: 999;         /* big gap so it's just one speck */
+      --edgeStroke: 1.6;       /* outline stroke width */
+      --sparkStroke: 2.6;      /* speck stroke width */
     }
 
     *{ box-sizing:border-box; }
@@ -46,16 +49,16 @@
       padding: 28px 14px;
     }
 
-    /* Theme sync: border color follows toggle mode */
+    /* Theme sync: edge glow + tracer follow toggle mode */
     body[data-mode="songs"]{
       --flowA: rgba(29,185,84,0.92);
-      --flowB: rgba(29,185,84,0.18);
-      --flowGlow: rgba(29,185,84,0.35);
+      --flowGlow: rgba(29,185,84,0.40);
+      --sparkSpeed: 2.85s;
     }
     body[data-mode="beats"]{
       --flowA: rgba(45,125,255,0.95);
-      --flowB: rgba(45,125,255,0.18);
-      --flowGlow: rgba(45,125,255,0.38);
+      --flowGlow: rgba(45,125,255,0.42);
+      --sparkSpeed: 2.25s;
     }
 
     .wrap{
@@ -73,103 +76,87 @@
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
 
-      position: relative; /* needed for the animated border */
-      isolation: isolate; /* keeps glow layers behaving */
+      position: relative;
+      isolation: isolate;
     }
 
-    /* 🔥 Dynamic flowing border (CSS-only) */
-.card::before{
-  content:"";
-  position:absolute;
-  inset: 0;
-  padding: var(--flowWidth);
-  border-radius: inherit;
-  z-index: 0;
-  pointer-events:none;
+    /* ===========================
+       TRUE EDGE GLOW + TRACING SPECK
+       (SVG outline that hugs the card)
+       =========================== */
 
-  background:
-    conic-gradient(
-      from 0deg,
-      transparent 0%,
-      var(--flowB) 12%,
-      var(--flowA) 22%,
-      transparent 32%,
-      transparent 55%,
-      var(--flowB) 68%,
-      var(--flowA) 78%,
-      transparent 88%,
-      transparent 100%
-    );
+    /* SVG layer sits under content */
+    .edge-trace{
+      position:absolute;
+      inset: 0;
+      width:100%;
+      height:100%;
+      z-index: 0;
+      pointer-events:none;
+      overflow: visible;
+    }
 
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
-
-  animation: flowSpin var(--flowSpeed) linear infinite;
-
-  /* THE GLOW */
-  filter:
-    drop-shadow(0 0 8px var(--flowA))
-    drop-shadow(0 0 18px var(--flowGlow))
-    drop-shadow(0 0 32px var(--flowGlow));
-}
-
-.card::after{
-  content:"";
-  position:absolute;
-  inset:-14px;
-  border-radius: calc(var(--radius) + 14px);
-  z-index: -1;
-  pointer-events:none;
-
-  background:
-    radial-gradient(
-      circle at 50% 50%,
-      var(--flowGlow),
-      transparent 65%
-    );
-
-  filter: blur(26px);
-  opacity: 0.65;
-  animation: glowPulse 3.5s ease-in-out infinite;
-}
-
-@keyframes glowPulse{
-  0%,100%{ opacity: 0.55; }
-  50%{ opacity: 0.85; }
-}
-
-
-    /* keep actual content above the border layers */
+    /* Keep actual content above SVG */
     .card > *{ position: relative; z-index: 1; }
 
-    @keyframes flowSpin{
-      to { transform: rotate(360deg); }
+    /* The glowing outline tube */
+    .edge-glow{
+      fill: none;
+      stroke: var(--flowA);
+      stroke-width: var(--edgeStroke);
+      opacity: 0.55;
+      vector-effect: non-scaling-stroke;
+
+      /* neon bloom */
+      filter:
+        drop-shadow(0 0 8px var(--flowGlow))
+        drop-shadow(0 0 18px var(--flowGlow))
+        drop-shadow(0 0 30px var(--flowGlow));
+      animation: edgeBreathe 3.6s ease-in-out infinite;
+    }
+
+    /* The traveling “speck” that traces the outline */
+    .edge-spark{
+      fill:none;
+      stroke: var(--flowA);
+      stroke-width: var(--sparkStroke);
+      vector-effect: non-scaling-stroke;
+      stroke-linecap: round;
+
+      stroke-dasharray: var(--sparkLen) var(--sparkGap);
+
+      filter:
+        drop-shadow(0 0 10px var(--flowA))
+        drop-shadow(0 0 22px var(--flowGlow))
+        drop-shadow(0 0 40px var(--flowGlow));
+
+      animation: sparkRun var(--sparkSpeed) linear infinite;
+    }
+
+    /* Make glow feel alive (subtle) */
+    @keyframes edgeBreathe{
+      0%,100%{ opacity: 0.45; }
+      50%{ opacity: 0.72; }
+    }
+
+    /* Move the dash around the perimeter */
+    @keyframes sparkRun{
+      to { stroke-dashoffset: -1000; }
     }
 
     @media (prefers-reduced-motion: reduce){
-      .card::before{ animation: none; }
+      .edge-glow, .edge-spark{ animation: none; }
     }
 
-    /* fallback if mask-composite isn't supported (still looks good) */
-    @supports not (mask-composite: exclude){
-      .card::before{
-        -webkit-mask: none;
-        mask: none;
-        opacity: 0.0; /* hide ring if we can't cut it cleanly */
-      }
-      .card{
-        box-shadow:
-          var(--shadow),
-          0 0 0 1px rgba(255,255,255,0.10),
-          0 0 18px var(--flowGlow);
-      }
+    /* Fallback: if SVG filters are limited, still show clean outline */
+    @supports not (filter: drop-shadow(0 0 10px #000)){
+      .edge-glow{ opacity: 0.65; }
+      .edge-spark{ opacity: 0.95; }
     }
+
+    /* ===========================
+       UI CONTENT
+       =========================== */
 
     .header{
       padding: 18px 18px 6px 18px;
@@ -523,6 +510,13 @@
 <main class="wrap">
 <section class="card">
 
+  <!-- Neon outline + traveling speck tracing the card edges -->
+  <svg class="edge-trace" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+    <!-- rounded rect: rx/ry should match your card radius vibe (18) -->
+    <rect class="edge-glow"  x="1.5" y="1.5" width="97" height="97" rx="18" ry="18"></rect>
+    <rect class="edge-spark" x="1.5" y="1.5" width="97" height="97" rx="18" ry="18"></rect>
+  </svg>
+
   <div class="header">
     <h1 class="title">🎧 Pick your lane 🎧</h1>
     <p class="subtitle">💫 Two vibes. One universe 💫.</p>
@@ -639,7 +633,7 @@ function setMode(mode){
   switchBtn.dataset.mode = isSongs ? "songs" : "beats";
   controlsStrip.dataset.mode = isSongs ? "songs" : "beats";
 
-  // 🔥 this is what makes the flowing border match the toggle
+  // this makes the edge glow + tracer match the toggle
   document.body.dataset.mode = isSongs ? "songs" : "beats";
 
   paneBeats.classList.toggle("active", !isSongs);
