@@ -206,6 +206,7 @@
     .pane{ display:none; gap:12px; }
     .pane.active{ display:grid; }
 
+    /* ✅ FIX: stop Instagram WebView from clipping the pane title text */
     .pane-title{
       display:flex;
       flex-direction: column;
@@ -283,15 +284,20 @@
       padding:12px;
     }
 
+    /* ✅ TIGHTENED Upcoming spacing (no more huge dead-air) */
     .upcoming{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
+
+      /* was 12px; this reduces vertical "pillow" */
       padding:10px 12px;
+
       border-radius:14px;
       border:1px dashed rgba(255,255,255,0.16);
       background: rgba(0,0,0,0.25);
+
       flex-wrap: wrap;
     }
 
@@ -300,6 +306,8 @@
       align-items:center;
       gap:12px;
       min-width:0;
+
+      /* was flex: 1 1 260px; which can exaggerate spacing in IG */
       flex: 1 1 auto;
     }
 
@@ -326,6 +334,7 @@
       font-size:14px;
       white-space: normal;
       overflow: visible;
+      text-overflow: unset;
       overflow-wrap: anywhere;
       word-break: break-word;
       line-height: 1.25;
@@ -336,6 +345,7 @@
       color:var(--muted);
       white-space: normal;
       overflow: visible;
+      text-overflow: unset;
       overflow-wrap: anywhere;
       word-break: break-word;
       line-height:1.3;
@@ -374,11 +384,15 @@
       .feature-link{
         width:100%;
         justify-content:center;
+
+        /* pulls it closer to content */
         margin-top: 8px;
       }
+
       .upcoming-sub{
         white-space:normal;
         overflow:visible;
+        text-overflow:unset;
         line-height:1.3;
       }
       .teaser{
@@ -452,7 +466,10 @@
     </div>
   </div>
 
+
+
   <div class="content">
+
     <section class="pane" id="paneBeats">
       <div class="pane-title">
         <h2>DJ Shwadda - Instrumentals</h2>
@@ -477,7 +494,7 @@
           <div class="upcoming-meta">
             <div class="upcoming-title">Upcoming Project: Primordial Groove</div>
             <div class="upcoming-sub">
-              <span class="drop-date">🗓️ Drop date: Jan 9th</span>
+              <span class="drop-date">🗓️ Drop date: Jan 4th</span>
               <span class="teaser">💿 Rap/Trap Instrumental Album</span>
             </div>
           </div>
@@ -521,24 +538,25 @@
         <a class="feature-link" href="https://ffm.to/shwadda-golden" target="_blank" rel="noopener">Spotify Pre-Save ↗</a>
       </div>
     </section>
+
   </div>
 
   <div class="footer" id="footerText">
     © Shwadda
-    <div class="socials">
-      <a href="https://instagram.com/shwadda" target="_blank" rel="noopener">
+    <div class="socials" id="socialLinks">
+      <a data-social="ig" href="https://instagram.com/" target="_blank" rel="noopener">
         <img src="assets/icons/instagram.png" alt="Instagram">
       </a>
-      <a href="https://x.com/djshwadda" target="_blank" rel="noopener">
+      <a data-social="x" href="https://x.com/" target="_blank" rel="noopener">
         <img src="assets/icons/x.png" alt="X">
       </a>
-      <a href="https://youtube.com/shwadda" target="_blank" rel="noopener">
+      <a data-social="yt" href="https://youtube.com/" target="_blank" rel="noopener">
         <img src="assets/icons/youtube.png" alt="YouTube">
       </a>
-      <a href="https://soundcloud.com/" target="_blank" rel="noopener">
+      <a data-social="sc" href="https://soundcloud.com/" target="_blank" rel="noopener">
         <img src="assets/icons/soundcloud.png" alt="SoundCloud">
       </a>
-      <a href="https://facebook.com/djshwadda" target="_blank" rel="noopener">
+      <a data-social="fb" href="https://facebook.com/" target="_blank" rel="noopener">
         <img src="assets/icons/facebook.png" alt="Facebook">
       </a>
     </div>
@@ -555,6 +573,33 @@ const labelBeats = document.getElementById("labelBeats");
 const labelSongs = document.getElementById("labelSongs");
 const footerText = document.getElementById("footerText");
 const controlsStrip = document.getElementById("controlsStrip");
+const socialLinks = document.getElementById("socialLinks");
+
+const SOCIALS = {
+  songs: {
+    ig: "https://instagram.com/",
+    x:  "https://x.com/",
+    yt: "https://youtube.com/",
+    sc: "https://soundcloud.com/",
+    fb: "https://facebook.com/"
+  },
+  beats: {
+    ig: "https://instagram.com/",
+    x:  "https://x.com/",
+    yt: "https://youtube.com/",
+    sc: "https://soundcloud.com/",
+    fb: "https://facebook.com/"
+  }
+};
+
+function setSocialHrefs(mode){
+  const map = SOCIALS[mode];
+  if (!map) return;
+  socialLinks.querySelectorAll("a[data-social]").forEach(a => {
+    const key = a.getAttribute("data-social");
+    if (map[key]) a.setAttribute("href", map[key]);
+  });
+}
 
 function setMode(mode){
   const isSongs = mode === "songs";
@@ -568,6 +613,8 @@ function setMode(mode){
   labelBeats.classList.toggle("active", !isSongs);
 
   footerText.firstChild.textContent = isSongs ? "© Shwadda" : "© DJ Shwadda";
+
+  setSocialHrefs(isSongs ? "songs" : "beats");
 }
 
 setMode("songs");
