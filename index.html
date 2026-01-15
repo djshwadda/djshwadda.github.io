@@ -609,9 +609,15 @@ function setMode(mode){
 }
 
 (function initModeFromURL(){
-  const path = window.location.pathname.toLowerCase();
+  const path  = window.location.pathname.toLowerCase();
+  const query = window.location.search.toLowerCase();
+  const hash  = window.location.hash.toLowerCase();
 
-  if (path.includes("/instrumentals")) {
+  // Supports:
+  //   /instrumentals
+  //   ?lane=instrumentals
+  //   #instrumentals
+  if (path.includes("/instrumentals") || query.includes("lane=instrumentals") || hash.includes("instrumentals")) {
     setMode("beats");
   } else {
     setMode("songs");
@@ -674,6 +680,9 @@ switchBtn.addEventListener("click", () => {
   `;
 
   footer.insertAdjacentElement("afterend", social);
+
+  // ✅ Sync footer links to the currently active mode (prevents wrong links on first load)
+  setMode(switchBtn.dataset.mode);
 })();
 </script>
 
