@@ -608,7 +608,15 @@ function setMode(mode){
   }
 }
 
-setMode("songs");
+(function initModeFromURL(){
+  const path = window.location.pathname.toLowerCase();
+
+  if (path.includes("/instrumentals")) {
+    setMode("beats");
+  } else {
+    setMode("songs");
+  }
+})();
 
 switchBtn.addEventListener("click", () => {
   setMode(switchBtn.dataset.mode === "songs" ? "beats" : "songs");
