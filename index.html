@@ -735,7 +735,8 @@ document.addEventListener('click', function(e){
     trackEvent('outbound_click', {
       platform: a.textContent.trim(),
       destination: url.hostname,
-      href: a.href
+      href: a.href,
+      lane: switchBtn.dataset.mode
     });
   }
 });
