@@ -732,7 +732,7 @@ document.addEventListener('click', function(e){
 
   const url = new URL(a.href, window.location.href);
   if (url.origin !== window.location.origin) {
-    trackEvent('outbound_click', {
+    trackEvent('platform_click', {
       platform: a.textContent.trim(),
       destination: url.hostname,
       href: a.href,
