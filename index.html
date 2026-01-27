@@ -712,7 +712,7 @@ switchBtn.addEventListener("click", () => {
 /* ===== GA4 EVENT HELPERS (added, no layout changes) ===== */
 function trackEvent(name, params = {}){
   if (typeof gtag === "function") {
-    gtag('event', name, params);
+    gtag('event', name, Object.assign({ transport_type: 'beacon' }, params));
   }
 }
 
