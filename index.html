@@ -1,17 +1,28 @@
 <!DOCTYPE html> 
 <html lang="en">
 <head>
+
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MGJV4NB2HR"></script>
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-  
+
+    // Configure now; gtag.js will pick this up when it loads
     gtag('config', 'G-MGJV4NB2HR');
+
+    // Load gtag.js after the page finishes loading (better perceived performance)
+    window.addEventListener('load', function () {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-MGJV4NB2HR';
+      document.head.appendChild(s);
+    });
   </script>
 
-  <meta charset="utf-8" />
+<meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Shwadda — Choose Your Lane</title>
   <meta name="description" content="Choose your lane: DJ Shwadda instrumentals or Shwadda songs." />
