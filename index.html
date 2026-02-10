@@ -298,7 +298,33 @@
       padding:12px;
     }
 
-    /* ✅ TIGHTENED Upcoming spacing (no more huge dead-air) */
+    
+    /* ✅ Added: Airbit purchase button (same footprint as .note) */
+    .note.purchase-btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      width:100%;
+      text-decoration:none;
+      font-weight:800;
+      letter-spacing:0.2px;
+      color: rgba(255,255,255,0.95);
+      border: 1px solid rgba(255,255,255,0.16);
+      background:
+        linear-gradient(180deg, rgba(155,89,255,0.42), rgba(120,50,220,0.22));
+      box-shadow: 0 10px 22px rgba(120,50,220,0.18);
+    }
+
+    .note.purchase-btn:hover,
+    .note.purchase-btn:focus-visible{
+      outline:none;
+      box-shadow: 0 0 0 3px var(--focus), 0 12px 28px rgba(120,50,220,0.22);
+      border-color: rgba(255,255,255,0.22);
+      background:
+        linear-gradient(180deg, rgba(170,110,255,0.52), rgba(120,50,220,0.26));
+    }
+/* ✅ TIGHTENED Upcoming spacing (no more huge dead-air) */
     .upcoming{
       display:flex;
       align-items:center;
@@ -519,7 +545,7 @@
 </div>
 
 
-      <div class="note">Instrumentals posted on YouTube daily.</div>
+      <a class="note purchase-btn" href="https://airbit.com/DJShwadda" target="_blank" rel="noopener">🛒🛍️Purchase Beats on Airbit</a>
 
       <div class="upcoming">
         <div class="upcoming-left">
