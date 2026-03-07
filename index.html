@@ -694,8 +694,16 @@ async function loadReleaseConfig(){
     releaseConfig = await response.json();
 
     applyBackgrounds(releaseConfig.backgrounds || {});
-    applyUpcomingRelease("beats", releaseConfig?.lanes?.beats?.upcoming || {}, releaseConfig?.showSpotifyPresaveButtons !== false);
-    applyUpcomingRelease("songs", releaseConfig?.lanes?.songs?.upcoming || {}, releaseConfig?.showSpotifyPresaveButtons !== false);
+    applyUpcomingRelease(
+      "beats",
+      releaseConfig?.lanes?.beats?.upcoming || {},
+      releaseConfig?.lanes?.beats?.showSpotifyPresaveButton !== false
+    );
+    applyUpcomingRelease(
+      "songs",
+      releaseConfig?.lanes?.songs?.upcoming || {},
+      releaseConfig?.lanes?.songs?.showSpotifyPresaveButton !== false
+    );
   } catch (error) {
     console.error("Could not load releases.json", error);
   }
