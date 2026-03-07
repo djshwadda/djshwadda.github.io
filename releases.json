@@ -1,12 +1,15 @@
 {
-  "showSpotifyPresaveButtons": true,
   "backgrounds": {
     "desktop": "assets/images/background1.desktop.webp",
     "mobile": "assets/images/background1.mobile.webp",
     "default": "assets/images/background1.webp"
   },
+
   "lanes": {
+
     "beats": {
+      "showSpotifyPresaveButton": true,
+
       "upcoming": {
         "coverArt": "assets/images/AeropolisCoverArt.webp",
         "projectTitle": "Aeropolis",
@@ -15,14 +18,18 @@
         "ffmLink": "https://ffm.to/djshwadda-aeropolis"
       }
     },
+
     "songs": {
+      "showSpotifyPresaveButton": true,
+
       "upcoming": {
         "coverArt": "assets/images/OhMyCoverArt.webp",
-        "projectTitle": "Oh My!",
+        "projectTitle": "Oh My",
         "dropDate": "Mar 27th",
         "description": "EDM Single",
         "ffmLink": "https://ffm.to/shwadda-ohmy"
       }
     }
+
   }
 }
