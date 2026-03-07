@@ -392,7 +392,7 @@
     }
 
     .drop-date{ font-weight:600; }
-    .teaser{ display:inline; }
+    .description{ display:inline; }
 
     .feature-link{
       display:inline-flex;
@@ -435,7 +435,7 @@
         text-overflow:unset;
         line-height:1.3;
       }
-      .teaser{
+      .description{
         display:block;
       }
     }
@@ -551,10 +551,10 @@
         <div class="upcoming-left">
           <img class="cover" src="assets/images/AeropolisCoverArt.webp" alt="Upcoming project cover art">
           <div class="upcoming-meta">
-            <div class="upcoming-title">Upcoming Project: Aeropolis</div>
+            <div class="upcoming-title">Upcoming Project: <span id="beatsTitle"></span></div>
             <div class="upcoming-sub">
-              <span class="drop-date">🗓️ Drop date: Mar 13th</span>
-              <span class="teaser">💿 Atmospheric Instrumental Album</span>
+              <span class="drop-date">🗓️ Drop date: <span id="beatsDate"></span></span>
+              <span class="description">💿 <span id="beatsDescription"></span></span>
             </div>
           </div>
         </div>
@@ -590,7 +590,7 @@
             <div class="upcoming-title">Upcoming Project: Oh My</div>
             <div class="upcoming-sub">
               <span class="drop-date">🗓️ Drop date: Mar 27th</span>
-              <span class="teaser">💿 EDM Single </span>
+              <span class="description">💿 EDM Single </span>
             </div>
           </div>
         </div>
@@ -758,6 +758,26 @@ document.addEventListener('click', function(e){
       lane: switchBtn.dataset.mode
     });
   }
+});
+</script>
+
+
+<script>
+const SETTINGS={showSpotifyPresaveButtons:true};
+
+fetch('releases.json')
+.then(r=>r.json())
+.then(data=>{
+ const beats=data.beats;
+ document.getElementById('beatsTitle').textContent=beats.title;
+ document.getElementById('beatsDate').textContent=beats.dropDate;
+ document.getElementById('beatsDescription').textContent=beats.description;
+
+ const link=document.querySelector('.feature-link');
+ if(link){ 
+   link.href=beats.ffm;
+   if(!SETTINGS.showSpotifyPresaveButtons){link.style.display='none';}
+ }
 });
 </script>
 
