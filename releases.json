@@ -23,7 +23,7 @@
         "description": "EDM Single",
         "ffmLink": "https://ffm.to/shwadda-ohmy"
       },
-      "showSpotifyPresaveButton": true
+      "showSpotifyPresaveButton": false
     }
   }
 }
