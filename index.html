@@ -1071,8 +1071,7 @@
         purchaseLabel: release.purchaseLabel || "Purchase on Airbit ↗",
         dateTextReleased: release.dateTextReleased || "Out now since",
         dateTextUpcoming: release.dateTextUpcoming || "Drop date:",
-        copy: release.copy || release.tagline || "",
-        airbitLink: release.airbitLink || ""
+        copy: release.copy || release.tagline || ""
       };
       return normalized;
     }
@@ -1129,10 +1128,6 @@
         };
       }
 
-      if (release.airbitLink) {
-        return { href: release.airbitLink, label: release.purchaseLabel, className: 'purchase' };
-      }
-
       return null;
     }
 
@@ -1153,7 +1148,7 @@
       const wrap = document.getElementById(`${prefix}AirbitWrap`);
       if (!wrap) return;
 
-      const airbitLink = lane.airbitLink || latestReleased?.airbitLink || upcoming?.airbitLink || "";
+      const airbitLink = lane.airbitLink || "";
       if (!airbitLink || lane._ui?.airbitAboveCards !== true) {
         wrap.classList.remove("active");
         wrap.innerHTML = "";
