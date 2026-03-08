@@ -6,24 +6,26 @@
   },
   "lanes": {
     "beats": {
+      "topCardMode": "latest",
+      "featuredRelease": "Aeropolis",
       "airbitLink": "https://airbit.com/DJShwadda",
-      "purchaseLabel": "Purchase on Airbit \u2197",
+      "purchaseLabel": "Purchase on Airbit ↗",
       "dateTextReleased": "Out now since",
       "dateTextUpcoming": "Drop date:",
-      "primaryLabel": "Open Release \u2197",
-      "presaveLabel": "Spotify Presave \u2197",
+      "primaryLabel": "Open Release ↗",
+      "presaveLabel": "Spotify Presave ↗",
       "releases": [
         {
           "projectTitle": "Wrong Notes, Right Time",
           "releaseDate": "February 27, 2026 00:00",
-          "description": "\ud83d\udcbfExperimental Instrumental Album",
+          "description": "💿Experimental Instrumental Album",
           "coverArt": "assets/images/WrongNotesRightTimeCoverArt.webp",
           "releaseLink": "https://open.spotify.com/album/5R7pEycFGTgEcfEp8oqlXQ?si=Cdxuz51KSyivqLsoVPGeHw"
         },
         {
           "projectTitle": "Aeropolis",
           "releaseDate": "March 13, 2026 00:00",
-          "description": "\ud83d\udcbfAtmospheric Instrumental Album",
+          "description": "💿Atmospheric Instrumental Album",
           "coverArt": "assets/images/AeropolisCoverArt.webp",
           "presaveLink": "https://ffm.to/djshwadda-aeropolis",
           "releaseLink": "https://open.spotify.com/album/6Uw8kluCcfByHzsAUEnkyC"
@@ -31,7 +33,7 @@
         {
           "projectTitle": "OtherWorldly Blues",
           "releaseDate": "March 20, 2026 00:00",
-          "description": "\ud83d\udcbfJazzy/Hip Hop Instrumental Single",
+          "description": "💿Jazzy/Hip Hop Instrumental Single",
           "coverArt": "assets/images/OtherWorldyBluesCoverArt.webp",
           "presaveLink": "https://ffm.to/djshwadda-otherworldy-blues",
           "releaseLink": "https://open.spotify.com/album/4HqTRowegHZls0m6VwmsmX"
@@ -39,71 +41,73 @@
         {
           "projectTitle": "5d Baby",
           "releaseDate": "April 3, 2026 00:00",
-          "description": "\ud83d\udcbfHip Hop Instrumental Single",
+          "description": "💿Hip Hop Instrumental Single",
           "coverArt": "assets/images/5dBabyCoverArt.webp",
           "releaseLink": "https://open.spotify.com/album/5RwgRqYWGbmi5vEasQSYTN"
         },
         {
           "projectTitle": "Engineered Pressure",
           "releaseDate": "April 10, 2026 00:00",
-          "description": "\ud83d\udcbfHip Hop Instrumental Album",
+          "description": "💿Hip Hop Instrumental Album",
           "coverArt": "assets/images/EngineeredPressureCoverArt.webp",
           "releaseLink": "https://open.spotify.com/album/1dpaxcfuD17g7n8iCGqBYr"
         },
         {
           "projectTitle": "The Rush",
           "releaseDate": "April 17, 2026 00:00",
-          "description": "\ud83d\udcbfEDM Instrumental Single",
+          "description": "💿EDM Instrumental Single",
           "coverArt": "assets/images/TheRushCoverArt.webp",
           "releaseLink": "https://open.spotify.com/album/1h23dOBKkVbRFuFaSBU40d"
         },
         {
           "projectTitle": "Electro Echo",
           "releaseDate": "April 24, 2026 00:00",
-          "description": "\ud83d\udcbfEDM/House Instrumental Album",
+          "description": "💿EDM/House Instrumental Album",
           "coverArt": "assets/images/ElectroEchoCoverArt.webp",
           "releaseLink": "https://open.spotify.com/album/"
         },
         {
           "projectTitle": "How I Strut",
           "releaseDate": "May 1, 2026 00:00",
-          "description": "\ud83d\udcbfExperimental Instrumental Single",
+          "description": "💿Experimental Instrumental Single",
           "coverArt": "assets/images/HowIStrutCoverArt.webp",
           "releaseLink": "https://open.spotify.com/album/6324xPq6z8pY1J30XfcsAH"
         },
         {
           "projectTitle": "Mythical Fantasy",
           "releaseDate": "May 15, 2026 00:00",
-          "description": "\ud83d\udcbfAtmospheric Instrumental Single",
+          "description": "💿Atmospheric Instrumental Single",
           "coverArt": "assets/images/MythicalFantasyCoverArt.webp",
           "releaseLink": "https://open.spotify.com/album/6ipAgtTNEOb1fZZQPMxHyN"
         },
         {
           "projectTitle": "All Mines",
           "releaseDate": "June 5, 2026 00:00",
-          "description": "\ud83d\udcbfExperimental Instrumental Single",
+          "description": "💿Experimental Instrumental Single",
           "coverArt": "assets/images/AllMinesCoverArt.webp",
           "releaseLink": "https://open.spotify.com/album/6BQzLJkGX5drsv45qKfoiT"
         }
       ]
     },
     "songs": {
+      "topCardMode": "latest",
+      "featuredRelease": "Oh My!",
       "dateTextReleased": "Out now since",
       "dateTextUpcoming": "Drop date:",
-      "primaryLabel": "Open Release \u2197",
-      "presaveLabel": "Spotify Presave \u2197",
+      "primaryLabel": "Open Release ↗",
+      "presaveLabel": "Spotify Presave ↗",
       "releases": [
         {
           "projectTitle": "BitterSweetMess",
           "releaseDate": "February 13, 2026 00:00",
-          "description": "\ud83d\udcbfNeo-Soul Album",
+          "description": "💿Neo-Soul Album",
           "coverArt": "assets/images/BitterSweetMessCoverArt.webp",
           "releaseLink": "https://open.spotify.com/album/0bQ66LSAcf75H6YJDSV2PX?si=y92Pyy3bSEevE2OSCqyppg"
         },
         {
           "projectTitle": "Oh My!",
           "releaseDate": "March 27, 2026 00:00",
-          "description": "\ud83d\udcbfEDM / House Single",
+          "description": "💿EDM / House Single",
           "coverArt": "assets/images/OhMyCoverArt.webp",
           "presaveLink": "https://ffm.to/shwadda-ohmy",
           "releaseLink": "https://open.spotify.com/album/"
