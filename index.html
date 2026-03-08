@@ -989,26 +989,28 @@
     }
 
     function toDate(value){
-      if (!value) return null;
-      if (value instanceof Date) {
-        return Number.isNaN(value.getTime()) ? null : value;
-      }
+  if (!value) return null;
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : value;
+  }
 
-      if (typeof value === "string") {
-        const normalized = value.trim();
+  if (typeof value === "string") {
+    const trimmed = value.trim();
 
-        const simpleMatch = normalized.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})(?:\s+(\d{1,2})(?::(\d{2}))?)?$/);
-        if (simpleMatch) {
-          const [, monthName, day, year, hour = "0", minute = "00"] = simpleMatch;
-          const composed = `${monthName} ${day}, ${year} ${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
-          const parsed = new Date(composed);
-          if (!Number.isNaN(parsed.getTime())) return parsed;
-        }
-      }
+    const direct = new Date(trimmed);
+    if (!Number.isNaN(direct.getTime())) return direct;
 
-      const date = new Date(value);
-      return Number.isNaN(date.getTime()) ? null : date;
+    const match = trimmed.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})(?:\s+(\d{1,2})(?::(\d{2}))?)?$/);
+    if (match) {
+      const [, monthName, day, year, hour = "0", minute = "0"] = match;
+      const normalized = `${monthName} ${day}, ${year} ${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+      const parsed = new Date(normalized);
+      if (!Number.isNaN(parsed.getTime())) return parsed;
     }
+  }
+
+  return null;
+}
 
     function formatDate(value){
       const date = toDate(value);
@@ -1054,25 +1056,31 @@
     }
 
     function getPrimaryLink(release = {}){
-      return release.link || release.primaryLink || release.ffmLink || release.spotifyLink || release.appleMusicLink || release.youtubeMusicLink || release.amazonMusicLink || release.airbitLink || "";
-    }
+  return release.link || "";
+}
 
     function stopCardPropagation(event){
       event.stopPropagation();
     }
 
     function buildButtons(release = {}, laneOptions = {}, kind = "latest"){
-      const buttons = [];
-      const primaryLink = getPrimaryLink(release);
-      const showPresave = laneOptions.showSpotifyPresaveButton !== false;
-      const isUpcoming = kind === "upcoming";
-      const buttonLabel = release.buttonLabel || (isUpcoming && showPresave ? "Spotify Presave ↗" : "Open Release ↗");
+  const buttons = [];
+  const primaryLink = getPrimaryLink(release);
 
-      if (primaryLink && !isUpcoming) {
-        buttons.push({ label: buttonLabel, href: primaryLink, className: "" });
+  if (primaryLink) {
+    buttons.push({
+      label: release.buttonLabel || (kind === "upcoming" ? "Spotify Presave ↗" : "Open Release ↗"),
+      href: primaryLink,
+      className: kind === "upcoming" ? "presave" : ""
+    });
+  }
+
+  return buttons.slice(0, 1);
+} else if (primaryLink && !(kind === "upcoming" && hideUpcomingPrimaryButton)) {
+        buttons.push({ label: release.primaryLabel || "Open Release ↗", href: primaryLink, className: "" });
       }
 
-      if (release.airbitLink && kind !== "upcoming" && laneOptions.airbitAboveCards !== true) {
+      if (release.airbitLink && !moveAirbitAboveCards && kind !== "upcoming") {
         buttons.push({ label: release.purchaseLabel || "Purchase on Airbit ↗", href: release.airbitLink, className: "purchase" });
       }
 
@@ -1088,16 +1096,27 @@
       card.setAttribute("role", "link");
     }
 
-    function renderStandaloneAirbit(prefix, primaryRelease = {}, fallbackRelease = {}, laneOptions = {}){
-      const wrap = document.getElementById(`${prefix}AirbitWrap`);
-      if (!wrap) return;
+    function renderStandaloneAirbit(prefix, lane = {}){
+  const wrap = document.getElementById(`${prefix}AirbitWrap`);
+  if (!wrap) return;
 
-      const release = primaryRelease?.airbitLink ? primaryRelease : fallbackRelease?.airbitLink ? fallbackRelease : null;
-      if (!release || laneOptions.airbitAboveCards !== true) {
-        wrap.classList.remove("active");
-        wrap.innerHTML = "";
-        return;
-      }
+  if (!lane.airbitLink) {
+    wrap.classList.remove("active");
+    wrap.innerHTML = "";
+    return;
+  }
+
+  wrap.classList.add("active");
+  wrap.innerHTML = "";
+
+  const a = document.createElement("a");
+  a.className = "release-btn purchase";
+  a.href = lane.airbitLink;
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.textContent = lane.purchaseLabel || "Purchase on Airbit ↗";
+  wrap.appendChild(a);
+}
 
       wrap.classList.add("active");
       wrap.innerHTML = "";
@@ -1111,9 +1130,24 @@
       wrap.appendChild(a);
     }
 
-    function formatSubtitle(release = {}, kind = "latest", laneOptions = {}){
-      if (laneOptions.showDescription !== true) return "";
-      return release.description || "";
+    function formatSubtitle(release = {}, kind = "latest"){
+  const date = formatDate(release.releaseDate);
+  const dateText = kind === "upcoming"
+    ? (release.dateTextUpcoming || "Drop date:")
+    : kind === "featured"
+      ? (release.dateTextFeatured || release.dateTextReleased || "Featured since")
+      : (release.dateTextReleased || "Out now since");
+
+  return [date ? `${dateText} ${date}` : "", release.description || ""].filter(Boolean).join(" ✦ ");
+} else {
+        dateText = kind === "upcoming"
+          ? (date ? `Touching down ${date}` : "")
+          : kind === "featured"
+            ? (date ? `In the spotlight ${date}` : "")
+            : (date ? `Out in the world ${date}` : "");
+      }
+
+      return [dateText, release.description || ""].filter(Boolean).join("  ✦  ");
     }
 
     function renderReleaseCard(prefix, slot, release, laneOptions = {}, kind = "latest"){
@@ -1139,11 +1173,9 @@
       const actionsEl = document.getElementById(`${baseId}Actions`);
 
       const slotName = kind === "upcoming" ? "Upcoming Project" : kind === "featured" ? "Featured Release" : "Latest Release";
-      const statusLabel = release.statusLabel || slotName;
-      const subtitleText = formatSubtitle(release, kind, laneOptions);
 
       if (labelEl) {
-        labelEl.textContent = statusLabel;
+        labelEl.textContent = slotName;
         labelEl.dataset.kind = kind;
       }
       if (dateEl) dateEl.textContent = formatDate(release.releaseDate);
@@ -1153,10 +1185,7 @@
         coverEl.alt = `${release.projectTitle || release.title || slotName} cover art`;
       }
       if (titleEl) titleEl.textContent = release.projectTitle || release.title || slotName;
-      if (subtitleEl) {
-        subtitleEl.textContent = subtitleText;
-        subtitleEl.style.display = subtitleText ? "" : "none";
-      }
+      if (subtitleEl) subtitleEl.textContent = formatSubtitle(release, kind);
       if (copyEl) {
         const copyText = release.copy || release.tagline || (kind === "latest" ? "Tap anywhere on this card to open the release." : "Tap anywhere on this card for the release landing page.");
         copyEl.textContent = copyText;
@@ -1184,7 +1213,7 @@
 
     function applyLane(prefix, lane = {}){
       const { latestReleased, upcoming, featured } = getLaneSelections(lane);
-      renderStandaloneAirbit(prefix, latestReleased, upcoming, lane);
+      renderStandaloneAirbit(prefix, lane);
       renderReleaseCard(prefix, "Latest", latestReleased, lane, "latest");
 
       let secondaryRelease = upcoming;
