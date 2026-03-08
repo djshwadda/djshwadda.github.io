@@ -130,7 +130,7 @@
       gap:4px;
     }
 
-    .toggle span{
+    .toggle .lane-pill{
       font-size:18px;
       font-weight:700;
       color:var(--muted);
@@ -141,10 +141,23 @@
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
-      transition: color 160ms ease, font-weight 160ms ease, background 160ms ease;
+      transition: color 160ms ease, font-weight 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+      border: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      font-family: inherit;
+      line-height: 1;
     }
 
-    .toggle span.active{
+    .toggle .lane-pill:hover,
+    .toggle .lane-pill:focus-visible{
+      outline:none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12), 0 0 0 3px var(--focus);
+      transform: translateY(-1px);
+    }
+
+    .toggle .lane-pill.active{
       font-weight: 800;
       background: rgba(0,0,0,0.75);
     }
@@ -314,10 +327,11 @@
       display:grid;
       grid-template-columns:minmax(0,1fr);
       grid-template-areas:
+        "topbar"
         "main"
         "actions";
       column-gap:14px;
-      row-gap:14px;
+      row-gap:10px;
       padding:14px;
       border-radius:18px;
       border:1px solid rgba(255,255,255,0.16);
@@ -391,6 +405,18 @@
       display:none;
     }
 
+    .release-topbar{
+      grid-area:topbar;
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
+      min-width:0;
+      position:relative;
+      z-index:2;
+      min-height:28px;
+    }
+
     .release-main{
       grid-area:main;
       display:grid;
@@ -422,7 +448,7 @@
 
     .release-title-row{
       display:flex;
-      align-items:center;
+      align-items:flex-start;
       gap:10px;
       flex-wrap:wrap;
       min-width:0;
@@ -465,7 +491,9 @@
     @media (min-width: 901px){
       .release-card{
         grid-template-columns:minmax(0,1fr) minmax(160px, clamp(18vw,22vw,260px));
-        grid-template-areas:"main actions";
+        grid-template-areas:
+          "topbar topbar"
+          "main actions";
         align-items:center;
       }
 
@@ -579,6 +607,9 @@
     @media (max-width: 1040px){
       .release-card{
         grid-template-columns:minmax(0,1fr) clamp(190px, 24vw, 250px);
+        grid-template-areas:
+          "topbar topbar"
+          "main actions";
         column-gap:12px;
         row-gap:12px;
       }
@@ -598,6 +629,7 @@
       .release-card{
         grid-template-columns:minmax(0,1fr);
         grid-template-areas:
+          "topbar"
           "main"
           "actions";
       }
@@ -640,7 +672,7 @@
         gap:8px;
       }
 
-      .toggle span{
+      .toggle .lane-pill{
         font-size:14px;
         padding:5px 9px;
       }
@@ -716,6 +748,11 @@
         padding:10px;
         row-gap:8px;
         column-gap:0;
+      }
+
+      .release-topbar{
+        gap:6px;
+        min-height:24px;
       }
 
       .release-chip,
@@ -795,7 +832,7 @@
       <div class="controls" id="controlsStrip" data-mode="songs">
         <div class="toggle">
           <div class="toggle-group">
-            <span id="labelSongs">Songs</span>
+            <button class="lane-pill" id="labelSongs" type="button" aria-pressed="true">Songs</button>
             <div class="toggle-sub">Vocals + Story</div>
           </div>
 
@@ -804,7 +841,7 @@
           </button>
 
           <div class="toggle-group">
-            <span id="labelBeats">Instrumentals</span>
+            <button class="lane-pill" id="labelBeats" type="button" aria-pressed="false">Instrumentals</button>
             <div class="toggle-sub">Sounds + Soul</div>
           </div>
         </div>
@@ -837,12 +874,14 @@
 
           <div class="release-stack">
             <article class="release-card" id="beatsLatestCard" tabindex="0">
+              <div class="release-topbar">
+                <span class="release-chip" id="beatsLatestLabel">Latest Release</span>
+                <span class="release-date-chip" id="beatsLatestDate"></span>
+              </div>
               <div class="release-main">
                 <img class="release-cover" id="beatsLatestCover" src="assets/images/PrimordialGrooveCoverArt.jpg" alt="Latest release cover art">
                 <div class="release-meta">
                   <div class="release-title-row">
-                    <span class="release-chip" id="beatsLatestLabel">Latest Release</span>
-                    <span class="release-date-chip" id="beatsLatestDate"></span>
                     <div class="release-title" id="beatsLatestTitle">Latest Release</div>
                   </div>
                   <div class="release-subtitle" id="beatsLatestSubtitle"></div>
@@ -853,12 +892,14 @@
             </article>
 
             <article class="release-card" id="beatsUpcomingCard" tabindex="0">
+              <div class="release-topbar">
+                <span class="release-chip" id="beatsUpcomingLabel">Upcoming Project</span>
+                <span class="release-date-chip" id="beatsUpcomingDate"></span>
+              </div>
               <div class="release-main">
                 <img class="release-cover" id="beatsUpcomingCover" src="assets/images/AeropolisCoverArt.webp" alt="Upcoming release cover art">
                 <div class="release-meta">
                   <div class="release-title-row">
-                    <span class="release-chip" id="beatsUpcomingLabel">Upcoming Project</span>
-                    <span class="release-date-chip" id="beatsUpcomingDate"></span>
                     <div class="release-title" id="beatsUpcomingTitle">Upcoming Project</div>
                   </div>
                   <div class="release-subtitle" id="beatsUpcomingSubtitle"></div>
@@ -894,12 +935,14 @@
 
           <div class="release-stack">
             <article class="release-card" id="songsLatestCard" tabindex="0">
+              <div class="release-topbar">
+                <span class="release-chip" id="songsLatestLabel">Latest Release</span>
+                <span class="release-date-chip" id="songsLatestDate"></span>
+              </div>
               <div class="release-main">
                 <img class="release-cover" id="songsLatestCover" src="assets/images/BlissCoverArt.webp" alt="Latest release cover art">
                 <div class="release-meta">
                   <div class="release-title-row">
-                    <span class="release-chip" id="songsLatestLabel">Latest Release</span>
-                    <span class="release-date-chip" id="songsLatestDate"></span>
                     <div class="release-title" id="songsLatestTitle">Latest Release</div>
                   </div>
                   <div class="release-subtitle" id="songsLatestSubtitle"></div>
@@ -910,12 +953,14 @@
             </article>
 
             <article class="release-card" id="songsUpcomingCard" tabindex="0">
+              <div class="release-topbar">
+                <span class="release-chip" id="songsUpcomingLabel">Upcoming Project</span>
+                <span class="release-date-chip" id="songsUpcomingDate"></span>
+              </div>
               <div class="release-main">
                 <img class="release-cover" id="songsUpcomingCover" src="assets/images/OhMyCoverArt.webp" alt="Upcoming release cover art">
                 <div class="release-meta">
                   <div class="release-title-row">
-                    <span class="release-chip" id="songsUpcomingLabel">Upcoming Project</span>
-                    <span class="release-date-chip" id="songsUpcomingDate"></span>
                     <div class="release-title" id="songsUpcomingTitle">Upcoming Project</div>
                   </div>
                   <div class="release-subtitle" id="songsUpcomingSubtitle"></div>
@@ -1026,6 +1071,8 @@
 
       labelSongs.classList.toggle("active", isSongs);
       labelBeats.classList.toggle("active", !isSongs);
+      labelSongs.setAttribute("aria-pressed", String(isSongs));
+      labelBeats.setAttribute("aria-pressed", String(!isSongs));
 
       footerText.textContent = isSongs ? "© Shwadda" : "© DJ Shwadda";
       updateFooterSocialLinks(isSongs ? "songs" : "beats");
@@ -1363,6 +1410,14 @@
 
     switchBtn.addEventListener("click", () => {
       setMode(switchBtn.dataset.mode === "songs" ? "beats" : "songs");
+    });
+
+    labelSongs.addEventListener("click", () => {
+      setMode("songs");
+    });
+
+    labelBeats.addEventListener("click", () => {
+      setMode("beats");
     });
 
     window.addEventListener("resize", () => {
