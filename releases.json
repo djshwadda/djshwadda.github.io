@@ -90,13 +90,20 @@
       ]
     },
     "songs": {
-      "topCardMode": "latest",
-      "featuredRelease": "Oh My!",
+      "topCardMode": "featured",
+      "featuredRelease": "Zenith",
       "dateTextReleased": "Out now since",
       "dateTextUpcoming": "Drop date:",
       "primaryLabel": "Open Release ↗",
       "presaveLabel": "Spotify Presave ↗",
       "releases": [
+        {
+          "projectTitle": "Zenith",
+          "releaseDate": "February 7, 2026 00:00",
+          "description": "💿EDM/House Album",
+          "coverArt": "assets/images/ZenithCoverArt.webp",
+          "releaseLink": "https://open.spotify.com/album/1de6YyDDK8oV8FYmtnXDmX"
+        },
         {
           "projectTitle": "BitterSweetMess",
           "releaseDate": "February 13, 2026 00:00",
