@@ -463,6 +463,12 @@
       overflow-wrap:anywhere;
     }
 
+    .release-date-line,
+    .release-separator,
+    .release-description-line{
+      display:inline;
+    }
+
     .release-copy{
       display:none;
     }
@@ -774,6 +780,15 @@
 
       .release-subtitle{
         font-size:11px;
+      }
+
+      .release-date-line,
+      .release-description-line{
+        display:block;
+      }
+
+      .release-separator{
+        display:none;
       }
 
       .release-actions{
@@ -1285,11 +1300,38 @@
       wrap.appendChild(a);
     }
 
-    function formatSubtitle(release = {}, kind = "latest"){
+    function setReleaseSubtitle(subtitleEl, release = {}, kind = "latest"){
+      if (!subtitleEl) return;
+
       const date = formatDate(release.releaseDate);
       const prefix = kind === "upcoming" ? release.dateTextUpcoming : release.dateTextReleased;
       const dateText = date ? `${prefix} ${date}` : "";
-      return [dateText, release.description || ""].filter(Boolean).join("  ✦  ");
+      const descriptionText = release.description || "";
+
+      subtitleEl.innerHTML = "";
+
+      if (!dateText && !descriptionText) return;
+
+      if (dateText) {
+        const dateSpan = document.createElement("span");
+        dateSpan.className = "release-date-line";
+        dateSpan.textContent = dateText;
+        subtitleEl.appendChild(dateSpan);
+      }
+
+      if (dateText && descriptionText) {
+        const separator = document.createElement("span");
+        separator.className = "release-separator";
+        separator.textContent = "  ✦  ";
+        subtitleEl.appendChild(separator);
+      }
+
+      if (descriptionText) {
+        const descriptionSpan = document.createElement("span");
+        descriptionSpan.className = "release-description-line";
+        descriptionSpan.textContent = descriptionText;
+        subtitleEl.appendChild(descriptionSpan);
+      }
     }
 
     function getSlotLabel(lane = {}, kind = "latest") {
@@ -1337,7 +1379,7 @@
       }
 
       if (titleEl) titleEl.textContent = release.projectTitle || slotName;
-      if (subtitleEl) subtitleEl.textContent = formatSubtitle(release, kind);
+      if (subtitleEl) setReleaseSubtitle(subtitleEl, release, kind);
       if (copyEl) {
         copyEl.textContent = release.copy || "";
         copyEl.style.display = lane._ui?.hideInstructionCopy === true || !release.copy ? "none" : "";
