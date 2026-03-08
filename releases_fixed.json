@@ -1,0 +1,65 @@
+{
+  "backgrounds": {
+    "desktop": "assets/images/background1.desktop.webp",
+    "mobile": "assets/images/background1.mobile.webp",
+    "default": "assets/images/background1.webp"
+  },
+  "lanes": {
+    "beats": {
+      "airbitLink": "https://airbit.com/DJShwadda",
+      "purchaseLabel": "Purchase on Airbit \u2197",
+      "dateTextReleased": "Out now since",
+      "dateTextUpcoming": "Drop date:",
+      "primaryLabel": "Open Release \u2197",
+      "presaveLabel": "Spotify Presave \u2197",
+      "releases": [
+        {
+          "projectTitle": "Wrong Notes, Right Time",
+          "releaseDate": "February 27, 2026 00:00",
+          "description": "Experimental Instrumental Album",
+          "coverArt": "assets/images/WrongNotesRightTimeCoverArt.webp",
+          "releaseLink": "https://open.spotify.com/album/5R7pEycFGTgEcfEp8oqlXQ?si=Cdxuz51KSyivqLsoVPGeHw"
+        },
+        {
+          "projectTitle": "Aeropolis",
+          "releaseDate": "March 13, 2026 00:00",
+          "description": "Atmospheric Instrumental Album",
+          "coverArt": "assets/images/AeropolisCoverArt.webp",
+          "presaveLink": "https://ffm.to/djshwadda-aeropolis",
+          "releaseLink": "https://open.spotify.com/album/6Uw8kluCcfByHzsAUEnkyC"
+        },
+        {
+          "projectTitle": "OtherWorldly Blues",
+          "releaseDate": "March 20, 2026 00:00",
+          "description": "Jazzy/Hip Hop Instrumental Single",
+          "coverArt": "assets/images/OtherWorldyBluesCoverArt.webp",
+          "presaveLink": "https://ffm.to/djshwadda-otherworldy-blues",
+          "releaseLink": "https://open.spotify.com/artist/4HqTRowegHZls0m6VwmsmX"
+        }
+      ]
+    },
+    "songs": {
+      "dateTextReleased": "Out now since",
+      "dateTextUpcoming": "Drop date:",
+      "primaryLabel": "Open Release \u2197",
+      "presaveLabel": "Spotify Presave \u2197",
+      "releases": [
+        {
+          "projectTitle": "BitterSweetMess",
+          "releaseDate": "February 13, 2026 00:00",
+          "description": "Neo-Soul Album",
+          "coverArt": "assets/images/BitterSweetMessCoverArt.webp",
+          "releaseLink": "https://open.spotify.com/album/0bQ66LSAcf75H6YJDSV2PX?si=y92Pyy3bSEevE2OSCqyppg"
+        },
+        {
+          "projectTitle": "Oh My!",
+          "releaseDate": "March 27, 2026 00:00",
+          "description": "EDM / House Single",
+          "coverArt": "assets/images/OhMyCoverArt.webp",
+          "presaveLink": "https://ffm.to/shwadda-ohmy",
+          "releaseLink": "https://ffm.to/shwadda-ohmy"
+        }
+      ]
+    }
+  }
+}
