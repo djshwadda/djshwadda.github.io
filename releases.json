@@ -1,0 +1,57 @@
+{
+  "backgrounds": {
+    "desktop": "assets/images/background1.desktop.webp",
+    "mobile": "assets/images/background1.mobile.webp",
+    "default": "assets/images/background1.webp"
+  },
+  "lanes": {
+    "beats": {
+      "releases": [
+        {
+          "projectTitle": "Primordial Groove",
+          "releaseDate": "2026-02-21T00:00:00-06:00",
+          "dateText": "Out now",
+          "description": "Instrumental Album",
+          "coverArt": "assets/images/PrimordialGrooveCoverArt.jpg",
+          "link": "https://open.spotify.com/artist/4HqTRowegHZls0m6VwmsmX",
+          "buttonText": "Open Release \u2197",
+          "airbitLink": "https://airbit.com/DJShwadda",
+          "airbitText": "Purchase on Airbit \u2197"
+        },
+        {
+          "projectTitle": "Aeropolis",
+          "releaseDate": "2026-03-13T00:00:00-05:00",
+          "dateText": "Drop date",
+          "description": "Atmospheric Instrumental Album",
+          "coverArt": "assets/images/AeropolisCoverArt.webp",
+          "link": "https://ffm.to/djshwadda-aeropolis",
+          "buttonText": "Spotify Presave \u2197",
+          "airbitLink": "https://airbit.com/DJShwadda",
+          "airbitText": "Purchase on Airbit \u2197"
+        }
+      ]
+    },
+    "songs": {
+      "releases": [
+        {
+          "projectTitle": "Bliss",
+          "releaseDate": "2026-02-14T00:00:00-06:00",
+          "dateText": "Out now",
+          "description": "Electronic / Vocal Release",
+          "coverArt": "assets/images/BlissCoverArt.webp",
+          "link": "https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA",
+          "buttonText": "Open Release \u2197"
+        },
+        {
+          "projectTitle": "Oh My!",
+          "releaseDate": "2026-03-27T00:00:00-05:00",
+          "dateText": "Drop date",
+          "description": "EDM / House Single",
+          "coverArt": "assets/images/OhMyCoverArt.webp",
+          "link": "https://ffm.to/shwadda-ohmy",
+          "buttonText": "Spotify Presave \u2197"
+        }
+      ]
+    }
+  }
+}
