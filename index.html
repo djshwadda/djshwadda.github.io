@@ -311,10 +311,10 @@
       position:relative;
       min-height:0;
       display:grid;
-      grid-template-columns:88px minmax(0,1fr);
+      grid-template-columns:minmax(0,1fr);
       grid-template-areas:
-        "main main"
-        ". actions";
+        "main"
+        "actions";
       column-gap:14px;
       row-gap:14px;
       padding:14px;
@@ -461,6 +461,25 @@
       min-width:0;
     }
 
+    @media (min-width: 901px){
+      .release-card{
+        grid-template-columns:minmax(0,1fr) clamp(220px, 26vw, 320px);
+        grid-template-areas:"main actions";
+        align-items:center;
+      }
+
+      .release-actions{
+        align-self:stretch;
+        justify-self:end;
+        width:100%;
+      }
+
+      .release-btn{
+        min-height:48px;
+        padding:10px 12px;
+      }
+    }
+
     .release-actions.single{
       grid-template-columns:minmax(0,1fr);
     }
@@ -545,7 +564,7 @@
       fill: rgba(255,255,255,0.70);
     }
 
-    @media (max-width: 1100px){
+    @media (max-width: 1200px){
       .release-title{
         font-size: clamp(17px, 2vw, 21px);
       }
@@ -553,13 +572,25 @@
       .release-subtitle{
         font-size:12px;
       }
+    }
+
+    @media (max-width: 1040px){
+      .release-card{
+        grid-template-columns:minmax(0,1fr) clamp(190px, 24vw, 250px);
+        column-gap:12px;
+        row-gap:12px;
+      }
+
+      .release-main{
+        gap:12px;
+      }
 
       .release-btn{
         min-height:42px;
+        padding:9px 10px;
         font-size:12px;
       }
     }
-
 
     @media (max-width: 900px){
       .release-card{
