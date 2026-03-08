@@ -1,0 +1,63 @@
+{
+  "backgrounds": {
+    "desktop": "assets/images/background1.desktop.webp",
+    "mobile": "assets/images/background1.mobile.webp",
+    "default": "assets/images/background1.webp"
+  },
+  "lanes": {
+    "beats": {
+      "airbitLink": "https://airbit.com/DJShwadda",
+      "purchaseLabel": "Purchase on Airbit \u2197",
+      "releases": [
+        {
+          "projectTitle": "Primordial Groove",
+          "releaseDate": "February 21, 2026 00:00",
+          "statusLabel": "Latest Release",
+          "dateTextReleased": "Out now since",
+          "dateTextUpcoming": "Drop date:",
+          "description": "Instrumental Album",
+          "coverArt": "assets/images/PrimordialGrooveCoverArt.jpg",
+          "link": "https://open.spotify.com/artist/4HqTRowegHZls0m6VwmsmX",
+          "buttonLabel": "Open Release \u2197"
+        },
+        {
+          "projectTitle": "Aeropolis",
+          "releaseDate": "March 13, 2026 00:00",
+          "statusLabel": "Upcoming Project",
+          "dateTextReleased": "Out now since",
+          "dateTextUpcoming": "Drop date:",
+          "description": "Atmospheric Instrumental Album",
+          "coverArt": "assets/images/AeropolisCoverArt.webp",
+          "link": "https://ffm.to/djshwadda-aeropolis",
+          "buttonLabel": "Spotify Presave \u2197"
+        }
+      ]
+    },
+    "songs": {
+      "releases": [
+        {
+          "projectTitle": "Bliss",
+          "releaseDate": "February 14, 2026 00:00",
+          "statusLabel": "Latest Release",
+          "dateTextReleased": "Out now since",
+          "dateTextUpcoming": "Drop date:",
+          "description": "Electronic / Vocal Release",
+          "coverArt": "assets/images/BlissCoverArt.webp",
+          "link": "https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA",
+          "buttonLabel": "Open Release \u2197"
+        },
+        {
+          "projectTitle": "Oh My!",
+          "releaseDate": "March 27, 2026 00:00",
+          "statusLabel": "Upcoming Project",
+          "dateTextReleased": "Out now since",
+          "dateTextUpcoming": "Drop date:",
+          "description": "EDM / House Single",
+          "coverArt": "assets/images/OhMyCoverArt.webp",
+          "link": "https://ffm.to/shwadda-ohmy",
+          "buttonLabel": "Spotify Presave \u2197"
+        }
+      ]
+    }
+  }
+}
