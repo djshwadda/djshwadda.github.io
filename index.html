@@ -130,7 +130,7 @@
       gap:4px;
     }
 
-    .toggle .lane-pill{
+    .lane-pill{
       font-size:18px;
       font-weight:700;
       color:var(--muted);
@@ -141,23 +141,20 @@
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
-      transition: color 160ms ease, font-weight 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
-      border: 0;
-      appearance: none;
-      -webkit-appearance: none;
+      transition: color 160ms ease, font-weight 160ms ease, background 160ms ease, box-shadow 160ms ease;
+      border: none;
       cursor: pointer;
-      font-family: inherit;
-      line-height: 1;
+      font: inherit;
     }
 
-    .toggle .lane-pill:hover,
-    .toggle .lane-pill:focus-visible{
-      outline:none;
+    .lane-pill:hover,
+    .lane-pill:focus-visible{
+      outline: none;
+      background: rgba(0,0,0,0.68);
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12), 0 0 0 3px var(--focus);
-      transform: translateY(-1px);
     }
 
-    .toggle .lane-pill.active{
+    .lane-pill.active{
       font-weight: 800;
       background: rgba(0,0,0,0.75);
     }
@@ -286,7 +283,7 @@
       text-decoration:none;
       font-weight:650;
       text-align:center;
-	  font-size:20px;
+      font-size:20px;
     }
 
     .icon{
@@ -327,11 +324,10 @@
       display:grid;
       grid-template-columns:minmax(0,1fr);
       grid-template-areas:
-        "topbar"
         "main"
         "actions";
       column-gap:14px;
-      row-gap:10px;
+      row-gap:14px;
       padding:14px;
       border-radius:18px;
       border:1px solid rgba(255,255,255,0.16);
@@ -354,6 +350,18 @@
 
     .release-card.is-hidden{ display:none; }
 
+    .release-top-badges{
+      position:absolute;
+      top:14px;
+      right:14px;
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
+      max-width:min(54%, 320px);
+      z-index:2;
+      pointer-events:none;
+    }
 
     .release-chip,
     .release-date-chip{
@@ -405,18 +413,6 @@
       display:none;
     }
 
-    .release-topbar{
-      grid-area:topbar;
-      display:flex;
-      align-items:center;
-      justify-content:flex-end;
-      gap:8px;
-      min-width:0;
-      position:relative;
-      z-index:2;
-      min-height:28px;
-    }
-
     .release-main{
       grid-area:main;
       display:grid;
@@ -444,13 +440,11 @@
       min-width:0;
       min-height:0;
       padding-top:2px;
+      padding-right:min(29vw, 240px);
     }
 
     .release-title-row{
-      display:flex;
-      align-items:flex-start;
-      gap:10px;
-      flex-wrap:wrap;
+      display:block;
       min-width:0;
     }
 
@@ -459,7 +453,6 @@
       font-weight:800;
       line-height:1.1;
       overflow-wrap:anywhere;
-      flex: 1 1 220px;
     }
 
     .release-subtitle{
@@ -491,9 +484,7 @@
     @media (min-width: 901px){
       .release-card{
         grid-template-columns:minmax(0,1fr) minmax(160px, clamp(18vw,22vw,260px));
-        grid-template-areas:
-          "topbar topbar"
-          "main actions";
+        grid-template-areas:"main actions";
         align-items:center;
       }
 
@@ -599,7 +590,7 @@
       }
 
       .release-subtitle{
-	min-width:0;
+        min-width:0;
         font-size:12px;
       }
     }
@@ -607,9 +598,6 @@
     @media (max-width: 1040px){
       .release-card{
         grid-template-columns:minmax(0,1fr) clamp(190px, 24vw, 250px);
-        grid-template-areas:
-          "topbar topbar"
-          "main actions";
         column-gap:12px;
         row-gap:12px;
       }
@@ -629,7 +617,6 @@
       .release-card{
         grid-template-columns:minmax(0,1fr);
         grid-template-areas:
-          "topbar"
           "main"
           "actions";
       }
@@ -638,6 +625,7 @@
         width:100%;
       }
     }
+
     @media (max-width: 720px){
       body{
         padding:8px;
@@ -672,7 +660,7 @@
         gap:8px;
       }
 
-      .toggle .lane-pill{
+      .lane-pill{
         font-size:14px;
         padding:5px 9px;
       }
@@ -750,9 +738,11 @@
         column-gap:0;
       }
 
-      .release-topbar{
+      .release-top-badges{
+        top:10px;
+        right:10px;
         gap:6px;
-        min-height:24px;
+        max-width:min(58%, 210px);
       }
 
       .release-chip,
@@ -774,8 +764,8 @@
         border-radius:10px;
       }
 
-      .release-title-row{
-        gap:6px;
+      .release-meta{
+        padding-right:min(34vw, 132px);
       }
 
       .release-title{
@@ -832,16 +822,16 @@
       <div class="controls" id="controlsStrip" data-mode="songs">
         <div class="toggle">
           <div class="toggle-group">
-            <button class="lane-pill" id="labelSongs" type="button" aria-pressed="true">Songs</button>
+            <button class="lane-pill" id="labelSongs" type="button" aria-controls="paneSongs">Songs</button>
             <div class="toggle-sub">Vocals + Story</div>
           </div>
 
-          <button class="switch" id="switch" data-mode="songs" aria-label="Toggle songs and instrumentals" aria-pressed="false">
+          <button class="switch" id="switch" data-mode="songs" aria-label="Toggle songs and instrumentals" aria-pressed="false" type="button">
             <span class="knob"></span>
           </button>
 
           <div class="toggle-group">
-            <button class="lane-pill" id="labelBeats" type="button" aria-pressed="false">Instrumentals</button>
+            <button class="lane-pill" id="labelBeats" type="button" aria-controls="paneBeats">Instrumentals</button>
             <div class="toggle-sub">Sounds + Soul</div>
           </div>
         </div>
@@ -874,7 +864,7 @@
 
           <div class="release-stack">
             <article class="release-card" id="beatsLatestCard" tabindex="0">
-              <div class="release-topbar">
+              <div class="release-top-badges">
                 <span class="release-chip" id="beatsLatestLabel">Latest Release</span>
                 <span class="release-date-chip" id="beatsLatestDate"></span>
               </div>
@@ -892,7 +882,7 @@
             </article>
 
             <article class="release-card" id="beatsUpcomingCard" tabindex="0">
-              <div class="release-topbar">
+              <div class="release-top-badges">
                 <span class="release-chip" id="beatsUpcomingLabel">Upcoming Project</span>
                 <span class="release-date-chip" id="beatsUpcomingDate"></span>
               </div>
@@ -935,7 +925,7 @@
 
           <div class="release-stack">
             <article class="release-card" id="songsLatestCard" tabindex="0">
-              <div class="release-topbar">
+              <div class="release-top-badges">
                 <span class="release-chip" id="songsLatestLabel">Latest Release</span>
                 <span class="release-date-chip" id="songsLatestDate"></span>
               </div>
@@ -953,7 +943,7 @@
             </article>
 
             <article class="release-card" id="songsUpcomingCard" tabindex="0">
-              <div class="release-topbar">
+              <div class="release-top-badges">
                 <span class="release-chip" id="songsUpcomingLabel">Upcoming Project</span>
                 <span class="release-date-chip" id="songsUpcomingDate"></span>
               </div>
@@ -992,6 +982,7 @@
         hideInstructionCopy: true,
         hideDatePill: true,
         latestLabel: "Latest Release",
+        featuredLabel: "Featured Release",
         upcomingLabel: "Upcoming Project"
       },
       songs: {
@@ -999,6 +990,7 @@
         hideInstructionCopy: true,
         hideDatePill: true,
         latestLabel: "Latest Release",
+        featuredLabel: "Featured Release",
         upcomingLabel: "Upcoming Project"
       }
     };
@@ -1181,6 +1173,11 @@
       };
     }
 
+    function normalizeTopCardMode(value) {
+      const normalized = String(value || "latest").trim().toLowerCase();
+      return normalized === "featured" ? "featured" : "latest";
+    }
+
     function normalizeLane(lane = {}, laneKey = "songs") {
       const ui = STATIC_LANE_UI[laneKey] || STATIC_LANE_UI.songs;
       const laneDefaults = {
@@ -1192,9 +1189,12 @@
 
       return {
         laneKey,
+        topCardMode: normalizeTopCardMode(lane.topCardMode || lane.heroCardMode || lane.cardMode),
+        featuredRelease: String(lane.featuredRelease || lane.featuredProjectTitle || lane.featuredTitle || "").trim(),
         airbitLink: laneKey === "beats" ? (lane.airbitLink || lane.storeLink || "") : "",
         purchaseLabel: lane.purchaseLabel || "Purchase on Airbit ↗",
         latestLabel: ui.latestLabel,
+        featuredLabel: ui.featuredLabel,
         upcomingLabel: ui.upcomingLabel,
         releases: Array.isArray(lane.releases) ? lane.releases.map(item => normalizeRelease(item, laneDefaults)) : [],
         _ui: ui
@@ -1205,11 +1205,20 @@
       return [...items].sort((a, b) => a.parsedDate.getTime() - b.parsedDate.getTime());
     }
 
+    function getFeaturedRelease(lane = {}) {
+      if (!lane.featuredRelease) return null;
+      const target = lane.featuredRelease.trim().toLowerCase();
+      return (lane.releases || []).find(item => String(item.projectTitle || "").trim().toLowerCase() === target) || null;
+    }
+
     function getLaneSelections(lane = {}, now = new Date()){
       const releases = sortByDateAsc((lane.releases || []).filter(item => item.parsedDate));
       const latestReleased = [...releases].filter(item => item.parsedDate <= now).at(-1) || null;
       const upcoming = releases.find(item => item.parsedDate > now) || null;
-      return { latestReleased, upcoming };
+      const featured = getFeaturedRelease(lane);
+      const topRelease = lane.topCardMode === "featured" && featured ? featured : latestReleased;
+      const topKind = lane.topCardMode === "featured" && featured ? "featured" : "latest";
+      return { topRelease, topKind, latestReleased, upcoming, featured };
     }
 
     function getCardLinkAndLabel(release = {}, kind = "latest", now = new Date()) {
@@ -1283,6 +1292,12 @@
       return [dateText, release.description || ""].filter(Boolean).join("  ✦  ");
     }
 
+    function getSlotLabel(lane = {}, kind = "latest") {
+      if (kind === "upcoming") return lane.upcomingLabel;
+      if (kind === "featured") return lane.featuredLabel;
+      return lane.latestLabel;
+    }
+
     function renderReleaseCard(prefix, slot, release, lane = {}, kind = "latest", now = new Date()){
       const baseId = `${prefix}${slot}`;
       const card = document.getElementById(`${baseId}Card`);
@@ -1305,7 +1320,7 @@
       const subtitleEl = document.getElementById(`${baseId}Subtitle`);
       const copyEl = document.getElementById(`${baseId}Copy`);
       const actionsEl = document.getElementById(`${baseId}Actions`);
-      const slotName = kind === "upcoming" ? lane.upcomingLabel : lane.latestLabel;
+      const slotName = getSlotLabel(lane, kind);
 
       if (labelEl) {
         labelEl.textContent = slotName;
@@ -1350,9 +1365,9 @@
 
     function applyLane(prefix, rawLane = {}, laneKey = "songs", now = new Date()){
       const lane = normalizeLane(rawLane, laneKey);
-      const { latestReleased, upcoming } = getLaneSelections(lane, now);
+      const { topRelease, topKind, upcoming } = getLaneSelections(lane, now);
       renderStandaloneAirbit(prefix, lane);
-      renderReleaseCard(prefix, "Latest", latestReleased, lane, "latest", now);
+      renderReleaseCard(prefix, "Latest", topRelease, lane, topKind, now);
       renderReleaseCard(prefix, "Upcoming", upcoming, lane, "upcoming", now);
     }
 
@@ -1412,13 +1427,8 @@
       setMode(switchBtn.dataset.mode === "songs" ? "beats" : "songs");
     });
 
-    labelSongs.addEventListener("click", () => {
-      setMode("songs");
-    });
-
-    labelBeats.addEventListener("click", () => {
-      setMode("beats");
-    });
+    labelSongs.addEventListener("click", () => setMode("songs"));
+    labelBeats.addEventListener("click", () => setMode("beats"));
 
     window.addEventListener("resize", () => {
       if (releaseConfig?.backgrounds) {
