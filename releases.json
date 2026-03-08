@@ -53,9 +53,16 @@
         {
           "projectTitle": "The Rush",
           "releaseDate": "April 17, 2026 00:00",
-          "description": "💿EDM Instrumental Album",
+          "description": "💿EDM Instrumental Single",
           "coverArt": "assets/images/TheRushCoverArt.webp",
           "releaseLink": "https://open.spotify.com/album/1h23dOBKkVbRFuFaSBU40d"
+        },
+        {
+          "projectTitle": "Electro Echo",
+          "releaseDate": "April 24, 2026 00:00",
+          "description": "💿EDM/House Instrumental Album",
+          "coverArt": "assets/images/ElectroEchoCoverArt.webp",
+          "releaseLink": "https://open.spotify.com/album/"
         },
         {
           "projectTitle": "How I Strut",
@@ -99,7 +106,7 @@
           "description": "💿EDM / House Single",
           "coverArt": "assets/images/OhMyCoverArt.webp",
           "presaveLink": "https://ffm.to/shwadda-ohmy",
-          "releaseLink": "https://ffm.to/shwadda-ohmy"
+          "releaseLink": "https://open.spotify.com/album/"
         }
       ]
     }
