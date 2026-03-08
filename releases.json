@@ -7,7 +7,7 @@
   "lanes": {
     "beats": {
       "airbitLink": "https://airbit.com/DJShwadda",
-      "purchaseLabel": "Purchase on Airbit ↗",
+      "purchaseLabel": "Purchase on Airbit \u2197",
       "latestLabel": "Latest Release",
       "upcomingLabel": "Upcoming Project",
       "releases": [
@@ -19,9 +19,8 @@
           "releaseLink": "https://open.spotify.com/artist/4HqTRowegHZls0m6VwmsmX",
           "dateTextReleased": "Out now since",
           "dateTextUpcoming": "Drop date:",
-          "primaryLabel": "Open Release ↗",
-          "presaveLabel": "Spotify Presave ↗",
-          "purchaseLabel": "Purchase on Airbit ↗"
+          "primaryLabel": "Open Release \u2197",
+          "presaveLabel": "Spotify Presave \u2197"
         },
         {
           "projectTitle": "Aeropolis",
@@ -32,9 +31,8 @@
           "releaseLink": "https://ffm.to/djshwadda-aeropolis",
           "dateTextReleased": "Out now since",
           "dateTextUpcoming": "Drop date:",
-          "primaryLabel": "Open Release ↗",
-          "presaveLabel": "Spotify Presave ↗",
-          "purchaseLabel": "Purchase on Airbit ↗"
+          "primaryLabel": "Open Release \u2197",
+          "presaveLabel": "Spotify Presave \u2197"
         },
         {
           "projectTitle": "OtherWorldly Blues",
@@ -45,9 +43,8 @@
           "releaseLink": "https://open.spotify.com/artist/4HqTRowegHZls0m6VwmsmX",
           "dateTextReleased": "Out now since",
           "dateTextUpcoming": "Drop date:",
-          "primaryLabel": "Open Release ↗",
-          "presaveLabel": "Spotify Presave ↗",
-          "purchaseLabel": "Purchase on Airbit ↗"
+          "primaryLabel": "Open Release \u2197",
+          "presaveLabel": "Spotify Presave \u2197"
         }
       ]
     },
@@ -63,8 +60,8 @@
           "releaseLink": "https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA",
           "dateTextReleased": "Out now since",
           "dateTextUpcoming": "Drop date:",
-          "primaryLabel": "Open Release ↗",
-          "presaveLabel": "Spotify Presave ↗"
+          "primaryLabel": "Open Release \u2197",
+          "presaveLabel": "Spotify Presave \u2197"
         },
         {
           "projectTitle": "Oh My!",
@@ -75,8 +72,8 @@
           "releaseLink": "https://ffm.to/shwadda-ohmy",
           "dateTextReleased": "Out now since",
           "dateTextUpcoming": "Drop date:",
-          "primaryLabel": "Open Release ↗",
-          "presaveLabel": "Spotify Presave ↗"
+          "primaryLabel": "Open Release \u2197",
+          "presaveLabel": "Spotify Presave \u2197"
         }
       ]
     }
