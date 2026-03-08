@@ -989,6 +989,23 @@
     }
 
     function toDate(value){
+      if (!value) return null;
+      if (value instanceof Date) {
+        return Number.isNaN(value.getTime()) ? null : value;
+      }
+
+      if (typeof value === "string") {
+        const normalized = value.trim();
+
+        const simpleMatch = normalized.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})(?:\s+(\d{1,2})(?::(\d{2}))?)?$/);
+        if (simpleMatch) {
+          const [, monthName, day, year, hour = "0", minute = "00"] = simpleMatch;
+          const composed = `${monthName} ${day}, ${year} ${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
+          const parsed = new Date(composed);
+          if (!Number.isNaN(parsed.getTime())) return parsed;
+        }
+      }
+
       const date = new Date(value);
       return Number.isNaN(date.getTime()) ? null : date;
     }
@@ -1037,7 +1054,7 @@
     }
 
     function getPrimaryLink(release = {}){
-      return release.primaryLink || release.ffmLink || release.spotifyLink || release.appleMusicLink || release.youtubeMusicLink || release.amazonMusicLink || release.airbitLink || "";
+      return release.link || release.primaryLink || release.ffmLink || release.spotifyLink || release.appleMusicLink || release.youtubeMusicLink || release.amazonMusicLink || release.airbitLink || "";
     }
 
     function stopCardPropagation(event){
@@ -1050,11 +1067,11 @@
       const showPresave = laneOptions.showSpotifyPresaveButton !== false;
       const moveAirbitAboveCards = laneOptions.moveAirbitAboveCards === true;
       const hideUpcomingPrimaryButton = laneOptions.hideUpcomingPrimaryButton === true;
+      const isUpcoming = kind === "upcoming";
+      const buttonLabel = release.buttonLabel || (isUpcoming && showPresave ? "Spotify Presave ↗" : "Open Release ↗");
 
-      if (kind === "upcoming" && showPresave && release.ffmLink) {
-        buttons.push({ label: release.presaveLabel || "Spotify Presave ↗", href: release.ffmLink, className: "presave" });
-      } else if (primaryLink && !(kind === "upcoming" && hideUpcomingPrimaryButton)) {
-        buttons.push({ label: release.primaryLabel || "Open Release ↗", href: primaryLink, className: "" });
+      if (primaryLink && !(isUpcoming && hideUpcomingPrimaryButton)) {
+        buttons.push({ label: buttonLabel, href: primaryLink, className: isUpcoming && showPresave ? "presave" : "" });
       }
 
       if (release.airbitLink && !moveAirbitAboveCards && kind !== "upcoming") {
@@ -1097,24 +1114,8 @@
     }
 
     function formatSubtitle(release = {}, kind = "latest", laneOptions = {}){
-      const date = formatDate(release.releaseDate);
-      let dateText = "";
-
-      if (laneOptions.creativeDateInDescription === true) {
-        dateText = kind === "upcoming"
-          ? (date ? `Drop date: ${date}` : "")
-          : kind === "featured"
-            ? (date ? `Featured since ${date}` : "")
-            : (date ? `Out now since ${date}` : "");
-      } else {
-        dateText = kind === "upcoming"
-          ? (date ? `Touching down ${date}` : "")
-          : kind === "featured"
-            ? (date ? `In the spotlight ${date}` : "")
-            : (date ? `Out in the world ${date}` : "");
-      }
-
-      return [dateText, release.description || ""].filter(Boolean).join("  ✦  ");
+      if (laneOptions.hideDescription === true || laneOptions.hideMetaLine === true) return "";
+      return release.description || "";
     }
 
     function renderReleaseCard(prefix, slot, release, laneOptions = {}, kind = "latest"){
@@ -1140,9 +1141,11 @@
       const actionsEl = document.getElementById(`${baseId}Actions`);
 
       const slotName = kind === "upcoming" ? "Upcoming Project" : kind === "featured" ? "Featured Release" : "Latest Release";
+      const statusLabel = release.statusLabel || slotName;
+      const subtitleText = formatSubtitle(release, kind, laneOptions);
 
       if (labelEl) {
-        labelEl.textContent = slotName;
+        labelEl.textContent = statusLabel;
         labelEl.dataset.kind = kind;
       }
       if (dateEl) dateEl.textContent = formatDate(release.releaseDate);
@@ -1152,7 +1155,10 @@
         coverEl.alt = `${release.projectTitle || release.title || slotName} cover art`;
       }
       if (titleEl) titleEl.textContent = release.projectTitle || release.title || slotName;
-      if (subtitleEl) subtitleEl.textContent = formatSubtitle(release, kind, laneOptions);
+      if (subtitleEl) {
+        subtitleEl.textContent = subtitleText;
+        subtitleEl.style.display = subtitleText ? "" : "none";
+      }
       if (copyEl) {
         const copyText = release.copy || release.tagline || (kind === "latest" ? "Tap anywhere on this card to open the release." : "Tap anywhere on this card for the release landing page.");
         copyEl.textContent = copyText;
