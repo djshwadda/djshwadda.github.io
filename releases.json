@@ -6,13 +6,7 @@
   },
   "lanes": {
     "beats": {
-      "showSpotifyPresaveButton": true,
-      "featuredMode": false,
-      "moveAirbitAboveCards": true,
-      "hideUpcomingPrimaryButton": true,
-      "hideInstructionCopy": true,
-      "hideDatePill": true,
-      "hideDescription": true,
+      "airbitAboveCards": true,
       "releases": [
         {
           "projectTitle": "Primordial Groove",
@@ -39,12 +33,6 @@
       ]
     },
     "songs": {
-      "showSpotifyPresaveButton": true,
-      "featuredMode": false,
-      "hideUpcomingPrimaryButton": true,
-      "hideInstructionCopy": true,
-      "hideDatePill": true,
-      "hideDescription": true,
       "releases": [
         {
           "projectTitle": "Bliss",
