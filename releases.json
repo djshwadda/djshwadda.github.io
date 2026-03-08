@@ -10,13 +10,13 @@
       "purchaseLabel": "Purchase on Airbit \u2197",
       "releases": [
         {
-          "projectTitle": "Primordial Groove",
-          "releaseDate": "February 21, 2026 00:00",
+          "projectTitle": "Wrong Notes, Right Time",
+          "releaseDate": "February 27, 2026 00:00",
           "statusLabel": "Latest Release",
           "dateTextReleased": "Out now since",
           "dateTextUpcoming": "Drop date:",
-          "description": "Instrumental Album",
-          "coverArt": "assets/images/PrimordialGrooveCoverArt.jpg",
+          "description": "Experimental Instrumental Album",
+          "coverArt": "assets/images/WrongNotesRightTimeCoverArt.webp",
           "link": "https://open.spotify.com/artist/4HqTRowegHZls0m6VwmsmX",
           "buttonLabel": "Open Release \u2197"
         },
@@ -36,13 +36,13 @@
     "songs": {
       "releases": [
         {
-          "projectTitle": "Bliss",
-          "releaseDate": "February 14, 2026 00:00",
+          "projectTitle": "BitterSweetMess",
+          "releaseDate": "February 13, 2026 00:00",
           "statusLabel": "Latest Release",
           "dateTextReleased": "Out now since",
           "dateTextUpcoming": "Drop date:",
-          "description": "Electronic / Vocal Release",
-          "coverArt": "assets/images/BlissCoverArt.webp",
+          "description": "Neo Soul Album",
+          "coverArt": "assets/images/BitterSweetMessCoverArt.webp",
           "link": "https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA",
           "buttonLabel": "Open Release \u2197"
         },
