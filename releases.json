@@ -6,52 +6,73 @@
   },
   "lanes": {
     "beats": {
+      "showSpotifyPresaveButton": true,
+      "featuredMode": false,
       "releases": [
         {
           "projectTitle": "Primordial Groove",
           "releaseDate": "2026-02-21T00:00:00-06:00",
-          "dateText": "Out now",
           "description": "Instrumental Album",
+          "copy": "",
           "coverArt": "assets/images/PrimordialGrooveCoverArt.jpg",
-          "link": "https://open.spotify.com/artist/4HqTRowegHZls0m6VwmsmX",
-          "buttonText": "Open Release \u2197",
+          "primaryLink": "https://open.spotify.com/artist/4HqTRowegHZls0m6VwmsmX",
+          "primaryLabel": "Open Release \u2197",
           "airbitLink": "https://airbit.com/DJShwadda",
-          "airbitText": "Purchase on Airbit \u2197"
+          "purchaseLabel": "Purchase on Airbit \u2197",
+          "featured": false
         },
         {
           "projectTitle": "Aeropolis",
           "releaseDate": "2026-03-13T00:00:00-05:00",
-          "dateText": "Drop date",
           "description": "Atmospheric Instrumental Album",
+          "copy": "",
           "coverArt": "assets/images/AeropolisCoverArt.webp",
-          "link": "https://ffm.to/djshwadda-aeropolis",
-          "buttonText": "Spotify Presave \u2197",
+          "primaryLink": "https://ffm.to/djshwadda-aeropolis",
+          "primaryLabel": "Open Release \u2197",
+          "ffmLink": "https://ffm.to/djshwadda-aeropolis",
+          "presaveLabel": "Spotify Presave \u2197",
           "airbitLink": "https://airbit.com/DJShwadda",
-          "airbitText": "Purchase on Airbit \u2197"
+          "purchaseLabel": "Purchase on Airbit \u2197",
+          "featured": false
         }
-      ]
+      ],
+      "moveAirbitAboveCards": true,
+      "hideUpcomingPrimaryButton": true,
+      "hideInstructionCopy": true,
+      "hideDatePill": true,
+      "creativeDateInDescription": true
     },
     "songs": {
+      "showSpotifyPresaveButton": true,
+      "featuredMode": false,
       "releases": [
         {
           "projectTitle": "Bliss",
           "releaseDate": "2026-02-14T00:00:00-06:00",
-          "dateText": "Out now",
           "description": "Electronic / Vocal Release",
+          "copy": "",
           "coverArt": "assets/images/BlissCoverArt.webp",
-          "link": "https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA",
-          "buttonText": "Open Release \u2197"
+          "primaryLink": "https://open.spotify.com/artist/6T7MvO6VerficEVHXmKBrA",
+          "primaryLabel": "Open Release \u2197",
+          "featured": false
         },
         {
           "projectTitle": "Oh My!",
           "releaseDate": "2026-03-27T00:00:00-05:00",
-          "dateText": "Drop date",
           "description": "EDM / House Single",
+          "copy": "",
           "coverArt": "assets/images/OhMyCoverArt.webp",
-          "link": "https://ffm.to/shwadda-ohmy",
-          "buttonText": "Spotify Presave \u2197"
+          "primaryLink": "https://ffm.to/shwadda-ohmy",
+          "primaryLabel": "Open Release \u2197",
+          "ffmLink": "https://ffm.to/shwadda-ohmy",
+          "presaveLabel": "Spotify Presave \u2197",
+          "featured": false
         }
-      ]
+      ],
+      "hideUpcomingPrimaryButton": true,
+      "hideInstructionCopy": true,
+      "hideDatePill": true,
+      "creativeDateInDescription": true
     }
   }
 }
