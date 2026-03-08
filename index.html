@@ -463,7 +463,7 @@
 
     @media (min-width: 901px){
       .release-card{
-        grid-template-columns:minmax(0,1fr) clamp(220px, 26vw, 320px);
+        grid-template-columns:minmax(0,1fr) minmax(160px, clamp(18vw,22vw,260px));
         grid-template-areas:"main actions";
         align-items:center;
       }
@@ -570,6 +570,7 @@
       }
 
       .release-subtitle{
+	min-width:0;
         font-size:12px;
       }
     }
