@@ -311,8 +311,12 @@
       position:relative;
       min-height:0;
       display:grid;
-      grid-template-rows:auto auto;
-      gap:14px;
+      grid-template-columns:88px minmax(0,1fr);
+      grid-template-areas:
+        "main main"
+        ". actions";
+      column-gap:14px;
+      row-gap:14px;
       padding:14px;
       border-radius:18px;
       border:1px solid rgba(255,255,255,0.16);
@@ -387,6 +391,7 @@
     }
 
     .release-main{
+      grid-area:main;
       display:grid;
       grid-template-columns:88px minmax(0,1fr);
       gap:14px;
@@ -443,15 +448,17 @@
     }
 
     .release-actions{
+      grid-area:actions;
       display:grid;
       grid-template-columns:minmax(0,1fr);
       gap:8px;
       position:relative;
       z-index:2;
-      margin-left:102px;
-      margin-top:0;
-      width:calc(100% - 102px);
+      margin:0;
+      width:100%;
+      max-width:100%;
       align-self:start;
+      min-width:0;
     }
 
     .release-actions.single{
@@ -555,8 +562,14 @@
 
 
     @media (max-width: 900px){
+      .release-card{
+        grid-template-columns:minmax(0,1fr);
+        grid-template-areas:
+          "main"
+          "actions";
+      }
+
       .release-actions{
-        margin-left:0;
         width:100%;
       }
     }
@@ -663,8 +676,13 @@
       }
 
       .release-card{
+        grid-template-columns:minmax(0,1fr);
+        grid-template-areas:
+          "main"
+          "actions";
         padding:10px;
-        gap:8px;
+        row-gap:8px;
+        column-gap:0;
       }
 
       .release-chip,
