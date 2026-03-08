@@ -940,6 +940,38 @@
     const footerText = document.getElementById("footerText");
     const controlsStrip = document.getElementById("controlsStrip");
 
+    const LANE_UI_DEFAULTS = {
+      beats: {
+        airbitAboveCards: true,
+        hideInstructionCopy: true,
+        hideDatePill: true,
+        latestLabel: "Latest Release",
+        upcomingLabel: "Upcoming Project"
+      },
+      songs: {
+        airbitAboveCards: false,
+        hideInstructionCopy: true,
+        hideDatePill: true,
+        latestLabel: "Latest Release",
+        upcomingLabel: "Upcoming Project"
+      }
+    };
+
+    const MONTH_INDEX = {
+      january: 0, jan: 0,
+      february: 1, feb: 1,
+      march: 2, mar: 2,
+      april: 3, apr: 3,
+      may: 4,
+      june: 5, jun: 5,
+      july: 6, jul: 6,
+      august: 7, aug: 7,
+      september: 8, sep: 8, sept: 8,
+      october: 9, oct: 9,
+      november: 10, nov: 10,
+      december: 11, dec: 11
+    };
+
     let releaseConfig = null;
 
     function setMode(mode){
@@ -988,40 +1020,27 @@
       document.body.style.setProperty("--pageBg", `url("${imagePath}")`);
     }
 
-
     function toDate(value){
-      if (!value) return null;
-      if (value instanceof Date) {
-        return Number.isNaN(value.getTime()) ? null : value;
+      if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
+      if (typeof value !== 'string') return null;
+
+      const trimmed = value.trim();
+      if (!trimmed) return null;
+
+      const manualMatch = trimmed.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})(?:\s+(\d{1,2}):(\d{2}))?$/);
+      if (manualMatch) {
+        const [, monthName, dayStr, yearStr, hourStr = '0', minuteStr = '0'] = manualMatch;
+        const month = MONTH_INDEX[monthName.toLowerCase()];
+        if (month === undefined) return null;
+        const year = Number(yearStr);
+        const day = Number(dayStr);
+        const hour = Number(hourStr);
+        const minute = Number(minuteStr);
+        const date = new Date(year, month, day, hour, minute, 0, 0);
+        return Number.isNaN(date.getTime()) ? null : date;
       }
 
-      if (typeof value === "string") {
-        const trimmed = value.trim();
-
-        const isoDate = new Date(trimmed);
-        if (!Number.isNaN(isoDate.getTime())) return isoDate;
-
-        const match = trimmed.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})\s+(\d{1,2}):(\d{2})$/);
-        if (match) {
-          const [, monthName, day, year, hour, minute] = match;
-          const probe = new Date(`${monthName} 1, 2000`);
-          const monthIndex = probe.getMonth();
-          if (!Number.isNaN(monthIndex)) {
-            const localDate = new Date(
-              Number(year),
-              monthIndex,
-              Number(day),
-              Number(hour),
-              Number(minute),
-              0,
-              0
-            );
-            return Number.isNaN(localDate.getTime()) ? null : localDate;
-          }
-        }
-      }
-
-      const fallback = new Date(value);
+      const fallback = new Date(trimmed);
       return Number.isNaN(fallback.getTime()) ? null : fallback;
     }
 
@@ -1035,109 +1054,90 @@
       });
     }
 
+    function normalizeRelease(release = {}) {
+      const releaseDate = release.releaseDate || release.date || "";
+      const parsedDate = toDate(releaseDate);
+      const normalized = {
+        ...release,
+        projectTitle: release.projectTitle || release.title || "Untitled Release",
+        releaseDate,
+        parsedDate,
+        description: release.description || release.genreDescription || "",
+        coverArt: release.coverArt || release.cover || release.artwork || "",
+        presaveLink: release.presaveLink || release.ffmLink || release.preSaveLink || "",
+        releaseLink: release.releaseLink || release.primaryLink || release.openLink || release.spotifyLink || release.appleMusicLink || release.youtubeMusicLink || release.amazonMusicLink || release.ffmLink || "",
+        primaryLabel: release.primaryLabel || "Open Release ↗",
+        presaveLabel: release.presaveLabel || "Spotify Presave ↗",
+        purchaseLabel: release.purchaseLabel || "Purchase on Airbit ↗",
+        dateTextReleased: release.dateTextReleased || "Out now since",
+        dateTextUpcoming: release.dateTextUpcoming || "Drop date:",
+        copy: release.copy || release.tagline || "",
+        airbitLink: release.airbitLink || ""
+      };
+      return normalized;
+    }
+
+    function normalizeLane(lane = {}, laneKey = "songs") {
+      const ui = LANE_UI_DEFAULTS[laneKey] || LANE_UI_DEFAULTS.songs;
+      return {
+        ...lane,
+        laneKey,
+        airbitLink: lane.airbitLink || "",
+        purchaseLabel: lane.purchaseLabel || "Purchase on Airbit ↗",
+        latestLabel: lane.latestLabel || ui.latestLabel,
+        upcomingLabel: lane.upcomingLabel || ui.upcomingLabel,
+        releases: Array.isArray(lane.releases) ? lane.releases.map(normalizeRelease) : [],
+        _ui: ui
+      };
+    }
+
     function sortByDateAsc(items = []){
       return [...items].sort((a, b) => {
-        const aDate = toDate(a.releaseDate)?.getTime() || 0;
-        const bDate = toDate(b.releaseDate)?.getTime() || 0;
+        const aDate = a?.parsedDate?.getTime() || 0;
+        const bDate = b?.parsedDate?.getTime() || 0;
         return aDate - bDate;
       });
     }
 
-    function getLatestFeatured(releases = []){
-      const featured = releases.filter(item => item && item.featured === true);
-      if (!featured.length) return null;
-      return sortByDateAsc(featured).at(-1) || null;
-    }
-
-    function normalizeLane(lane = {}, prefix = ""){
-      const isBeats = prefix === "beats";
-      const normalized = { ...lane };
-
-      normalized.releases = Array.isArray(lane.releases)
-        ? lane.releases.map(release => {
-            const link = release.link || release.primaryLink || release.ffmLink || "";
-            const isUpcoming = (() => {
-              const d = toDate(release.releaseDate);
-              return d ? d > new Date() : false;
-            })();
-
-            return {
-              ...release,
-              link,
-              buttonLabel:
-                release.buttonLabel ||
-                (isUpcoming
-                  ? (release.presaveLabel || "Spotify Presave ↗")
-                  : (release.primaryLabel || "Open Release ↗")),
-              dateTextReleased: release.dateTextReleased || "Out now since",
-              dateTextUpcoming: release.dateTextUpcoming || "Drop date:",
-              airbitLink: release.airbitLink || lane.airbitLink || "",
-              purchaseLabel: release.purchaseLabel || lane.purchaseLabel || "Purchase on Airbit ↗"
-            };
-          })
-        : [];
-
-      normalized.moveAirbitAboveCards = isBeats;
-      normalized.hideUpcomingPrimaryButton = true;
-      normalized.hideInstructionCopy = true;
-      normalized.hideDatePill = true;
-      normalized.creativeDateInDescription = true;
-      normalized.showSpotifyPresaveButton = lane.showSpotifyPresaveButton !== false;
-      normalized.featuredMode = lane.featuredMode === true;
-      normalized.airbitLink = lane.airbitLink || normalized.releases.find(item => item.airbitLink)?.airbitLink || "";
-      normalized.purchaseLabel = lane.purchaseLabel || normalized.releases.find(item => item.purchaseLabel)?.purchaseLabel || "Purchase on Airbit ↗";
-
-      return normalized;
-    }
-
     function getLaneSelections(lane = {}){
-      const releases = Array.isArray(lane.releases) ? sortByDateAsc(lane.releases) : [];
+      const releases = sortByDateAsc(lane.releases || []).filter(item => item.parsedDate);
       const now = new Date();
 
-      const latestReleased = [...releases].filter(item => {
-        const date = toDate(item.releaseDate);
-        return date && date <= now;
-      }).at(-1) || null;
+      const latestReleased = [...releases].filter(item => item.parsedDate <= now).at(-1) || null;
+      const upcoming = releases.find(item => item.parsedDate > now) || null;
 
-      const upcoming = releases.find(item => {
-        const date = toDate(item.releaseDate);
-        return date && date > now;
-      }) || null;
-
-      const featured = getLatestFeatured(releases);
-
-      return { releases, latestReleased, upcoming, featured };
+      return { releases, latestReleased, upcoming };
     }
 
-    function getPrimaryLink(release = {}){
-      return release.link || release.primaryLink || release.ffmLink || release.spotifyLink || release.appleMusicLink || release.youtubeMusicLink || release.amazonMusicLink || release.airbitLink || "";
+    function getCardLinkAndLabel(release = {}, kind = "latest") {
+      const date = release.parsedDate;
+      const isReleased = date ? date <= new Date() : kind !== 'upcoming';
+
+      if (!isReleased && release.presaveLink) {
+        return { href: release.presaveLink, label: release.presaveLabel, className: 'presave' };
+      }
+
+      if (release.releaseLink) {
+        return { href: release.releaseLink, label: release.primaryLabel, className: '' };
+      }
+
+      if (release.presaveLink) {
+        return {
+          href: release.presaveLink,
+          label: isReleased ? release.primaryLabel : release.presaveLabel,
+          className: isReleased ? '' : 'presave'
+        };
+      }
+
+      if (release.airbitLink) {
+        return { href: release.airbitLink, label: release.purchaseLabel, className: 'purchase' };
+      }
+
+      return null;
     }
 
     function stopCardPropagation(event){
       event.stopPropagation();
-    }
-
-    function buildButtons(release = {}, laneOptions = {}, kind = "latest"){
-      const buttons = [];
-      const primaryLink = getPrimaryLink(release);
-      const moveAirbitAboveCards = laneOptions.moveAirbitAboveCards === true;
-      const hideUpcomingPrimaryButton = laneOptions.hideUpcomingPrimaryButton !== false;
-
-      if (kind === "upcoming") {
-        if (primaryLink && !hideUpcomingPrimaryButton) {
-          buttons.push({ label: release.buttonLabel || release.presaveLabel || "Spotify Presave ↗", href: primaryLink, className: "presave" });
-        } else if ((release.ffmLink || release.link) && laneOptions.showSpotifyPresaveButton !== false) {
-          buttons.push({ label: release.buttonLabel || release.presaveLabel || "Spotify Presave ↗", href: (release.link || release.ffmLink), className: "presave" });
-        }
-      } else if (primaryLink) {
-        buttons.push({ label: release.buttonLabel || release.primaryLabel || "Open Release ↗", href: primaryLink, className: "" });
-      }
-
-      if (release.airbitLink && !moveAirbitAboveCards && kind !== "upcoming") {
-        buttons.push({ label: release.purchaseLabel || laneOptions.purchaseLabel || "Purchase on Airbit ↗", href: release.airbitLink, className: "purchase" });
-      }
-
-      return buttons.slice(0, 2);
     }
 
     function makeCardInteractive(card, href){
@@ -1149,12 +1149,12 @@
       card.setAttribute("role", "link");
     }
 
-    function renderStandaloneAirbit(prefix, primaryRelease = {}, fallbackRelease = {}, laneOptions = {}){
+    function renderStandaloneAirbit(prefix, lane = {}, latestReleased = null, upcoming = null){
       const wrap = document.getElementById(`${prefix}AirbitWrap`);
       if (!wrap) return;
 
-      const airbitLink = laneOptions.airbitLink || primaryRelease?.airbitLink || fallbackRelease?.airbitLink || "";
-      if (!airbitLink || laneOptions.moveAirbitAboveCards !== true) {
+      const airbitLink = lane.airbitLink || latestReleased?.airbitLink || upcoming?.airbitLink || "";
+      if (!airbitLink || lane._ui?.airbitAboveCards !== true) {
         wrap.classList.remove("active");
         wrap.innerHTML = "";
         return;
@@ -1168,23 +1168,18 @@
       a.href = airbitLink;
       a.target = "_blank";
       a.rel = "noopener";
-      a.textContent = laneOptions.purchaseLabel || primaryRelease?.purchaseLabel || fallbackRelease?.purchaseLabel || "Purchase on Airbit ↗";
+      a.textContent = lane.purchaseLabel || latestReleased?.purchaseLabel || upcoming?.purchaseLabel || "Purchase on Airbit ↗";
       wrap.appendChild(a);
     }
 
-    function formatSubtitle(release = {}, kind = "latest", laneOptions = {}){
+    function formatSubtitle(release = {}, kind = "latest"){
       const date = formatDate(release.releaseDate);
-
-      const dateText = kind === "upcoming"
-        ? (release.dateTextUpcoming || "Drop date:")
-        : kind === "featured"
-          ? (release.dateTextFeatured || "Featured since")
-          : (release.dateTextReleased || "Out now since");
-
-      return [date ? `${dateText} ${date}` : "", release.description || ""].filter(Boolean).join(" ✦ ");
+      const prefix = kind === "upcoming" ? release.dateTextUpcoming : release.dateTextReleased;
+      const dateText = date ? `${prefix} ${date}` : "";
+      return [dateText, release.description || ""].filter(Boolean).join("  ✦  ");
     }
 
-    function renderReleaseCard(prefix, slot, release, laneOptions = {}, kind = "latest"){
+    function renderReleaseCard(prefix, slot, release, lane = {}, kind = "latest"){
       const baseId = `${prefix}${slot}`;
       const card = document.getElementById(`${baseId}Card`);
       if (!card) return;
@@ -1206,73 +1201,62 @@
       const copyEl = document.getElementById(`${baseId}Copy`);
       const actionsEl = document.getElementById(`${baseId}Actions`);
 
-      const slotName = kind === "upcoming" ? "Upcoming Project" : kind === "featured" ? "Featured Release" : "Latest Release";
+      const slotName = kind === "upcoming" ? lane.upcomingLabel : lane.latestLabel;
 
       if (labelEl) {
-        labelEl.textContent = release.statusLabel || slotName;
+        labelEl.textContent = slotName;
         labelEl.dataset.kind = kind;
       }
       if (dateEl) dateEl.textContent = formatDate(release.releaseDate);
-      card.classList.toggle("hide-date-pill", laneOptions.hideDatePill === true);
+      card.classList.toggle("hide-date-pill", lane._ui?.hideDatePill === true);
       if (coverEl && release.coverArt) {
         coverEl.src = release.coverArt;
-        coverEl.alt = `${release.projectTitle || release.title || slotName} cover art`;
+        coverEl.alt = `${release.projectTitle || slotName} cover art`;
       }
-      if (titleEl) titleEl.textContent = release.projectTitle || release.title || slotName;
-      if (subtitleEl) subtitleEl.textContent = formatSubtitle(release, kind, laneOptions);
+      if (titleEl) titleEl.textContent = release.projectTitle || slotName;
+      if (subtitleEl) subtitleEl.textContent = formatSubtitle(release, kind);
       if (copyEl) {
-        const copyText = release.copy || release.tagline || "";
-        copyEl.textContent = copyText;
-        copyEl.style.display = laneOptions.hideInstructionCopy === true || !copyText ? "none" : "";
+        copyEl.textContent = release.copy || "";
+        copyEl.style.display = lane._ui?.hideInstructionCopy === true || !release.copy ? "none" : "";
       }
+
+      const cardLink = getCardLinkAndLabel(release, kind);
 
       if (actionsEl) {
         actionsEl.innerHTML = "";
-        const buttons = buildButtons(release, laneOptions, kind);
-        actionsEl.classList.toggle("single", buttons.length === 1);
-        buttons.forEach(button => {
+        actionsEl.classList.toggle("single", !!cardLink);
+        if (cardLink) {
           const a = document.createElement("a");
-          a.className = `release-btn ${button.className || ""}`.trim();
-          a.href = button.href;
+          a.className = `release-btn ${cardLink.className || ""}`.trim();
+          a.href = cardLink.href;
           a.target = "_blank";
           a.rel = "noopener";
-          a.textContent = button.label;
+          a.textContent = cardLink.label;
           a.addEventListener("click", stopCardPropagation);
           actionsEl.appendChild(a);
-        });
+        }
       }
 
-      makeCardInteractive(card, getPrimaryLink(release));
+      makeCardInteractive(card, cardLink?.href || "");
     }
 
-    function applyLane(prefix, lane = {}){
-      const normalizedLane = normalizeLane(lane, prefix);
-      const { latestReleased, upcoming, featured } = getLaneSelections(normalizedLane);
-      renderStandaloneAirbit(prefix, latestReleased, upcoming, normalizedLane);
-      renderReleaseCard(prefix, "Latest", latestReleased, normalizedLane, "latest");
+    function applyLane(prefix, rawLane = {}, laneKey = "songs"){
+      const lane = normalizeLane(rawLane, laneKey);
+      const { latestReleased, upcoming } = getLaneSelections(lane);
 
-      let secondaryRelease = upcoming;
-      let secondaryKind = "upcoming";
-
-      if (!secondaryRelease && normalizedLane.featuredMode === true && featured) {
-        secondaryRelease = featured;
-        secondaryKind = "featured";
-      }
-
-      if (secondaryRelease && latestReleased && secondaryRelease.projectTitle === latestReleased.projectTitle && secondaryRelease.releaseDate === latestReleased.releaseDate) {
-        secondaryRelease = null;
-      }
-
-      renderReleaseCard(prefix, "Upcoming", secondaryRelease, normalizedLane, secondaryKind);
+      renderStandaloneAirbit(prefix, lane, latestReleased, upcoming);
+      renderReleaseCard(prefix, "Latest", latestReleased, lane, "latest");
+      renderReleaseCard(prefix, "Upcoming", upcoming, lane, "upcoming");
     }
+
     async function loadReleaseConfig(){
       try {
         const response = await fetch("./releases.json", { cache: "no-store" });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         releaseConfig = await response.json();
         applyBackgrounds(releaseConfig.backgrounds || {});
-        applyLane("beats", releaseConfig?.lanes?.beats || {});
-        applyLane("songs", releaseConfig?.lanes?.songs || {});
+        applyLane("beats", releaseConfig?.lanes?.beats || {}, "beats");
+        applyLane("songs", releaseConfig?.lanes?.songs || {}, "songs");
       } catch (error) {
         console.error("Could not load releases.json", error);
       }
@@ -1355,7 +1339,6 @@
       setMode(switchBtn.dataset.mode);
     })();
   </script>
-
   <script>
     function trackEvent(name, params = {}){
       if (typeof gtag === 'function') {
