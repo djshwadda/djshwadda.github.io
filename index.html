@@ -1065,16 +1065,14 @@
       const buttons = [];
       const primaryLink = getPrimaryLink(release);
       const showPresave = laneOptions.showSpotifyPresaveButton !== false;
-      const moveAirbitAboveCards = laneOptions.moveAirbitAboveCards === true;
-      const hideUpcomingPrimaryButton = laneOptions.hideUpcomingPrimaryButton === true;
       const isUpcoming = kind === "upcoming";
       const buttonLabel = release.buttonLabel || (isUpcoming && showPresave ? "Spotify Presave ↗" : "Open Release ↗");
 
-      if (primaryLink && !(isUpcoming && hideUpcomingPrimaryButton)) {
-        buttons.push({ label: buttonLabel, href: primaryLink, className: isUpcoming && showPresave ? "presave" : "" });
+      if (primaryLink && !isUpcoming) {
+        buttons.push({ label: buttonLabel, href: primaryLink, className: "" });
       }
 
-      if (release.airbitLink && !moveAirbitAboveCards && kind !== "upcoming") {
+      if (release.airbitLink && kind !== "upcoming" && laneOptions.airbitAboveCards !== true) {
         buttons.push({ label: release.purchaseLabel || "Purchase on Airbit ↗", href: release.airbitLink, className: "purchase" });
       }
 
@@ -1095,7 +1093,7 @@
       if (!wrap) return;
 
       const release = primaryRelease?.airbitLink ? primaryRelease : fallbackRelease?.airbitLink ? fallbackRelease : null;
-      if (!release || laneOptions.moveAirbitAboveCards !== true) {
+      if (!release || laneOptions.airbitAboveCards !== true) {
         wrap.classList.remove("active");
         wrap.innerHTML = "";
         return;
@@ -1114,7 +1112,7 @@
     }
 
     function formatSubtitle(release = {}, kind = "latest", laneOptions = {}){
-      if (laneOptions.hideDescription === true || laneOptions.hideMetaLine === true) return "";
+      if (laneOptions.showDescription !== true) return "";
       return release.description || "";
     }
 
@@ -1149,7 +1147,7 @@
         labelEl.dataset.kind = kind;
       }
       if (dateEl) dateEl.textContent = formatDate(release.releaseDate);
-      card.classList.toggle("hide-date-pill", laneOptions.hideDatePill === true);
+      card.classList.add("hide-date-pill");
       if (coverEl && release.coverArt) {
         coverEl.src = release.coverArt;
         coverEl.alt = `${release.projectTitle || release.title || slotName} cover art`;
@@ -1162,7 +1160,7 @@
       if (copyEl) {
         const copyText = release.copy || release.tagline || (kind === "latest" ? "Tap anywhere on this card to open the release." : "Tap anywhere on this card for the release landing page.");
         copyEl.textContent = copyText;
-        copyEl.style.display = laneOptions.hideInstructionCopy === true ? "none" : "";
+        copyEl.style.display = "none";
       }
 
       if (actionsEl) {
