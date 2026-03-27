@@ -90,7 +90,7 @@
       ]
     },
     "songs": {
-      "topCardMode": "latest",
+      "topCardMode": "featured",
       "featuredRelease": "Zenith",
       "dateTextReleased": "🔥Out now since",
       "dateTextUpcoming": "⏳Drop date:",
